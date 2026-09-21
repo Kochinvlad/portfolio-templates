@@ -1,0 +1,259 @@
+@import "tailwindcss";
+
+/* ============================================================
+   БАЗОВЫЕ ТОКЕНЫ
+   Каждый шаблон переопределяет переменные внутри своего .theme-*
+   ============================================================ */
+:root {
+  --font-ui: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-head: var(--font-ui);
+
+  --surface: #ffffff;
+  --surface-2: #f5f6f8;
+  --surface-3: #eceef2;
+  --ink: #101014;
+  --ink-soft: #6b7080;
+  --line: #e4e7ec;
+  --brand: #4f46e5;
+  --brand-hover: #4338ca;
+  --brand-soft: #eef2ff;
+  --on-brand: #ffffff;
+  --accent: #f59e0b;
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px -12px rgb(0 0 0 / 0.14);
+  --shadow-pop: 0 24px 64px -24px rgb(0 0 0 / 0.35);
+}
+
+/* ---------- Витрина: тёмная «агентская» ---------- */
+.theme-showcase {
+  --font-ui: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-head: "Unbounded", "Inter", sans-serif;
+  --surface: #08080b;
+  --surface-2: #101017;
+  --surface-3: #191922;
+  --ink: #f7f7fa;
+  --ink-soft: #9b9bab;
+  --line: #24242f;
+  --brand: #6366f1;
+  --brand-hover: #818cf8;
+  --brand-soft: #1a1a3a;
+  --on-brand: #ffffff;
+  --accent: #f472b6;
+  --radius: 18px;
+  --radius-sm: 12px;
+}
+
+/* ---------- Суши: тёмная, красно-золотая ---------- */
+.theme-sushi {
+  --font-ui: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-head: "Unbounded", "Inter", sans-serif;
+  --surface: #0f0f13;
+  --surface-2: #17171d;
+  --surface-3: #202028;
+  --ink: #f6f3ee;
+  --ink-soft: #a29fa8;
+  --line: #2b2b35;
+  --brand: #e02b3c;
+  --brand-hover: #f14656;
+  --brand-soft: #2a1216;
+  --on-brand: #ffffff;
+  --accent: #f5c542;
+  --radius: 16px;
+  --radius-sm: 12px;
+}
+
+/* ---------- Ресторан: светлая, кремово-бронзовая ---------- */
+.theme-restaurant {
+  --font-ui: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-head: "Playfair Display", Georgia, serif;
+  --surface: #fbf8f3;
+  --surface-2: #ffffff;
+  --surface-3: #f2ece1;
+  --ink: #1f1b16;
+  --ink-soft: #6f6558;
+  --line: #e6ded1;
+  --brand: #8c6a3f;
+  --brand-hover: #75562f;
+  --brand-soft: #f3ece1;
+  --on-brand: #ffffff;
+  --accent: #2f4a3c;
+  --radius: 4px;
+  --radius-sm: 2px;
+}
+
+/* ---------- Магазин: светлая, синяя, «доверие» ---------- */
+.theme-shop {
+  --font-ui: "Manrope", "Inter", sans-serif;
+  --font-head: "Manrope", "Inter", sans-serif;
+  --surface: #ffffff;
+  --surface-2: #f4f6f9;
+  --surface-3: #e8ecf2;
+  --ink: #0c1220;
+  --ink-soft: #5a6478;
+  --line: #e3e8ef;
+  --brand: #2563eb;
+  --brand-hover: #1d4ed8;
+  --brand-soft: #eff5ff;
+  --on-brand: #ffffff;
+  --accent: #16a34a;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+/* ---------- Игрушки: светлая, фиолетово-жёлтая, круглая ---------- */
+.theme-toys {
+  --font-ui: "Nunito", "Inter", sans-serif;
+  --font-head: "Nunito", "Inter", sans-serif;
+  --surface: #fffdf8;
+  --surface-2: #ffffff;
+  --surface-3: #fdf0dd;
+  --ink: #2b1b46;
+  --ink-soft: #7a6b91;
+  --line: #f0e4d4;
+  --brand: #7c4dff;
+  --brand-hover: #6a35ff;
+  --brand-soft: #f2edff;
+  --on-brand: #ffffff;
+  --accent: #ffb020;
+  --radius: 24px;
+  --radius-sm: 16px;
+}
+
+/* ============================================================
+   УТИЛИТЫ, ЧИТАЮЩИЕ ТОКЕНЫ ТЕКУЩЕЙ ТЕМЫ
+   ============================================================ */
+@utility bg-surface { background-color: var(--surface); }
+@utility bg-surface-2 { background-color: var(--surface-2); }
+@utility bg-surface-3 { background-color: var(--surface-3); }
+@utility bg-brand { background-color: var(--brand); }
+@utility bg-brand-hover { background-color: var(--brand-hover); }
+@utility bg-brand-soft { background-color: var(--brand-soft); }
+@utility bg-accent { background-color: var(--accent); }
+
+@utility text-ink { color: var(--ink); }
+@utility text-ink-soft { color: var(--ink-soft); }
+@utility text-brand { color: var(--brand); }
+@utility text-accent { color: var(--accent); }
+@utility text-on-brand { color: var(--on-brand); }
+
+@utility border-line { border-color: var(--line); }
+@utility border-brand { border-color: var(--brand); }
+@utility ring-brand { --tw-ring-color: var(--brand); }
+@utility decoration-brand { text-decoration-color: var(--brand); }
+
+@utility rounded-card { border-radius: var(--radius); }
+@utility rounded-control { border-radius: var(--radius-sm); }
+
+@utility font-head { font-family: var(--font-head); }
+@utility font-ui { font-family: var(--font-ui); }
+
+@utility shadow-card { box-shadow: var(--shadow-card); }
+@utility shadow-pop { box-shadow: var(--shadow-pop); }
+
+/* ============================================================
+   БАЗА
+   ============================================================ */
+@layer base {
+  * {
+    border-color: var(--line);
+  }
+  html {
+    scroll-behavior: smooth;
+    /* Без этого Chrome подстраивает прокрутку при подгрузке шаблона
+       и страница открывается со смещением в несколько десятков пикселей. */
+    overflow-anchor: none;
+  }
+  body {
+    margin: 0;
+    font-family: var(--font-ui);
+    background-color: var(--surface);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-head);
+    letter-spacing: -0.02em;
+  }
+  button, input, select, textarea {
+    font-family: inherit;
+  }
+  /* Единый видимый фокус — важно для доступности */
+  :focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+}
+
+/* ============================================================
+   АНИМАЦИИ
+   ============================================================ */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pop-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes cart-bump {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in { animation: fade-in 0.25s ease-out both; }
+.animate-pop-in { animation: pop-in 0.28s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+.animate-slide-in-right { animation: slide-in-right 0.3s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+.animate-slide-up { animation: slide-up 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+.animate-toast-in { animation: toast-in 0.25s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
+.animate-cart-bump { animation: cart-bump 0.4s ease-out; }
+
+/* Появление секций при скролле */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .reveal { opacity: 1; transform: none; }
+}
+
+/* Аккуратный скроллбар внутри панелей */
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line) transparent;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Блокировка прокрутки страницы, когда открыта модалка/корзина */
+body.is-locked { overflow: hidden; }

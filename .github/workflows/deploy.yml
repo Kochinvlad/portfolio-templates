@@ -1,0 +1,61 @@
+name: Сборка и публикация на GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  # Позволяет запустить публикацию вручную из вкладки Actions
+  workflow_dispatch:
+
+# Права, которые нужны действию deploy-pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Одновременно выполняется только одна публикация; лишние запуски отменяются
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Сборка
+    runs-on: ubuntu-latest
+    steps:
+      - name: Забрать код
+        uses: actions/checkout@v4
+
+      - name: Поставить Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Установить зависимости
+        run: npm ci
+
+      - name: Собрать проект
+        env:
+          # Сайт лежит в подпапке с именем репозитория — передаём её в Vite
+          VITE_BASE: /${{ github.event.repository.name }}/
+        run: npm run build
+
+      - name: Подготовить Pages
+        uses: actions/configure-pages@v5
+
+      - name: Загрузить сборку
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Публикация
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Опубликовать
+        id: deployment
+        uses: actions/deploy-pages@v4
