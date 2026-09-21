@@ -86,6 +86,14 @@ export function FaqSection() {
 
 /* ============================ КОНТАКТЫ ============================ */
 
+/** Контакты. Меняются здесь — и сразу везде по странице. */
+const EMAIL = 'vladk0chin@mail.ru'
+
+const CONTACTS = [
+  { icon: Mail, label: 'Почта', value: EMAIL, href: `mailto:${EMAIL}` },
+  { icon: Clock, label: 'Отвечаю', value: 'Пн–Пт, 10:00–20:00 МСК', href: undefined },
+]
+
 type ContactErrors = Partial<Record<'name' | 'contact' | 'message', string>>
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/
@@ -173,28 +181,35 @@ export function ContactSection() {
             subtitle="Напишите пару предложений о бизнесе и о том, что должен делать сайт. Отвечу в течение рабочего дня и назову срок и цену."
           />
           <ul className="mt-8 flex flex-col gap-3">
-            {[
-              { icon: Mail, label: 'Почта', value: 'hello@example.ru' },
-              { icon: Send, label: 'Telegram', value: '@your_nickname' },
-              { icon: Clock, label: 'Отвечаю', value: 'Пн–Пт, 10:00–20:00 МСК' },
-            ].map(({ icon: Icon, label, value }) => (
-              <li
-                key={label}
-                className="flex items-center gap-4 rounded-card border border-line bg-surface-2 px-5 py-4"
-              >
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand">
-                  <Icon size={18} />
-                </span>
-                <span>
-                  <span className="block text-[13px] text-ink-soft">{label}</span>
-                  <span className="block font-semibold text-ink">{value}</span>
-                </span>
-              </li>
-            ))}
+            {CONTACTS.map(({ icon: Icon, label, value, href }) => {
+              // Почту и мессенджер делаем кликабельными: с телефона это одно касание
+              const content = (
+                <>
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand">
+                    <Icon size={18} />
+                  </span>
+                  <span>
+                    <span className="block text-[13px] text-ink-soft">{label}</span>
+                    <span className="block font-semibold text-ink">{value}</span>
+                  </span>
+                </>
+              )
+              const box =
+                'flex items-center gap-4 rounded-card border border-line bg-surface-2 px-5 py-4'
+
+              return (
+                <li key={label}>
+                  {href ? (
+                    <a href={href} className={`${box} transition hover:border-brand`}>
+                      {content}
+                    </a>
+                  ) : (
+                    <div className={box}>{content}</div>
+                  )}
+                </li>
+              )
+            })}
           </ul>
-          <p className="mt-4 text-[13px] leading-relaxed text-ink-soft opacity-70">
-            Контакты здесь — заглушки. Замените их своими в файле src/showcase/ShowcaseContact.tsx.
-          </p>
         </div>
 
         <form
