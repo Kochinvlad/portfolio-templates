@@ -87,7 +87,7 @@ export function FaqSection() {
 /* ============================ КОНТАКТЫ ============================ */
 
 /** Контакты. Меняются здесь — и сразу везде по странице. */
-const EMAIL = 'vladk0chin@mail.ru'
+const EMAIL = 'kochin.web@gmail.com'
 
 const CONTACTS = [
   { icon: Mail, label: 'Почта', value: EMAIL, href: `mailto:${EMAIL}` },
