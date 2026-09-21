@@ -1,9 +1,9 @@
 import { useState, type FormEvent } from 'react'
-import { Check, ChevronDown, Clock, Mail, Send } from 'lucide-react'
+import { AlertTriangle, Check, ChevronDown, Clock, Mail, Send } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '../lib/cn'
 import { formatPhone, isPhoneComplete } from '../lib/format'
-import { Button } from '../ui/Button'
+import { Button, buttonStyles } from '../ui/Button'
 import { Input, Select, Textarea } from '../ui/Field'
 import { Section, SectionHeading } from '../ui/Bits'
 import { useToast } from '../ui/Toast'
@@ -89,6 +89,15 @@ export function FaqSection() {
 /** Контакты. Меняются здесь — и сразу везде по странице. */
 const EMAIL = 'kochin.web@gmail.com'
 
+/**
+ * Ключ Web3Forms — сервиса, который пересылает заявки на почту.
+ * Он публичный по своей природе: указывает лишь, на какой адрес доставить
+ * письмо, и ничего не открывает в почтовом ящике. Получить свой:
+ * web3forms.com → ввести почту → ключ придёт письмом.
+ */
+const FORM_ACCESS_KEY = 'ЗАМЕНИТЬ_НА_КЛЮЧ'
+const FORM_ENDPOINT = 'https://api.web3forms.com/submit'
+
 const CONTACTS = [
   { icon: Mail, label: 'Почта', value: EMAIL, href: `mailto:${EMAIL}` },
   { icon: Clock, label: 'Отвечаю', value: 'Пн–Пт, 10:00–20:00 МСК', href: undefined },
@@ -107,6 +116,8 @@ export function ContactSection() {
   const [errors, setErrors] = useState<ContactErrors>({})
   const [sent, setSent] = useState(false)
   const [sending, setSending] = useState(false)
+  // Заявку не удалось отправить — показываем прямые контакты, чтобы не потерять обращение
+  const [failed, setFailed] = useState(false)
 
   function validate(): ContactErrors {
     const next: ContactErrors = {}
@@ -118,7 +129,19 @@ export function ContactSection() {
     return next
   }
 
-  function handleSubmit(e: FormEvent) {
+  /** Письмо со всеми полями — запасной путь, если сервис не ответил. */
+  function mailtoFallback(): string {
+    const body = `Имя: ${name}
+Контакт: ${contact}
+Интересует шаблон: ${topic}
+
+${message}`
+    return `mailto:${EMAIL}?subject=${encodeURIComponent(
+      `Заявка с сайта: ${topic}`,
+    )}&body=${encodeURIComponent(body)}`
+  }
+
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     const next = validate()
     setErrors(next)
@@ -126,13 +149,40 @@ export function ContactSection() {
       toast('Проверьте поля формы', 'error')
       return
     }
+
     setSending(true)
-    // Демонстрация: имитируем отправку. Здесь подключается бэкенд или Telegram-бот.
-    window.setTimeout(() => {
-      setSending(false)
+    setFailed(false)
+
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: FORM_ACCESS_KEY,
+          subject: `Заявка с сайта: ${topic}`,
+          from_name: 'Витрина шаблонов',
+          Имя: name,
+          Контакт: contact,
+          'Интересует шаблон': topic,
+          Сообщение: message,
+        }),
+      })
+
+      const result: { success?: boolean; message?: string } = await response.json()
+      if (!response.ok || !result.success) {
+        throw new Error(result.message ?? `Сервис ответил ${response.status}`)
+      }
+
       setSent(true)
       toast('Заявка отправлена — отвечу в течение дня')
-    }, 700)
+    } catch {
+      // Сервис может быть недоступен или заблокирован. Молча «терять» заявку нельзя:
+      // показываем прямые контакты и готовое письмо.
+      setFailed(true)
+      toast('Не удалось отправить — напишите напрямую', 'error')
+    } finally {
+      setSending(false)
+    }
   }
 
   function reset() {
@@ -158,10 +208,6 @@ export function ContactSection() {
           <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-ink-soft">
             {name}, спасибо. Отвечу в течение рабочего дня и пришлю несколько уточняющих вопросов
             по проекту «{topic}».
-          </p>
-          <p className="mt-4 text-[13px] text-ink-soft opacity-70">
-            Это демонстрация: форма ничего не отправляет на сервер. В боевом проекте заявка уходит
-            в Telegram или на почту.
           </p>
           <Button variant="outline" className="mt-6" onClick={reset}>
             Отправить ещё одну
@@ -266,6 +312,24 @@ export function ContactSection() {
             }}
             error={errors.message}
           />
+          {failed && (
+            <div className="animate-fade-in rounded-control border border-red-500/40 bg-red-500/10 p-4">
+              <h3 className="flex items-center gap-2 text-[15px] font-bold text-ink">
+                <AlertTriangle size={17} className="shrink-0 text-red-400" />
+                Заявка не ушла
+              </h3>
+              <p className="mt-2 text-[14px] leading-relaxed text-ink-soft">
+                Сервис отправки не ответил — такое бывает. Ваше сообщение не потерялось: нажмите
+                кнопку ниже, откроется письмо с уже заполненным текстом. Или напишите напрямую
+                на {EMAIL}.
+              </p>
+              <a href={mailtoFallback()} className={buttonStyles('outline', 'sm', 'mt-3')}>
+                <Mail size={16} />
+                Открыть письмо
+              </a>
+            </div>
+          )}
+
           <Button type="submit" size="lg" full disabled={sending}>
             {sending ? 'Отправляю…' : 'Отправить заявку'}
             {!sending && <Send size={17} />}
