@@ -96,11 +96,23 @@ function Header() {
 function Hero() {
   return (
     <section id="top" className="relative overflow-hidden px-4 pb-16 pt-14 sm:px-6 sm:pb-24 sm:pt-20">
-      {/* фоновое свечение */}
+      {/* Живой фон: два пятна света, медленно дрейфующие в противофазе */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[-18rem] h-[36rem] w-[36rem] -translate-x-1/2 rounded-full opacity-25 blur-[110px]"
-        style={{ background: 'radial-gradient(circle, #6366f1 0%, #f472b6 55%, transparent 72%)' }}
+        className="pointer-events-none absolute left-1/2 top-[-18rem] h-[36rem] w-[36rem] rounded-full blur-[110px]"
+        style={{
+          background: 'radial-gradient(circle, #6366f1 0%, #f472b6 55%, transparent 72%)',
+          animation: 'drift-a 26s ease-in-out infinite',
+        }}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-40 top-[6rem] h-[30rem] w-[30rem] rounded-full blur-[120px]"
+        style={{
+          background: 'radial-gradient(circle, #22d3ee 0%, #6366f1 60%, transparent 75%)',
+          animation: 'drift-b 34s ease-in-out infinite',
+          animationDelay: '-8s',
+        }}
       />
       <div
         aria-hidden="true"
