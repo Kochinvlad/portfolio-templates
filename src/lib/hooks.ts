@@ -292,3 +292,40 @@ export function useAppUpdate(checkEveryMs = 5 * 60 * 1000) {
 
   return updateAvailable
 }
+
+/**
+ * Следит, попал ли конкретный элемент во вьюпорт. Срабатывает один раз.
+ *
+ * Отличие от useRevealOnScroll: тот навешивает общий класс на все блоки страницы,
+ * а здесь нужен момент входа одного элемента — чтобы от него отсчитывать задержки
+ * дочерних анимаций и запускать их по очереди.
+ */
+export function useInView<T extends HTMLElement>(threshold = 0.2) {
+  const ref = useRef<T>(null)
+  const [inView, setInView] = useState(false)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+
+    if (!('IntersectionObserver' in window)) {
+      setInView(true)
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          setInView(true)
+          observer.disconnect()
+        }
+      },
+      { threshold, rootMargin: '0px 0px -60px 0px' },
+    )
+
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [threshold])
+
+  return [ref, inView] as const
+}

@@ -14,6 +14,8 @@ import {
   Sparkles,
 } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { cn } from '../lib/cn'
+import { useInView } from '../lib/hooks'
 import { buttonStyles } from '../ui/Button'
 import { Section, SectionHeading } from '../ui/Bits'
 import { TEMPLATES, type TemplateMeta } from './templates'
@@ -226,24 +228,67 @@ const STEPS = [
   },
 ]
 
+/** Пауза между появлением соседних этапов: волна должна быть бодрой, а не тягучей. */
+const STEP_DELAY_MS = 90
+
+/** Сглаживание: быстрый старт, мягкое торможение. */
+const STEP_EASING = 'cubic-bezier(0.16, 0.8, 0.32, 1)'
+
 export function ProcessSection() {
+  const [listRef, inView] = useInView<HTMLOListElement>()
+
   return (
-    <Section id="process" className="border-t border-line py-16 sm:py-24">
+    <Section id="process" className="border-t border-line py-16 sm:py-24" reveal={false}>
       <SectionHeading
         eyebrow="Процесс"
         title="Как идёт работа"
         subtitle="Без месяцев согласований. Вы видите живой сайт уже на третий день и правите его по факту, а не по картинке."
       />
-      <ol className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+
+      <ol ref={listRef} className="relative mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {/*
+          Линия между этапами. Лежит под карточками и видна только в промежутках,
+          поэтому читается как соединитель. Прочерчивается слева направо ровно
+          столько времени, сколько появляются все четыре карточки.
+        */}
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-[12%] top-[2.9rem] hidden h-0.5 origin-left bg-brand/40 transition-transform ease-out lg:block"
+          style={{
+            transform: inView ? 'scaleX(1)' : 'scaleX(0)',
+            transitionDuration: `${STEPS.length * STEP_DELAY_MS + 500}ms`,
+          }}
+        />
+
         {STEPS.map(({ icon: Icon, title, text, time }, i) => (
-          <li key={title} className="relative rounded-card border border-line bg-surface-2 p-6">
+          <li
+            key={title}
+            style={{
+              transitionDelay: `${i * STEP_DELAY_MS}ms`,
+              transitionTimingFunction: STEP_EASING,
+            }}
+            className={cn(
+              'relative rounded-card border border-line bg-surface-2 p-6',
+              'transition-[opacity,transform,filter] duration-700',
+              inView
+                ? 'translate-y-0 scale-100 opacity-100 blur-0'
+                : 'translate-y-[26px] scale-[0.98] opacity-0 blur-[6px]',
+            )}
+          >
             <span
               aria-hidden="true"
               className="absolute right-5 top-4 font-head text-4xl font-extrabold text-ink opacity-10"
             >
               {i + 1}
             </span>
-            <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand text-on-brand">
+            <span
+              style={{ transitionDelay: `${i * STEP_DELAY_MS + 120}ms` }}
+              className={cn(
+                'grid h-11 w-11 place-items-center rounded-xl bg-brand text-on-brand',
+                'transition-transform duration-500 ease-out',
+                inView ? 'scale-100' : 'scale-75',
+              )}
+            >
               <Icon size={20} />
             </span>
             <h3 className="mt-4 font-head text-lg font-bold text-ink">{title}</h3>
