@@ -242,3 +242,53 @@ export function useDocumentMeta(title: string, description?: string) {
     }
   }, [title, description])
 }
+
+/** Версия, зашитая в текущую сборку. */
+export const APP_VERSION: string = import.meta.env.VITE_APP_VERSION ?? 'dev'
+
+/**
+ * Следит за тем, не вышла ли новая версия сайта.
+ *
+ * GitHub Pages держит index.html в кэше около десяти минут, поэтому у посетителя
+ * (и у разработчика) легко остаётся открытой устаревшая страница. Здесь мы сами
+ * сверяемся с version.json и предлагаем обновиться, когда версия изменилась.
+ *
+ * Проверяем не по таймеру в лоб, а ещё и при возвращении на вкладку — так реже
+ * дёргаем сеть и быстрее замечаем обновление.
+ */
+export function useAppUpdate(checkEveryMs = 5 * 60 * 1000) {
+  const [updateAvailable, setUpdateAvailable] = useState(false)
+
+  useEffect(() => {
+    // В режиме разработки version.json не создаётся — проверять нечего
+    if (import.meta.env.DEV) return
+    let cancelled = false
+
+    async function check() {
+      if (cancelled || document.hidden) return
+      try {
+        const url = `${import.meta.env.BASE_URL}version.json?t=${Date.now()}`
+        const res = await fetch(url, { cache: 'no-store' })
+        if (!res.ok) return
+        const data: { version?: string } = await res.json()
+        if (!cancelled && data.version && data.version !== APP_VERSION) {
+          setUpdateAvailable(true)
+        }
+      } catch {
+        // Нет сети или файл недоступен — молча ждём следующей попытки
+      }
+    }
+
+    const timer = window.setInterval(check, checkEveryMs)
+    document.addEventListener('visibilitychange', check)
+    check()
+
+    return () => {
+      cancelled = true
+      window.clearInterval(timer)
+      document.removeEventListener('visibilitychange', check)
+    }
+  }, [checkEveryMs])
+
+  return updateAvailable
+}

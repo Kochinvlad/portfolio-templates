@@ -1,5 +1,7 @@
 import { Suspense, lazy, useEffect } from 'react'
+import { RefreshCw } from 'lucide-react'
 import { Route, Routes, useLocation } from 'react-router-dom'
+import { useAppUpdate } from './lib/hooks'
 import { ShowcasePage } from './showcase/ShowcasePage'
 import { NotFoundPage } from './showcase/NotFoundPage'
 
@@ -40,6 +42,33 @@ function ScrollToTop() {
   return null
 }
 
+/**
+ * Появляется, когда выложена новая версия сайта.
+ *
+ * Оформлен отдельно от тем шаблонов: плашка показывается на любой странице,
+ * поэтому не должна зависеть от того, светлая тема вокруг или тёмная.
+ */
+function UpdateBanner() {
+  const updateAvailable = useAppUpdate()
+  if (!updateAvailable) return null
+
+  return (
+    <div className="animate-pop-in fixed bottom-4 right-4 z-[65] print:hidden">
+      <div className="flex items-center gap-3 rounded-full bg-[#101017]/95 py-2 pl-4 pr-2 text-white shadow-pop ring-1 ring-white/15 backdrop-blur-md">
+        <span className="text-sm font-semibold">Вышла новая версия сайта</span>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="flex cursor-pointer items-center gap-1.5 rounded-full bg-white px-3.5 py-1.5 text-sm font-bold text-[#101017] transition hover:bg-white/85"
+        >
+          <RefreshCw size={14} />
+          Обновить
+        </button>
+      </div>
+    </div>
+  )
+}
+
 /** Заглушка на время загрузки шаблона. */
 function TemplateFallback() {
   return (
@@ -59,6 +88,7 @@ export default function App() {
   return (
     <>
       <ScrollToTop />
+      <UpdateBanner />
       <Suspense fallback={<TemplateFallback />}>
         <Routes>
           <Route path="/" element={<ShowcasePage />} />

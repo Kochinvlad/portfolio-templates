@@ -16,6 +16,12 @@ import { TEMPLATES } from './src/showcase/templates'
 const base = process.env.VITE_BASE || '/'
 
 /**
+ * Версия сборки. В GitHub Actions подставляется хеш коммита, локально — время сборки.
+ * Нужна, чтобы открытая у посетителя страница могла заметить, что вышла новая версия.
+ */
+const appVersion = process.env.VITE_APP_VERSION || new Date().toISOString()
+
+/**
  * Файлы, без которых GitHub Pages ломает SPA.
  *
  * 1. Папка на каждый маршрут с копией index.html внутри. GitHub Pages не умеет
@@ -49,12 +55,20 @@ function githubPagesFiles(): Plugin {
 
       fs.copyFileSync(indexHtml, path.join(outDir, '404.html'))
       fs.writeFileSync(path.join(outDir, '.nojekyll'), '')
+
+      // Файл с версией: страница периодически сверяется с ним и узнаёт про обновление
+      fs.writeFileSync(
+        path.join(outDir, 'version.json'),
+        JSON.stringify({ version: appVersion, builtAt: new Date().toISOString() }, null, 2),
+      )
     },
   }
 }
 
 export default defineConfig({
   base,
+  // Версия попадает в бандл — с ней страница и сравнивает version.json
+  define: { 'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion) },
   plugins: [react(), tailwindcss(), githubPagesFiles()],
   server: {
     // Явный IPv4-адрес: иначе Vite слушает только [::1] и браузер не достучится
