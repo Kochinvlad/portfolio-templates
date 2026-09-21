@@ -159,8 +159,13 @@ ${message}`
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           access_key: FORM_ACCESS_KEY,
-          subject: `Заявка с сайта: ${topic}`,
+          // Имя в теме — чтобы заявку было видно прямо в списке писем
+          subject: `Заявка с сайта: ${name} — ${topic}`,
           from_name: 'Витрина шаблонов',
+          // Кнопка «Ответить» в почте сразу пишет клиенту, а не в пустоту.
+          // Сервис берёт replyto из поля email, но у нас поля с таким именем нет,
+          // да и человек может оставить телефон вместо почты.
+          replyto: EMAIL_RE.test(contact.trim()) ? contact.trim() : EMAIL,
           Имя: name,
           Контакт: contact,
           'Интересует шаблон': topic,
