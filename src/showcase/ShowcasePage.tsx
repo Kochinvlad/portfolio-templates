@@ -114,16 +114,52 @@ function Hero() {
           animationDelay: '-8s',
         }}
       />
+      {/*
+        Сетка в два слоя: тусклая основа и бегущая по её линиям подсветка.
+        Оба слоя лежат внутри общей маски, которая мягко гасит сетку к низу шапки.
+      */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.045]"
+        className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage:
-            'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
           maskImage: 'radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 80% 55% at 50% 0%, #000 40%, transparent 100%)',
         }}
-      />
+      >
+        <div
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage:
+              'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+            backgroundSize: '64px 64px',
+          }}
+        />
+        {/*
+          Маска-сетка на родителе, движение — на дочернем слое.
+          Так свет виден только на линиях разметки, но маска не пересчитывается:
+          браузер двигает уже готовый слой силами видеокарты.
+        */}
+        <div
+          className="absolute inset-0 overflow-hidden"
+          style={{
+            maskImage:
+              'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+            WebkitMaskImage:
+              'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)',
+            maskSize: '64px 64px',
+            WebkitMaskSize: '64px 64px',
+          }}
+        >
+          <div
+            className="absolute inset-y-0 -left-1/2 -right-1/2 will-change-transform"
+            style={{
+              backgroundImage:
+                'linear-gradient(115deg, transparent 38%, rgba(165,180,252,0.9) 50%, transparent 62%)',
+              animation: 'grid-sweep 9s ease-in-out infinite alternate',
+            }}
+          />
+        </div>
+      </div>
 
       <div className="relative mx-auto w-full max-w-4xl text-center">
         <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface-2 px-4 py-1.5 text-[13px] font-semibold text-ink-soft">

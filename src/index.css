@@ -229,6 +229,19 @@
   50% { transform: translate(-60px, 50px) scale(1.15); opacity: 0.26; }
 }
 
+/*
+  Волна подсветки, бегущая по сетке в шапке.
+
+  Двигаем только transform светлой полосы — это считает видеокарта.
+  Маска-сетка живёт на родителе и остаётся неподвижной: если анимировать
+  background-position под маской, браузер перерисовывает маску каждый кадр
+  и частота падает с 60 до 50 кадров — проверено замером.
+*/
+@keyframes grid-sweep {
+  from { transform: translate3d(-45%, 0, 0); }
+  to { transform: translate3d(45%, 0, 0); }
+}
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
