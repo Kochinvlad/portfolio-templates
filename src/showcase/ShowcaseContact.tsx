@@ -95,7 +95,7 @@ const EMAIL = 'kochin.web@gmail.com'
  * письмо, и ничего не открывает в почтовом ящике. Получить свой:
  * web3forms.com → ввести почту → ключ придёт письмом.
  */
-const FORM_ACCESS_KEY = 'ЗАМЕНИТЬ_НА_КЛЮЧ'
+const FORM_ACCESS_KEY = '8473aad0-d75a-4bbe-8e28-dee82e618499'
 const FORM_ENDPOINT = 'https://api.web3forms.com/submit'
 
 const CONTACTS = [
