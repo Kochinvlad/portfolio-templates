@@ -360,6 +360,8 @@ export function ShowcaseFooter() {
           </span>
           <p className="mt-1 text-[13px] text-ink-soft">
             Демонстрационный проект. Все компании, цены и контакты — вымышленные.
+            <br />
+            Фотографии — Unsplash.
           </p>
         </div>
         <nav className="flex flex-wrap gap-x-5 gap-y-2">

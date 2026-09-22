@@ -1,0 +1,19 @@
+[
+  { "q": "grilled vegetables platter vegan", "ids": ["mn-vegetables"] },
+  { "q": "red wine glass pouring", "ids": ["wn-barolo"] },
+  { "q": "plush fox stuffed toy", "ids": ["sf-fox"] },
+  { "q": "plush whale stuffed toy", "ids": ["sf-whale"] },
+  { "q": "spaghetti carbonara bacon", "ids": ["ps-carbonara"] },
+  { "q": "linguine clams seafood pasta", "ids": ["ps-vongole"] },
+  { "q": "mushroom risotto creamy", "ids": ["ps-truffle"] },
+  { "q": "grilled whole fish lemon", "ids": ["mn-seabass"] },
+  { "q": "lego castle building bricks", "ids": ["ct-castle"] },
+  { "q": "power bank portable battery", "ids": ["ac-vektor-bank"] },
+  { "q": "usb wall charger adapter", "ids": ["ac-nord-charger"] },
+  { "q": "usb hub dongle ports", "ids": ["ac-helix-hub"] },
+  { "q": "bluetooth portable speaker", "ids": ["au-helix-speaker"] },
+  { "q": "vegetable sushi avocado cucumber", "ids": ["set-veg"] },
+  { "q": "restaurant outdoor terrace tables", "ids": ["g-terrace"] },
+  { "q": "chef cooking open kitchen", "ids": ["g-kitchen"] },
+  { "q": "hummus bowl pita bread", "ids": ["st-hummus"] }
+]

@@ -7,6 +7,7 @@ import { useCart } from '../../store/cart'
 import { Button } from '../../ui/Button'
 import { Badge, QtyStepper, Rating } from '../../ui/Bits'
 import { Modal } from '../../ui/Modal'
+import { photoUrl } from '../../lib/photos'
 import { ProductArt } from '../../ui/ProductArt'
 import { useToast } from '../../ui/Toast'
 
@@ -36,6 +37,7 @@ export function SushiCard({ product, onOpen }: { product: Product; onOpen: () =>
         <ProductArt
           glyph={product.glyph}
           hue={product.hue}
+          photo={photoUrl(product.id)}
           scale="lg"
           className="h-44 w-full transition-transform duration-500 group-hover:scale-[1.04]"
         />
@@ -133,6 +135,7 @@ export function SushiProductModal({
           <ProductArt
             glyph={product.glyph}
             hue={product.hue}
+            photo={photoUrl(product.id)}
             scale="xl"
             className="h-56 w-full sm:h-full sm:min-h-[22rem]"
           />

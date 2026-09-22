@@ -6,6 +6,7 @@ import { useCart } from '../store/cart'
 import { Button } from './Button'
 import { EmptyState, QtyStepper } from './Bits'
 import { Drawer } from './Drawer'
+import { photoUrl } from '../lib/photos'
 import { ProductArt } from './ProductArt'
 import { useToast } from './Toast'
 
@@ -18,6 +19,7 @@ function CartRow({ line }: { line: CartLine }) {
       <ProductArt
         glyph={line.product.glyph}
         hue={line.product.hue}
+        photo={photoUrl(line.product.id)}
         scale="sm"
         className="h-20 w-20 shrink-0 rounded-control"
       />

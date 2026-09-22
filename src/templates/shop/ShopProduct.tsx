@@ -8,6 +8,7 @@ import { useFavorites } from '../../store/favorites'
 import { Button } from '../../ui/Button'
 import { Badge, QtyStepper, Rating } from '../../ui/Bits'
 import { Modal } from '../../ui/Modal'
+import { photoUrl } from '../../lib/photos'
 import { ProductArt } from '../../ui/ProductArt'
 import { useToast } from '../../ui/Toast'
 
@@ -64,6 +65,7 @@ export function ShopCard({ product, onOpen }: { product: Product; onOpen: () => 
         <ProductArt
           glyph={product.glyph}
           hue={product.hue}
+          photo={photoUrl(product.id)}
           scale="lg"
           className="h-48 w-full transition-transform duration-500 group-hover:scale-105"
         />
@@ -157,6 +159,7 @@ export function ShopProductModal({
             <ProductArt
               glyph={product.glyph}
               hue={product.hue}
+              photo={photoUrl(product.id)}
               scale="xl"
               className="h-64 w-full lg:h-full lg:min-h-[28rem]"
             />

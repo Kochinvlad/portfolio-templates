@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Expand } from 'lucide-react'
 import { cn } from '../../lib/cn'
 import { Rating } from '../../ui/Bits'
 import { Modal } from '../../ui/Modal'
+import { photoUrl } from '../../lib/photos'
 import { ProductArt } from '../../ui/ProductArt'
 import { REST_GALLERY, REST_REVIEWS } from './data'
 
@@ -56,6 +57,7 @@ export function RestaurantGallery() {
               <ProductArt
                 glyph={item.glyph}
                 hue={item.hue}
+                photo={photoUrl(item.id)}
                 scale="lg"
                 className="h-full w-full transition-transform duration-500 group-hover:scale-105"
               />
@@ -87,6 +89,7 @@ export function RestaurantGallery() {
               <ProductArt
                 glyph={current.glyph}
                 hue={current.hue}
+                photo={photoUrl(current.id)}
                 scale="xl"
                 className="h-72 w-full sm:h-[26rem]"
               />
