@@ -25,55 +25,32 @@ import { TEMPLATES, type TemplateMeta } from './templates'
 function TemplateCard({ template }: { template: TemplateMeta }) {
   return (
     <article className="group relative flex flex-col overflow-hidden rounded-card border border-line bg-surface-2 transition duration-300 hover:border-brand/45 hover:shadow-pop">
-      {/* Превью: мини-макет браузера на фирменном градиенте шаблона */}
-      <div
-        className="relative h-52 overflow-hidden"
-        style={{
-          background: `linear-gradient(140deg, hsl(${template.hue} 72% 58%) 0%, hsl(${
-            (template.hue + 34) % 360
-          } 66% 38%) 100%)`,
-        }}
-      >
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 opacity-[0.16]"
-          style={{
-            backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)',
-            backgroundSize: '16px 16px',
-          }}
-        />
-        <div
-          aria-hidden="true"
-          className="absolute -right-8 -top-10 h-40 w-40 rounded-full bg-white/20 blur-2xl"
-        />
-
-        <div className="absolute inset-x-6 bottom-0 top-9 rounded-t-xl bg-black/25 p-2 ring-1 ring-white/20 transition-transform duration-500 group-hover:translate-y-1">
-          <div className="flex gap-1.5 px-1 pb-2">
-            <span className="h-2 w-2 rounded-full bg-white/50" />
-            <span className="h-2 w-2 rounded-full bg-white/50" />
-            <span className="h-2 w-2 rounded-full bg-white/50" />
-          </div>
-          <div className="flex h-[calc(100%-1.5rem)] gap-2 rounded-lg bg-white/12 p-2.5">
-            <div className="flex flex-1 flex-col gap-1.5">
-              <div className="h-2.5 w-3/4 rounded bg-white/55" />
-              <div className="h-2 w-1/2 rounded bg-white/35" />
-              <div className="mt-1 grid grid-cols-3 gap-1.5">
-                <div className="h-9 rounded bg-white/30" />
-                <div className="h-9 rounded bg-white/30" />
-                <div className="h-9 rounded bg-white/30" />
-              </div>
-            </div>
-            <span
-              className="self-center text-4xl leading-none drop-shadow-lg"
-              style={{ fontFamily: '"Segoe UI Emoji", "Apple Color Emoji", sans-serif' }}
-              aria-hidden="true"
-            >
-              {template.glyph}
-            </span>
-          </div>
+      {/*
+        Превью — настоящий скриншот шаблона, снятый с живой страницы.
+        Раньше здесь был нарисованный макет браузера: он сразу выдавал,
+        что за карточкой ничего не стоит.
+        Как обновить снимки — в README, раздел «Превью на витрине».
+      */}
+      <div className="relative h-56 overflow-hidden border-b border-line bg-surface-3">
+        {/* Тонкая полоса окна браузера — чтобы снимок читался как сайт, а не как фото */}
+        <div className="flex h-7 items-center gap-1.5 border-b border-line bg-surface-2 px-3.5">
+          <span className="h-2 w-2 rounded-full bg-ink-soft opacity-40" />
+          <span className="h-2 w-2 rounded-full bg-ink-soft opacity-40" />
+          <span className="h-2 w-2 rounded-full bg-ink-soft opacity-40" />
+          <span className="ml-2 truncate text-[11px] text-ink-soft opacity-70">
+            {template.slug}.ru
+          </span>
         </div>
 
-        <span className="absolute left-4 top-4 rounded-full bg-black/45 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-white backdrop-blur">
+        <img
+          src={`${import.meta.env.BASE_URL}previews/${template.slug}.webp`}
+          alt={`Как выглядит шаблон «${template.name}»`}
+          loading="lazy"
+          decoding="async"
+          className="h-[calc(100%-1.75rem)] w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+        />
+
+        <span className="absolute bottom-3 left-3.5 rounded-full bg-black/60 px-3 py-1 text-[11px] font-extrabold uppercase tracking-wider text-white backdrop-blur">
           {template.dark ? 'тёмная тема' : 'светлая тема'}
         </span>
       </div>
