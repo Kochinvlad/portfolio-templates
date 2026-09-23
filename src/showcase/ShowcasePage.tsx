@@ -27,8 +27,9 @@ function Header() {
     <header className="sticky top-0 z-50 border-b border-line bg-surface/85 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <a href="#top" className="flex items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand text-on-brand font-head text-lg font-extrabold">
-            U
+          {/* Две буквы в том же квадрате: Unbounded широкий, поэтому кегль меньше */}
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand text-on-brand font-head text-[13px] font-extrabold tracking-tight">
+            UU
           </span>
           <span className="font-head text-[15px] font-bold tracking-tight">
             Ultra<span className="text-brand">Team</span>
