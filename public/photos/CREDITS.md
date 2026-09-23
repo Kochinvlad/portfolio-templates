@@ -15,7 +15,7 @@
 | `ac-nord-charger.webp` | [Andrey Matveev](https://unsplash.com/@zelebb) |
 | `ac-vektor-bank.webp` | [Markus Winkler](https://unsplash.com/@markuswinkler) |
 | `au-aurum-over.webp` | [Tomasz Gawłowski](https://unsplash.com/@gawlowski) |
-| `au-helix-speaker.webp` | [Nejc Soklič](https://unsplash.com/@nejc_soklic) |
+| `au-helix-speaker.webp` | [Nicolas J Leclercq](https://unsplash.com/@nicolasjleclercq) |
 | `au-nord-buds.webp` | [C D-X](https://unsplash.com/@cdx2) |
 | `baked-crab.webp` | [Mahmoud Fawzy](https://unsplash.com/@mahmoud_fawzy100) |
 | `baked-eel.webp` | [Mahmoud Fawzy](https://unsplash.com/@mahmoud_fawzy100) |

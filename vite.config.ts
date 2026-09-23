@@ -54,7 +54,7 @@ function readMeta(html: string): Pick<PageMeta, 'title' | 'description'> {
 /**
  * Прописывает странице заголовок, описание и метатеги Open Graph — по ним VK,
  * Telegram, WhatsApp и другие мессенджеры рисуют карточку ссылки.
- * Картинки лежат в public/og, снимает их scripts/build-og-images.mjs.
+ * Картинки лежат в public/og, снимает их scripts/build-snapshots.mjs.
  */
 function withPageMeta(html: string, page: PageMeta): string {
   const url = siteUrl + page.path
@@ -77,7 +77,7 @@ function withPageMeta(html: string, page: PageMeta): string {
       '<meta name="twitter:card" content="summary_large_image" />',
     )
   } else {
-    console.warn(`[превью] нет картинки для «${page.title}» — запустите scripts/build-og-images.mjs`)
+    console.warn(`[превью] нет картинки для «${page.title}» — запустите scripts/build-snapshots.mjs`)
   }
 
   return html

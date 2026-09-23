@@ -1,10 +1,13 @@
 /**
- * Снимает картинки для превью ссылок (Open Graph): 1200×630, JPEG, в public/og.
+ * Снимает с настоящих страниц две серии картинок:
  *
- * Мессенджеры показывают такую картинку, когда в чат кидают ссылку на сайт.
- * Снимок делается с настоящей страницы, поэтому после правок внешнего вида
- * картинки стоит переснять:
- *   npm run build && node scripts/build-og-images.mjs
+ * 1. public/og/*.jpg — превью ссылок (Open Graph), 1200×630. Их показывают
+ *    мессенджеры, когда в чат кидают ссылку на сайт.
+ * 2. public/previews/*.webp — скриншоты шаблонов, 1660×900. Они стоят на карточках
+ *    витрины и в 3D-сцене на первом экране.
+ *
+ * После правок внешнего вида снимки стоит переснять:
+ *   npm run build && node scripts/build-snapshots.mjs
  *
  * Нужен установленный Edge или Chrome; другой путь можно указать в BROWSER_PATH.
  * Скрипт сам поднимает vite preview и управляет браузером через протокол DevTools —
@@ -33,6 +36,41 @@ const PAGES = [
   { file: 'showcase.jpg', route: '' },
   ...TEMPLATES.map(({ slug }) => ({ file: `${slug}.jpg`, route: slug })),
 ]
+
+const PREVIEW_DIR = path.join(ROOT, 'public', 'previews')
+const PREVIEW_WIDTH = 1660
+const PREVIEW_HEIGHT = 900
+const PREVIEW_QUALITY = 80
+
+/**
+ * Какое место шаблона показать на скриншоте — то, где видно, что сайт живой:
+ * меню или каталог с фотографиями, а не пустая шапка. Нет записи — снимается верх страницы.
+ */
+const PREVIEW_ANCHORS = {
+  sushi: '#menu [aria-pressed]',
+  restaurant: '#gallery',
+  shop: '#catalog',
+  toys: '#catalog',
+}
+
+/** Прокручивает к нужному месту под шапку и ждёт, пока догрузятся фото в кадре. */
+const scrollToAnchor = (selector) => `(async () => {
+  const target = ${JSON.stringify(selector ?? null)}
+  const el = target && document.querySelector(target)
+  const header = document.querySelector('header')
+  const offset = (header ? header.offsetHeight : 0) + 16
+  if (el) window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - offset, behavior: 'instant' })
+  await new Promise((resolve) => setTimeout(resolve, 300))
+  const inView = [...document.images].filter((img) => {
+    const r = img.getBoundingClientRect()
+    return r.bottom > 0 && r.top < window.innerHeight
+  })
+  await Promise.all(inView.map((img) => img.complete ? null : new Promise((resolve) => {
+    img.addEventListener('load', resolve, { once: true })
+    img.addEventListener('error', resolve, { once: true })
+    setTimeout(resolve, 5000)
+  })))
+})()`
 
 const BROWSERS = [
   process.env.BROWSER_PATH,
@@ -228,11 +266,41 @@ try {
     })
     const image = Buffer.from(data, 'base64')
     fs.writeFileSync(path.join(OUT_DIR, file), image)
-    console.log(`  ${file} — ${Math.round(image.length / 1024)} КБ`)
+    console.log(`  og/${file} — ${Math.round(image.length / 1024)} КБ`)
+  }
+
+  // Скриншоты шаблонов для витрины: окно шире, и снимается не верх, а меню или каталог
+  fs.mkdirSync(PREVIEW_DIR, { recursive: true })
+  await cdp.send('Emulation.setDeviceMetricsOverride', {
+    width: PREVIEW_WIDTH,
+    height: PREVIEW_HEIGHT,
+    deviceScaleFactor: 1,
+    mobile: false,
+  })
+
+  for (const { slug } of TEMPLATES) {
+    await cdp.send('Page.navigate', { url: site + slug })
+    await cdp.once('Page.loadEventFired')
+    await cdp.send('Runtime.evaluate', { expression: PREPARE_PAGE, awaitPromise: true })
+    await sleep(SETTLE_MS)
+    await cdp.send('Runtime.evaluate', {
+      expression: scrollToAnchor(PREVIEW_ANCHORS[slug]),
+      awaitPromise: true,
+    })
+    await sleep(800)
+
+    // Без clip снимается видимая область — ровно то место, куда прокрутили
+    const { data } = await cdp.send('Page.captureScreenshot', {
+      format: 'webp',
+      quality: PREVIEW_QUALITY,
+    })
+    const image = Buffer.from(data, 'base64')
+    fs.writeFileSync(path.join(PREVIEW_DIR, `${slug}.webp`), image)
+    console.log(`  previews/${slug}.webp — ${Math.round(image.length / 1024)} КБ`)
   }
 
   cdp.close()
-  console.log(`\nготово: ${PAGES.length} картинок в public/og`)
+  console.log(`\nготово: ${PAGES.length} превью ссылок и ${TEMPLATES.length} скриншотов шаблонов`)
 } finally {
   // Штатное закрытие: браузер сам завершит все свои процессы и отпустит профиль.
   // Процесс, который мы запустили, на Windows бывает лишь пусковым — поэтому
