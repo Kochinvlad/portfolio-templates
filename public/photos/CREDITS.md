@@ -61,9 +61,9 @@
 | `ot-kite.webp` | [Kris Len Lu](https://unsplash.com/@kris3) |
 | `ot-scooter.webp` | [Maxim Tolchinskiy](https://unsplash.com/@shaikhulud) |
 | `ph-aurum-x.webp` | [William Hook](https://unsplash.com/@williamtm) |
-| `ph-helix-action.webp` | [Christian Wiediger](https://unsplash.com/@christianw) |
+| `ph-helix-action.webp` | [Jadon Kelly](https://unsplash.com/@jado_tornado) |
 | `ph-helix-mini.webp` | [Rodion Kutsaiev](https://unsplash.com/@frostroomhead) |
-| `ph-kvant-cam.webp` | [William Thomas](https://unsplash.com/@williamauto) |
+| `ph-kvant-cam.webp` | [Mika Wegelius](https://unsplash.com/@mikawe) |
 | `ph-kvant-lite.webp` | [Vojtech Bruzek](https://unsplash.com/@vojtechbruzek) |
 | `ps-carbonara.webp` | [Zoran Borojevic](https://unsplash.com/@fresh_studio) |
 | `ps-truffle.webp` | [Rob Wicks](https://unsplash.com/@robwicks) |

@@ -34,9 +34,18 @@ const LAYOUT = [
   { x: 20, y: 10 },
 ]
 
-type Camera = { x: number; y: number; z: number }
+type Camera = {
+  x: number
+  y: number
+  z: number
+  /**
+   * Проявленность сцены, 0–1. На первом кадре экраны спрятаны, чтобы не раскрывать,
+   * что будет дальше: они выплывают из дымки, только когда начинаешь листать.
+   */
+  reveal: number
+}
 
-const START: Camera = { x: 0, y: 0, z: 0 }
+const START: Camera = { x: 0, y: 0, z: 0, reveal: 0 }
 
 /** Яркость экрана по расстоянию до камеры: вдали — как в дымке, при пролёте сквозь — гаснет. */
 function panelOpacity(depth: number): number {
@@ -51,7 +60,7 @@ function panelStyle(index: number, cam: Camera) {
   const depth = cam.z - DEPTH_STEP * (index + 1)
   return {
     transform: `translate(-50%, -50%) translate3d(${spot.x - cam.x}%, ${spot.y - cam.y}%, ${depth}px)`,
-    opacity: panelOpacity(depth),
+    opacity: panelOpacity(depth) * cam.reveal,
   }
 }
 
@@ -110,6 +119,8 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
         const tl = gsap.timeline({ defaults: { ease: 'power2.inOut' }, onUpdate: render })
 
         tl.to(introRef.current, { autoAlpha: 0, y: -60, duration: 0.5, ease: 'power1.in' }, 0)
+        // Экраны проявляются, пока уходит вступление, — сюрприз с первого движения колеса
+        tl.to(cam, { reveal: 1, duration: 0.45, ease: 'power1.out' }, 0.05)
 
         TEMPLATES.forEach((_, i) => {
           const spot = LAYOUT[i % LAYOUT.length]
