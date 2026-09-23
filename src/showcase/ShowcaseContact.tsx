@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useRef, useState, type FormEvent } from 'react'
 import { AlertTriangle, Check, ChevronDown, Clock, Mail, Send } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { cn } from '../lib/cn'
@@ -7,7 +7,7 @@ import { Button, buttonStyles } from '../ui/Button'
 import { Input, Select, Textarea } from '../ui/Field'
 import { Section, SectionHeading } from '../ui/Bits'
 import { useToast } from '../ui/Toast'
-import { TEMPLATES } from './templates'
+import { SITE_NAME, TEMPLATES } from './templates'
 
 /* ============================ FAQ ============================ */
 
@@ -118,6 +118,8 @@ export function ContactSection() {
   const [sending, setSending] = useState(false)
   // Заявку не удалось отправить — показываем прямые контакты, чтобы не потерять обращение
   const [failed, setFailed] = useState(false)
+  // Скрытое поле-ловушка: человек его не видит, а спам-боты отмечают всё подряд
+  const botcheck = useRef<HTMLInputElement>(null)
 
   function validate(): ContactErrors {
     const next: ContactErrors = {}
@@ -150,6 +152,12 @@ ${message}`
       return
     }
 
+    // Бот попался: показываем «успех» и ничего не отправляем, чтобы он не пробовал снова
+    if (botcheck.current?.checked) {
+      setSent(true)
+      return
+    }
+
     setSending(true)
     setFailed(false)
 
@@ -161,7 +169,7 @@ ${message}`
           access_key: FORM_ACCESS_KEY,
           // Имя в теме — чтобы заявку было видно прямо в списке писем
           subject: `Заявка с сайта: ${name} — ${topic}`,
-          from_name: 'Витрина шаблонов',
+          from_name: SITE_NAME,
           // Кнопка «Ответить» в почте сразу пишет клиенту, а не в пустоту.
           // Сервис берёт replyto из поля email, но у нас поля с таким именем нет,
           // да и человек может оставить телефон вместо почты.
@@ -268,6 +276,16 @@ ${message}`
           noValidate
           className="flex flex-col gap-5 rounded-card border border-line bg-surface-2 p-6 sm:p-8"
         >
+          {/* Имя botcheck и скрытие через display: none — как рекомендует Web3Forms */}
+          <input
+            ref={botcheck}
+            type="checkbox"
+            name="botcheck"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="hidden"
+          />
           <Input
             label="Как вас зовут"
             placeholder="Иван"

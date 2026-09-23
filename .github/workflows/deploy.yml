@@ -34,16 +34,20 @@ jobs:
       - name: Установить зависимости
         run: npm ci
 
+      # До сборки: отсюда берётся полный адрес сайта для превью ссылок
+      - name: Подготовить Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
       - name: Собрать проект
         env:
           # Сайт лежит в подпапке с именем репозитория — передаём её в Vite
           VITE_BASE: /${{ github.event.repository.name }}/
           # Хеш коммита как версия сборки — по нему страница узнаёт об обновлении
           VITE_APP_VERSION: ${{ github.sha }}
+          # Полный адрес сайта: мессенджеры берут картинку превью только по абсолютной ссылке
+          VITE_SITE_URL: ${{ steps.pages.outputs.base_url }}/
         run: npm run build
-
-      - name: Подготовить Pages
-        uses: actions/configure-pages@v5
 
       - name: Загрузить сборку
         uses: actions/upload-pages-artifact@v3
