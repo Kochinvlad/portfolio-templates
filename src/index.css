@@ -5,7 +5,7 @@
    Каждый шаблон переопределяет переменные внутри своего .theme-*
    ============================================================ */
 :root {
-  --font-ui: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-ui: "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --font-head: var(--font-ui);
 
   --surface: #ffffff;
@@ -27,8 +27,8 @@
 
 /* ---------- Витрина: тёмная «агентская» ---------- */
 .theme-showcase {
-  --font-ui: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-head: "Unbounded", "Inter", sans-serif;
+  --font-ui: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-head: "Unbounded Variable", "Inter Variable", sans-serif;
   --surface: #08080b;
   --surface-2: #101017;
   --surface-3: #191922;
@@ -46,8 +46,8 @@
 
 /* ---------- Суши: тёмная, красно-золотая ---------- */
 .theme-sushi {
-  --font-ui: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-head: "Unbounded", "Inter", sans-serif;
+  --font-ui: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-head: "Unbounded Variable", "Inter Variable", sans-serif;
   --surface: #0f0f13;
   --surface-2: #17171d;
   --surface-3: #202028;
@@ -65,8 +65,8 @@
 
 /* ---------- Ресторан: светлая, кремово-бронзовая ---------- */
 .theme-restaurant {
-  --font-ui: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-head: "Playfair Display", Georgia, serif;
+  --font-ui: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-head: "Playfair Display Variable", Georgia, serif;
   --surface: #fbf8f3;
   --surface-2: #ffffff;
   --surface-3: #f2ece1;
@@ -84,8 +84,8 @@
 
 /* ---------- Магазин: светлая, синяя, «доверие» ---------- */
 .theme-shop {
-  --font-ui: "Manrope", "Inter", sans-serif;
-  --font-head: "Manrope", "Inter", sans-serif;
+  --font-ui: "Manrope Variable", "Inter Variable", sans-serif;
+  --font-head: "Manrope Variable", "Inter Variable", sans-serif;
   --surface: #ffffff;
   --surface-2: #f4f6f9;
   --surface-3: #e8ecf2;
@@ -103,8 +103,8 @@
 
 /* ---------- Игрушки: светлая, фиолетово-жёлтая, круглая ---------- */
 .theme-toys {
-  --font-ui: "Nunito", "Inter", sans-serif;
-  --font-head: "Nunito", "Inter", sans-serif;
+  --font-ui: "Nunito Variable", "Inter Variable", sans-serif;
+  --font-head: "Nunito Variable", "Inter Variable", sans-serif;
   --surface: #fffdf8;
   --surface-2: #ffffff;
   --surface-3: #fdf0dd;

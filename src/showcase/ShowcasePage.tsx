@@ -9,7 +9,7 @@ import { ContactSection, FaqSection, ShowcaseFooter } from './ShowcaseContact'
 const NAV = [
   { href: '#templates', label: 'Шаблоны' },
   { href: '#features', label: 'Что входит' },
-  { href: '#process', label: 'Как работаю' },
+  { href: '#process', label: 'Как работаем' },
   { href: '#faq', label: 'Вопросы' },
 ]
 
@@ -28,10 +28,10 @@ function Header() {
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <a href="#top" className="flex items-center gap-2.5">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand text-on-brand font-head text-lg font-extrabold">
-            В
+            U
           </span>
           <span className="font-head text-[15px] font-bold tracking-tight">
-            Витрина<span className="text-brand">.</span>шаблонов
+            Ultra<span className="text-brand">Team</span>
           </span>
         </a>
 
@@ -167,7 +167,7 @@ function Hero() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
           </span>
-          Свободен для новых проектов
+          Берём новые проекты
         </span>
 
         <h1 className="mt-6 font-head text-[2.1rem] font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl">
@@ -179,7 +179,7 @@ function Hero() {
         </h1>
 
         <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-relaxed text-ink-soft sm:text-lg">
-          Делаю сайты для доставки еды, ресторанов и магазинов. Ниже — четыре готовых шаблона.
+          Делаем сайты для доставки еды, ресторанов и магазинов. Ниже — четыре готовых шаблона.
           Это не картинки: открывайте и кликайте — корзина считает, фильтры фильтруют, формы
           проверяют ввод.
         </p>
@@ -213,7 +213,7 @@ function Hero() {
 
 export function ShowcasePage() {
   useDocumentMeta(
-    'Витрина шаблонов сайтов — портфолио веб-разработчика',
+    'UltraTeam — сайты для доставки еды, ресторанов и магазинов',
     'Живые интерактивные шаблоны сайтов: доставка суши, ресторан, интернет-магазин, магазин игрушек.',
   )
   useRevealOnScroll()

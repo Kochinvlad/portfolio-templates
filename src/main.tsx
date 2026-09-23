@@ -2,6 +2,14 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
+// Шрифты раздаются с нашего сайта, а не с Google: не зависят от чужого сервера
+// и не требуют лишних подключений. Браузер скачивает только те алфавиты
+// (латиница, кириллица), которые реально встречаются на странице.
+import '@fontsource-variable/inter'
+import '@fontsource-variable/manrope'
+import '@fontsource-variable/nunito'
+import '@fontsource-variable/playfair-display'
+import '@fontsource-variable/unbounded'
 import './index.css'
 
 // Позицией прокрутки управляем сами (ScrollToTop в App),

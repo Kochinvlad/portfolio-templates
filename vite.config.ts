@@ -139,7 +139,7 @@ function githubPagesFiles(): Plugin {
           path: '',
           ...readMeta(html),
           image: ogImage('showcase.jpg'),
-          imageAlt: 'Витрина шаблонов сайтов: доставка суши, ресторан, магазин техники и игрушек',
+          imageAlt: `${SITE_NAME}: шаблоны сайтов для доставки суши, ресторана, магазинов техники и игрушек`,
         }),
       )
 

@@ -1,5 +1,5 @@
 /** Название сайта — в превью ссылок и в подписи писем с заявками. */
-export const SITE_NAME = 'Витрина шаблонов'
+export const SITE_NAME = 'UltraTeam'
 
 export type TemplateMeta = {
   slug: string
