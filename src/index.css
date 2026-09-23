@@ -121,26 +121,25 @@
 }
 
 /* ============================================================
-   УТИЛИТЫ, ЧИТАЮЩИЕ ТОКЕНЫ ТЕКУЩЕЙ ТЕМЫ
+   ЦВЕТА ТЕКУЩЕЙ ТЕМЫ
+   Объявлены в теме Tailwind, поэтому работают все цветовые утилиты
+   (bg-, text-, border-, ring-, from-/via-/to- …) и прозрачность вида
+   bg-surface/85. inline — значение не копируется, а ссылается на
+   переменную: каждая .theme-* подменяет цвета на лету.
    ============================================================ */
-@utility bg-surface { background-color: var(--surface); }
-@utility bg-surface-2 { background-color: var(--surface-2); }
-@utility bg-surface-3 { background-color: var(--surface-3); }
-@utility bg-brand { background-color: var(--brand); }
-@utility bg-brand-hover { background-color: var(--brand-hover); }
-@utility bg-brand-soft { background-color: var(--brand-soft); }
-@utility bg-accent { background-color: var(--accent); }
-
-@utility text-ink { color: var(--ink); }
-@utility text-ink-soft { color: var(--ink-soft); }
-@utility text-brand { color: var(--brand); }
-@utility text-accent { color: var(--accent); }
-@utility text-on-brand { color: var(--on-brand); }
-
-@utility border-line { border-color: var(--line); }
-@utility border-brand { border-color: var(--brand); }
-@utility ring-brand { --tw-ring-color: var(--brand); }
-@utility decoration-brand { text-decoration-color: var(--brand); }
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-soft: var(--brand-soft);
+  --color-on-brand: var(--on-brand);
+  --color-accent: var(--accent);
+}
 
 @utility rounded-card { border-radius: var(--radius); }
 @utility rounded-control { border-radius: var(--radius-sm); }
