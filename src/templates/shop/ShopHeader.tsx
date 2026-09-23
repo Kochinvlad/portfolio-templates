@@ -5,6 +5,7 @@ import { usePulse } from '../../lib/hooks'
 import { useCart } from '../../store/cart'
 import { useFavorites } from '../../store/favorites'
 import { IconButton } from '../../ui/Bits'
+import { CategoryIcon } from '../../ui/CategoryIcon'
 import { SHOP_CATEGORIES } from './data'
 
 type Props = {
@@ -97,7 +98,7 @@ export function ShopHeader({
               onClick={() => onPickCategory(cat.id)}
               className="flex cursor-pointer items-center gap-2 rounded-full px-3.5 py-2 text-[14px] font-medium text-ink-soft transition hover:bg-surface-2 hover:text-ink"
             >
-              <span aria-hidden="true">{cat.glyph}</span>
+              <CategoryIcon icon={cat.icon} size={17} />
               {cat.name}
             </button>
           ))}
@@ -116,7 +117,7 @@ export function ShopHeader({
               }}
               className="flex cursor-pointer items-center gap-2 rounded-control px-3 py-3 text-left text-[15px] font-medium text-ink-soft transition hover:bg-surface-2 hover:text-ink"
             >
-              <span aria-hidden="true">{cat.glyph}</span>
+              <CategoryIcon icon={cat.icon} size={17} />
               {cat.name}
             </button>
           ))}

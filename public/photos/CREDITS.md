@@ -9,6 +9,7 @@
 
 | Файл | Автор |
 |---|---|
+| `about-open-kitchen.webp` | [Izzedine Elfatih](https://unsplash.com/@zenwijen) |
 | `ac-aurum-keyboard.webp` | [Wesley Tingey](https://unsplash.com/@wesleyphotography) |
 | `ac-helix-hub.webp` | [Barry A](https://unsplash.com/@barryalbert24) |
 | `ac-nord-charger.webp` | [Andrey Matveev](https://unsplash.com/@zelebb) |
@@ -86,7 +87,7 @@
 | `tr-excavator.webp` | [Jerry Wang](https://unsplash.com/@jerry_318) |
 | `tr-railway.webp` | [Jerry Wang](https://unsplash.com/@jerry_318) |
 | `wn-barolo.webp` | [Apolo Photographer](https://unsplash.com/@apolophotographer) |
-| `wn-chardonnay.webp` | [Ambitious Studio* | Rick Barrett](https://unsplash.com/@weareambitious) |
+| `wn-chardonnay.webp` | [Ambitious Studio* \| Rick Barrett](https://unsplash.com/@weareambitious) |
 | `wn-prosecco.webp` | [Alexander Naglestad](https://unsplash.com/@alexandernaglestad) |
 | `wt-aurum-classic.webp` | [Luke Chesser](https://unsplash.com/@lukechesser) |
 | `wt-vektor-fit.webp` | [Luke Chesser](https://unsplash.com/@lukechesser) |

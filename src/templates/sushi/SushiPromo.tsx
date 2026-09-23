@@ -161,7 +161,9 @@ export function SushiFooter() {
       <div className="mx-auto grid w-full max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <span className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand text-lg">🍣</span>
+            <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand font-head text-lg font-extrabold text-on-brand">
+              С
+            </span>
             <span className="font-head text-[15px] font-extrabold text-ink">САКУРА</span>
           </span>
           <p className="mt-3 text-[14px] leading-relaxed text-ink-soft">

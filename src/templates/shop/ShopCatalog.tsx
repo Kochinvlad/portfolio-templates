@@ -7,6 +7,7 @@ import { useDebounced } from '../../lib/hooks'
 import { useFavorites } from '../../store/favorites'
 import { Button } from '../../ui/Button'
 import { EmptyState } from '../../ui/Bits'
+import { CategoryIcon } from '../../ui/CategoryIcon'
 import { SHOP_BRANDS, SHOP_CATALOG, SHOP_CATEGORIES, SHOP_PRICE_MAX } from './data'
 import { ShopCard } from './ShopProduct'
 
@@ -101,9 +102,7 @@ function FilterPanel({
               checked={filters.categories.includes(cat.id)}
               onChange={() => toggleIn('categories', cat.id)}
             >
-              <span aria-hidden="true" className="mr-1">
-                {cat.glyph}
-              </span>
+              <CategoryIcon icon={cat.icon} size={16} className="mr-1.5 inline-block align-[-3px] text-ink-soft" />
               {cat.name}
             </Checkbox>
           ))}

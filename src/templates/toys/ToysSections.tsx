@@ -61,9 +61,9 @@ export function ToysGiftBanner() {
       >
         <span
           aria-hidden="true"
-          className="grid h-24 w-24 shrink-0 place-items-center rounded-3xl bg-white/25 text-5xl backdrop-blur"
+          className="grid h-24 w-24 shrink-0 place-items-center rounded-3xl bg-white/25 text-white backdrop-blur"
         >
-          🎁
+          <Gift size={46} strokeWidth={1.6} />
         </span>
         <div className="flex-1">
           <h2 className="font-head text-2xl font-black leading-tight text-white sm:text-3xl">
@@ -91,8 +91,8 @@ export function ToysFooter() {
       <div className="mx-auto grid w-full max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <span className="flex items-center gap-2.5">
-            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand text-xl">
-              🧸
+            <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand font-head text-xl font-black text-on-brand">
+              И
             </span>
             <span className="font-head text-[17px] font-extrabold tracking-tight text-ink">
               ИГРО<span className="text-brand">ГРАД</span>

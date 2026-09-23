@@ -1,6 +1,8 @@
 import { ArrowRight, BadgeCheck, CreditCard, RotateCcw, Truck } from 'lucide-react'
 import { formatPrice } from '../../lib/format'
+import { photoUrl } from '../../lib/photos'
 import { buttonStyles } from '../../ui/Button'
+import { CategoryIcon } from '../../ui/CategoryIcon'
 import { SHOP_CATALOG, SHOP_CATEGORIES } from './data'
 
 const FEATURED = SHOP_CATALOG.find((p) => p.id === 'lp-nord-14') ?? SHOP_CATALOG[0]
@@ -82,12 +84,14 @@ export function ShopHero({ onOpenFeatured }: { onOpenFeatured: () => void }) {
             </div>
 
             <div className="hidden justify-self-center lg:block">
-              <span
-                aria-hidden="true"
-                className="grid h-56 w-56 place-items-center rounded-full bg-white/12 text-[8rem] ring-1 ring-white/25 backdrop-blur"
-              >
-                {FEATURED.glyph}
-              </span>
+              <img
+                src={photoUrl(FEATURED.id)}
+                alt={FEATURED.name}
+                width={352}
+                height={262}
+                decoding="async"
+                className="h-[262px] w-[352px] rounded-3xl object-cover shadow-pop ring-4 ring-white/25"
+              />
             </div>
           </div>
         </div>
@@ -100,9 +104,7 @@ export function ShopHero({ onOpenFeatured }: { onOpenFeatured: () => void }) {
               href="#catalog"
               className="flex flex-col items-center gap-2 rounded-card border border-line bg-surface p-4 text-center transition hover:-translate-y-0.5 hover:border-brand hover:shadow-card"
             >
-              <span aria-hidden="true" className="text-2xl">
-                {cat.glyph}
-              </span>
+              <CategoryIcon icon={cat.icon} size={26} className="text-brand" />
               <span className="text-[13px] font-semibold leading-tight text-ink">{cat.name}</span>
             </a>
           ))}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Menu as MenuIcon, Phone, ShoppingBag, Star, Timer, Truck, Wallet, X } from 'lucide-react'
 import { cn } from '../../lib/cn'
 import { usePulse } from '../../lib/hooks'
+import { photoUrl } from '../../lib/photos'
 import { useCart } from '../../store/cart'
 import { buttonStyles } from '../../ui/Button'
 import { IconButton } from '../../ui/Bits'
@@ -24,7 +25,9 @@ export function SushiHeader() {
     <header className="sticky top-0 z-50 border-b border-line bg-surface/88 backdrop-blur-xl">
       <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         <a href="#top" className="flex shrink-0 items-center gap-2.5">
-          <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand text-lg">🍣</span>
+          <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand font-head text-lg font-extrabold text-on-brand">
+            С
+          </span>
           <span className="font-head text-[15px] font-extrabold tracking-tight text-ink">
             САКУРА
           </span>
@@ -149,28 +152,29 @@ export function SushiHero() {
           </dl>
         </div>
 
-        {/* Декоративная композиция вместо фотографии */}
+        {/* Композиция из фото блюд вокруг счётчика позиций */}
         <div className="relative mx-auto hidden aspect-square w-full max-w-md lg:block">
           <div className="absolute inset-0 rounded-full border border-line" />
           <div className="absolute inset-[12%] rounded-full border border-line" />
           {[
-            { glyph: '🍣', pos: 'left-1/2 top-0 -translate-x-1/2', size: 'text-7xl', delay: '0s' },
-            { glyph: '🍱', pos: 'right-0 top-1/2 -translate-y-1/2', size: 'text-6xl', delay: '.4s' },
-            { glyph: '🍜', pos: 'bottom-0 left-1/2 -translate-x-1/2', size: 'text-6xl', delay: '.8s' },
-            { glyph: '🥢', pos: 'left-0 top-1/2 -translate-y-1/2', size: 'text-5xl', delay: '1.2s' },
-          ].map(({ glyph, pos, size, delay }) => (
-            <span
-              key={glyph}
+            { id: 'roll-dragon', pos: 'left-1/2 top-0 -translate-x-1/2', size: 'h-28 w-28', delay: '0s' },
+            { id: 'set-tokyo', pos: 'right-0 top-1/2 -translate-y-1/2', size: 'h-24 w-24', delay: '.4s' },
+            { id: 'hot-ramen', pos: 'bottom-0 left-1/2 -translate-x-1/2', size: 'h-24 w-24', delay: '.8s' },
+            { id: 'nigiri-salmon', pos: 'left-0 top-1/2 -translate-y-1/2', size: 'h-20 w-20', delay: '1.2s' },
+          ].map(({ id, pos, size, delay }) => (
+            <img
+              key={id}
+              src={photoUrl(id)}
+              alt=""
               aria-hidden="true"
+              decoding="async"
               className={cn(
-                'absolute grid h-24 w-24 place-items-center rounded-full border border-line bg-surface-2 shadow-pop',
+                'absolute rounded-full object-cover shadow-pop ring-4 ring-surface-2',
                 pos,
                 size,
               )}
               style={{ animation: `pop-in 0.6s cubic-bezier(0.2,0.9,0.3,1) ${delay} both` }}
-            >
-              {glyph}
-            </span>
+            />
           ))}
           <span
             aria-hidden="true"

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Gift, Menu as MenuIcon, Phone, ShoppingBasket, Sparkles, Truck, X } from 'lucide-react'
 import { usePulse } from '../../lib/hooks'
+import { photoUrl } from '../../lib/photos'
 import { useCart } from '../../store/cart'
 import { buttonStyles } from '../../ui/Button'
 import { IconButton } from '../../ui/Bits'
@@ -21,7 +22,9 @@ export function ToysHeader() {
     <header className="sticky top-0 z-50 border-b border-line bg-surface/92 backdrop-blur-xl">
       <div className="mx-auto flex h-[70px] w-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
         <a href="#top" className="flex shrink-0 items-center gap-2.5">
-          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand text-xl">🧸</span>
+          <span className="grid h-10 w-10 place-items-center rounded-2xl bg-brand font-head text-xl font-black text-on-brand">
+            И
+          </span>
           <span className="font-head text-[17px] font-extrabold tracking-tight text-ink">
             ИГРО<span className="text-brand">ГРАД</span>
           </span>
@@ -142,25 +145,31 @@ export function ToysHero() {
           </dl>
         </div>
 
-        {/* Весёлая композиция из игрушек */}
+        {/* Весёлая композиция из игрушек: фото в цветных рамках, слегка вразброс */}
         <div className="relative mx-auto hidden aspect-square w-full max-w-sm lg:block">
           {[
-            { glyph: '🧸', pos: 'left-0 top-4', size: 'h-32 w-32 text-6xl', hue: 30, delay: '0s' },
-            { glyph: '🚂', pos: 'right-2 top-0', size: 'h-28 w-28 text-5xl', hue: 10, delay: '.15s' },
-            { glyph: '🧱', pos: 'left-8 bottom-2', size: 'h-28 w-28 text-5xl', hue: 270, delay: '.3s' },
-            { glyph: '🎨', pos: 'right-0 bottom-10', size: 'h-32 w-32 text-6xl', hue: 320, delay: '.45s' },
-            { glyph: '🪁', pos: 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2', size: 'h-36 w-36 text-7xl', hue: 190, delay: '.6s' },
-          ].map(({ glyph, pos, size, hue, delay }) => (
+            { id: 'cr-paint', pos: 'left-0 top-4 -rotate-6', size: 'h-32 w-32', hue: 30, delay: '0s' },
+            { id: 'tr-railway', pos: 'right-2 top-0 rotate-3', size: 'h-28 w-28', hue: 10, delay: '.15s' },
+            { id: 'ot-kite', pos: 'left-8 bottom-2 rotate-6', size: 'h-28 w-28', hue: 270, delay: '.3s' },
+            { id: 'ct-blocks', pos: 'right-0 bottom-10 -rotate-3', size: 'h-32 w-32', hue: 320, delay: '.45s' },
+            // В центре — самый узнаваемый и тёплый кадр
+            { id: 'sf-bear', pos: 'left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2', size: 'h-36 w-36', hue: 190, delay: '.6s' },
+          ].map(({ id, pos, size, hue, delay }) => (
             <span
-              key={glyph}
+              key={id}
               aria-hidden="true"
-              className={`absolute grid place-items-center rounded-[2rem] shadow-card ${pos} ${size}`}
+              className={`absolute rounded-[2rem] p-1.5 shadow-card ${pos} ${size}`}
               style={{
                 background: `linear-gradient(140deg, hsl(${hue} 88% 82%), hsl(${(hue + 30) % 360} 80% 66%))`,
                 animation: `pop-in 0.6s cubic-bezier(0.2,0.9,0.3,1) ${delay} both`,
               }}
             >
-              {glyph}
+              <img
+                src={photoUrl(id)}
+                alt=""
+                decoding="async"
+                className="h-full w-full rounded-[1.6rem] object-cover"
+              />
             </span>
           ))}
         </div>

@@ -44,3 +44,29 @@ export function photoUrl(id: string): string | undefined {
 
 fs.writeFileSync(OUT, file)
 console.log(`манифест собран: ${ids.length} фотографий`)
+
+// Таблица авторов в CREDITS.md собирается из credits.json — так она не расходится с файлами.
+const CREDITS_JSON = path.join(DIR, 'credits.json')
+const CREDITS_MD = path.join(DIR, 'CREDITS.md')
+const TABLE_HEAD = '| Файл | Автор |'
+
+if (fs.existsSync(CREDITS_JSON) && fs.existsSync(CREDITS_MD)) {
+  const credits = JSON.parse(fs.readFileSync(CREDITS_JSON, 'utf8'))
+  const md = fs.readFileSync(CREDITS_MD, 'utf8')
+  const tableStart = md.indexOf(TABLE_HEAD)
+
+  if (tableStart < 0) {
+    console.warn(`в CREDITS.md нет строки «${TABLE_HEAD}» — таблица не обновлена`)
+  } else {
+    // Вертикальная черта в имени автора ломает таблицу Markdown
+    const cell = (text) => text.replace(/\|/g, '\\|')
+    const rows = ids.map((id) => {
+      const credit = credits[id]
+      // Своё фото, положенное вручную, в credits.json не попадает
+      const author = credit ? `[${cell(credit.author)}](${credit.authorLink})` : '—'
+      return `| \`${id}.webp\` | ${author} |`
+    })
+    fs.writeFileSync(CREDITS_MD, `${md.slice(0, tableStart)}${TABLE_HEAD}\n|---|---|\n${rows.join('\n')}\n`)
+    console.log(`CREDITS.md обновлён: ${rows.length} строк`)
+  }
+}

@@ -1,14 +1,15 @@
 import type { Category, Product } from '../../lib/types'
 import type { PromoCode } from '../../store/cart'
 
+// Обложка категории — фото одного из её блюд
 export const SUSHI_CATEGORIES: Category[] = [
-  { id: 'sets', name: 'Сеты', glyph: '🍱' },
-  { id: 'rolls', name: 'Роллы', glyph: '🍣' },
-  { id: 'baked', name: 'Запечённые', glyph: '🔥' },
-  { id: 'sushi', name: 'Суши', glyph: '🍤' },
-  { id: 'hot', name: 'Горячее', glyph: '🍜' },
-  { id: 'drinks', name: 'Напитки', glyph: '🥤' },
-  { id: 'desserts', name: 'Десерты', glyph: '🍡' },
+  { id: 'sets', name: 'Сеты', coverId: 'set-tokyo' },
+  { id: 'rolls', name: 'Роллы', coverId: 'roll-philadelphia' },
+  { id: 'baked', name: 'Запечённые', coverId: 'baked-salmon' },
+  { id: 'sushi', name: 'Суши', coverId: 'nigiri-salmon' },
+  { id: 'hot', name: 'Горячее', coverId: 'hot-ramen' },
+  { id: 'drinks', name: 'Напитки', coverId: 'drink-lemonade' },
+  { id: 'desserts', name: 'Десерты', coverId: 'dessert-mochi' },
 ]
 
 export const SUSHI_PROMO_CODES: Record<string, PromoCode> = {

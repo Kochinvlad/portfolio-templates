@@ -58,6 +58,7 @@ export function RestaurantGallery() {
                 glyph={item.glyph}
                 hue={item.hue}
                 photo={photoUrl(item.id)}
+                alt={item.caption}
                 scale="lg"
                 className="h-full w-full transition-transform duration-500 group-hover:scale-105"
               />
@@ -90,6 +91,7 @@ export function RestaurantGallery() {
                 glyph={current.glyph}
                 hue={current.hue}
                 photo={photoUrl(current.id)}
+                alt={current.caption}
                 scale="xl"
                 className="h-72 w-full sm:h-[26rem]"
               />

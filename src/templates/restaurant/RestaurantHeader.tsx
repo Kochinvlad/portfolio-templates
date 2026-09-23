@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Menu as MenuIcon, Phone, X } from 'lucide-react'
+import { Menu as MenuIcon, Phone, UtensilsCrossed, X } from 'lucide-react'
+import { photoUrl } from '../../lib/photos'
 import { buttonStyles } from '../../ui/Button'
 
 const NAV = [
@@ -118,7 +119,7 @@ export function RestaurantHero() {
 
         <div aria-hidden="true" className="my-8 flex items-center gap-4">
           <span className="h-px w-16 bg-line" />
-          <span className="text-2xl">🍽️</span>
+          <UtensilsCrossed size={22} strokeWidth={1.4} className="text-brand" />
           <span className="h-px w-16 bg-line" />
         </div>
 
@@ -162,28 +163,13 @@ export function RestaurantAbout() {
     <section id="about" className="border-t border-line px-4 py-16 sm:px-6 sm:py-24">
       <div className="reveal mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2">
         <div className="relative aspect-[4/3] overflow-hidden bg-surface-3">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0"
-            style={{
-              background:
-                'linear-gradient(135deg, hsl(32 45% 72%) 0%, hsl(24 40% 52%) 55%, hsl(150 22% 32%) 100%)',
-            }}
+          <img
+            src={photoUrl('about-open-kitchen')}
+            alt="Повар готовит на открытом огне у стойки открытой кухни"
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover"
           />
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 opacity-15"
-            style={{
-              backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)',
-              backgroundSize: '18px 18px',
-            }}
-          />
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 grid place-items-center text-[7rem] drop-shadow-2xl"
-          >
-            🔥
-          </span>
           <span className="absolute bottom-5 left-5 bg-surface px-4 py-2 text-[12px] uppercase tracking-[0.2em] text-ink">
             открытая кухня
           </span>

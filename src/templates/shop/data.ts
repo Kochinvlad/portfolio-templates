@@ -1,13 +1,14 @@
+import { Cable, Camera, Headphones, Laptop, Smartphone, Watch } from 'lucide-react'
 import type { Category, Product } from '../../lib/types'
 import type { PromoCode } from '../../store/cart'
 
 export const SHOP_CATEGORIES: Category[] = [
-  { id: 'laptops', name: 'Ноутбуки', glyph: '💻' },
-  { id: 'phones', name: 'Смартфоны', glyph: '📱' },
-  { id: 'audio', name: 'Аудио', glyph: '🎧' },
-  { id: 'watch', name: 'Часы', glyph: '⌚' },
-  { id: 'photo', name: 'Фото и видео', glyph: '📷' },
-  { id: 'accessories', name: 'Аксессуары', glyph: '🔌' },
+  { id: 'laptops', name: 'Ноутбуки', icon: Laptop },
+  { id: 'phones', name: 'Смартфоны', icon: Smartphone },
+  { id: 'audio', name: 'Аудио', icon: Headphones },
+  { id: 'watch', name: 'Часы', icon: Watch },
+  { id: 'photo', name: 'Фото и видео', icon: Camera },
+  { id: 'accessories', name: 'Аксессуары', icon: Cable },
 ]
 
 export const SHOP_BRANDS = ['Nordline', 'Kvant', 'Aurum', 'Vektor', 'Helix']

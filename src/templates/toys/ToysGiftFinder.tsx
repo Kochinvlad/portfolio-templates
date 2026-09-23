@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react'
-import { ArrowLeft, Gift, RotateCcw, Sparkles } from 'lucide-react'
-import type { Product } from '../../lib/types'
+import { ArrowLeft, Gift, RotateCcw, SearchX, Sparkles } from 'lucide-react'
+import type { CategoryMark, Product } from '../../lib/types'
 import { cn } from '../../lib/cn'
 import { Button } from '../../ui/Button'
+import { CategoryIcon } from '../../ui/CategoryIcon'
 import { TOYS_AGE_GROUPS, TOYS_BUDGETS, TOYS_CATALOG, TOYS_INTERESTS, matchesAgeGroup } from './data'
 import { ToysCard } from './ToysProduct'
 
@@ -20,7 +21,7 @@ function OptionGrid({
   onPick,
   columns = 3,
 }: {
-  options: Array<{ id: string; label: string; glyph?: string }>
+  options: Array<CategoryMark & { id: string; label: string }>
   value: string | null
   onPick: (id: string) => void
   columns?: 2 | 3
@@ -42,11 +43,8 @@ function OptionGrid({
                 : 'border-line bg-surface-2 hover:-translate-y-0.5 hover:border-brand/50',
             )}
           >
-            {opt.glyph && (
-              <span aria-hidden="true" className="text-3xl">
-                {opt.glyph}
-              </span>
-            )}
+            {opt.icon && <CategoryIcon icon={opt.icon} size={30} className="text-brand" />}
+            {opt.coverId && <CategoryIcon coverId={opt.coverId} size={56} />}
             <span className="text-[15px] font-bold leading-snug text-ink">{opt.label}</span>
           </button>
         )
@@ -97,7 +95,7 @@ export function ToysGiftFinder({
     {
       title: 'Сколько лет ребёнку?',
       hint: 'Подберём игрушки, которые подходят по возрасту и безопасны.',
-      options: TOYS_AGE_GROUPS.map((a) => ({ id: a.id, label: a.label, glyph: a.glyph })),
+      options: TOYS_AGE_GROUPS.map((a) => ({ id: a.id, label: a.label, icon: a.icon })),
       value: answers.ageGroupId,
       pick: (id: string) => setAnswers((a) => ({ ...a, ageGroupId: id })),
     },
@@ -214,8 +212,11 @@ export function ToysGiftFinder({
               </>
             ) : (
               <div className="flex flex-col items-center gap-4 py-10 text-center">
-                <span aria-hidden="true" className="text-5xl">
-                  🤔
+                <span
+                  aria-hidden="true"
+                  className="grid h-16 w-16 place-items-center rounded-full bg-brand-soft text-brand"
+                >
+                  <SearchX size={30} strokeWidth={1.75} />
                 </span>
                 <h3 className="font-head text-xl font-black text-ink">
                   По таким условиям ничего нет

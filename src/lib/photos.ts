@@ -2,6 +2,7 @@
 
 /** Идентификаторы товаров, для которых в public/photos лежит фотография. */
 const WITH_PHOTO = new Set<string>([
+  'about-open-kitchen',
   'ac-aurum-keyboard',
   'ac-helix-hub',
   'ac-nord-charger',

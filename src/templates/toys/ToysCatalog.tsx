@@ -6,6 +6,7 @@ import { pluralWithCount } from '../../lib/format'
 import { useDebounced } from '../../lib/hooks'
 import { Button } from '../../ui/Button'
 import { EmptyState } from '../../ui/Bits'
+import { CategoryIcon } from '../../ui/CategoryIcon'
 import { TOYS_AGE_GROUPS, TOYS_CATALOG, TOYS_CATEGORIES, matchesAgeGroup } from './data'
 import { ToysCard } from './ToysProduct'
 
@@ -151,7 +152,7 @@ export function ToysCatalog({ onOpenProduct, picked, onPickedConsumed }: Props) 
                 active={ageGroup === group.id}
                 onClick={() => setAgeGroup(ageGroup === group.id ? null : group.id)}
               >
-                <span aria-hidden="true">{group.glyph}</span>
+                <CategoryIcon icon={group.icon} size={17} />
                 {group.label}
               </Chip>
             ))}
@@ -173,7 +174,8 @@ export function ToysCatalog({ onOpenProduct, picked, onPickedConsumed }: Props) 
                 active={category === cat.id}
                 onClick={() => setCategory(category === cat.id ? null : cat.id)}
               >
-                <span aria-hidden="true">{cat.glyph}</span>
+                {/* Фото ближе к краю: круг в скруглённом чипе иначе смотрится с лишним отступом */}
+                <CategoryIcon coverId={cat.coverId} size={24} className="-ml-1.5" />
                 {cat.name}
               </Chip>
             ))}

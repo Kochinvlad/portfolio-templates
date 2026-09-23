@@ -1,5 +1,7 @@
 /** Общие типы, которые переиспользуют все шаблоны. */
 
+import type { LucideIcon } from 'lucide-react'
+
 export type Product = {
   id: string
   name: string
@@ -29,10 +31,20 @@ export type Product = {
   ageMax?: number
 }
 
-export type Category = {
+/**
+ * Значок категории: либо иконка, либо фото товара-представителя.
+ * Технику узнают по силуэту — ей подходят иконки. Еду и игрушки по силуэту
+ * не отличить, поэтому у них маленькое круглое фото, как в приложениях доставки.
+ */
+export type CategoryMark = {
+  icon?: LucideIcon
+  /** id товара, чьё фото служит обложкой категории. */
+  coverId?: string
+}
+
+export type Category = CategoryMark & {
   id: string
   name: string
-  glyph?: string
 }
 
 /** Позиция в корзине. */

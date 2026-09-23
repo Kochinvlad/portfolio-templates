@@ -66,6 +66,7 @@ export function ShopCard({ product, onOpen }: { product: Product; onOpen: () => 
           glyph={product.glyph}
           hue={product.hue}
           photo={photoUrl(product.id)}
+          alt={product.name}
           scale="lg"
           className="h-48 w-full transition-transform duration-500 group-hover:scale-105"
         />
@@ -160,6 +161,7 @@ export function ShopProductModal({
               glyph={product.glyph}
               hue={product.hue}
               photo={photoUrl(product.id)}
+              alt={product.name}
               scale="xl"
               className="h-64 w-full lg:h-full lg:min-h-[28rem]"
             />

@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
-import { Search, SearchX } from 'lucide-react'
-import type { Product } from '../../lib/types'
+import { LayoutGrid, Search, SearchX } from 'lucide-react'
+import type { Category, Product } from '../../lib/types'
 import { cn } from '../../lib/cn'
 import { useDebounced } from '../../lib/hooks'
 import { Button } from '../../ui/Button'
 import { EmptyState, SectionHeading } from '../../ui/Bits'
+import { CategoryIcon } from '../../ui/CategoryIcon'
 import { SUSHI_CATEGORIES, SUSHI_MENU } from './data'
 import { SushiCard } from './SushiProduct'
 
@@ -24,7 +25,7 @@ export function SushiMenu({ onOpenProduct }: { onOpenProduct: (p: Product) => vo
     })
   }, [category, query])
 
-  const tabs = [{ id: 'all', name: 'Всё меню', glyph: '✨' }, ...SUSHI_CATEGORIES]
+  const tabs: Category[] = [{ id: 'all', name: 'Всё меню', icon: LayoutGrid }, ...SUSHI_CATEGORIES]
 
   return (
     <section id="menu" className="px-4 py-16 sm:px-6 sm:py-24">
@@ -61,13 +62,20 @@ export function SushiMenu({ onOpenProduct }: { onOpenProduct: (p: Product) => vo
                 onClick={() => setCategory(tab.id)}
                 aria-pressed={active}
                 className={cn(
-                  'flex shrink-0 cursor-pointer items-center gap-2 rounded-full border px-4 py-2.5 text-[15px] font-semibold transition',
+                  'flex shrink-0 cursor-pointer items-center gap-2 rounded-full border py-2 pl-2 pr-4 text-[15px] font-semibold transition',
                   active
                     ? 'border-brand bg-brand text-on-brand'
                     : 'border-line bg-surface-2 text-ink-soft hover:border-brand/50 hover:text-ink',
                 )}
               >
-                <span aria-hidden="true">{tab.glyph}</span>
+                {/* Иконку «Всё меню» центрируем в том же круге, что и фото категорий */}
+                {tab.icon ? (
+                  <span className="grid h-7 w-7 place-items-center">
+                    <CategoryIcon icon={tab.icon} size={18} />
+                  </span>
+                ) : (
+                  <CategoryIcon coverId={tab.coverId} size={28} />
+                )}
                 {tab.name}
               </button>
             )

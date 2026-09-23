@@ -40,6 +40,7 @@ export function ToysCard({ product, onOpen }: { product: Product; onOpen: () => 
           glyph={product.glyph}
           hue={product.hue}
           photo={photoUrl(product.id)}
+          alt={product.name}
           scale="lg"
           className="h-44 w-full transition-transform duration-500 group-hover:scale-105"
         />
@@ -140,6 +141,7 @@ export function ToysProductModal({
             glyph={product.glyph}
             hue={product.hue}
             photo={photoUrl(product.id)}
+            alt={product.name}
             scale="xl"
             className="h-56 w-full sm:h-full sm:min-h-[24rem]"
           />

@@ -1,13 +1,15 @@
+import { Baby, Bike, Gamepad2, Microscope, Puzzle, type LucideIcon } from 'lucide-react'
 import type { Category, Product } from '../../lib/types'
 import type { PromoCode } from '../../store/cart'
 
+// Обложка категории — фото одной из её игрушек
 export const TOYS_CATEGORIES: Category[] = [
-  { id: 'constructors', name: 'Конструкторы', glyph: '🧱' },
-  { id: 'soft', name: 'Мягкие игрушки', glyph: '🧸' },
-  { id: 'board', name: 'Настольные игры', glyph: '🎲' },
-  { id: 'creative', name: 'Творчество', glyph: '🎨' },
-  { id: 'transport', name: 'Транспорт', glyph: '🚗' },
-  { id: 'outdoor', name: 'Для улицы', glyph: '🪁' },
+  { id: 'constructors', name: 'Конструкторы', coverId: 'ct-blocks' },
+  { id: 'soft', name: 'Мягкие игрушки', coverId: 'sf-bear' },
+  { id: 'board', name: 'Настольные игры', coverId: 'bd-cards' },
+  { id: 'creative', name: 'Творчество', coverId: 'cr-paint' },
+  { id: 'transport', name: 'Транспорт', coverId: 'tr-cars' },
+  { id: 'outdoor', name: 'Для улицы', coverId: 'ot-kite' },
 ]
 
 export type AgeGroup = {
@@ -15,15 +17,15 @@ export type AgeGroup = {
   label: string
   min: number
   max: number
-  glyph: string
+  icon: LucideIcon
 }
 
 export const TOYS_AGE_GROUPS: AgeGroup[] = [
-  { id: 'baby', label: '0–3 года', min: 0, max: 3, glyph: '🍼' },
-  { id: 'preschool', label: '3–6 лет', min: 3, max: 6, glyph: '🧩' },
-  { id: 'junior', label: '6–9 лет', min: 6, max: 9, glyph: '🚲' },
-  { id: 'middle', label: '9–12 лет', min: 9, max: 12, glyph: '🔬' },
-  { id: 'teen', label: '12+ лет', min: 12, max: 16, glyph: '🎮' },
+  { id: 'baby', label: '0–3 года', min: 0, max: 3, icon: Baby },
+  { id: 'preschool', label: '3–6 лет', min: 3, max: 6, icon: Puzzle },
+  { id: 'junior', label: '6–9 лет', min: 6, max: 9, icon: Bike },
+  { id: 'middle', label: '9–12 лет', min: 9, max: 12, icon: Microscope },
+  { id: 'teen', label: '12+ лет', min: 12, max: 16, icon: Gamepad2 },
 ]
 
 export const TOYS_PROMO_CODES: Record<string, PromoCode> = {
@@ -297,15 +299,18 @@ export const TOYS_CATALOG: Product[] = [
   ...TOYS_PRODUCTS_REST,
 ]
 
-/** Интересы для подбора подарка. */
+/** Интересы для подбора подарка. id совпадает с категорией — обложка берётся оттуда же. */
 export const TOYS_INTERESTS = [
-  { id: 'constructors', label: 'Строить и собирать', glyph: '🧱' },
-  { id: 'soft', label: 'Обнимать и играть в дом', glyph: '🧸' },
-  { id: 'board', label: 'Играть с семьёй', glyph: '🎲' },
-  { id: 'creative', label: 'Рисовать и мастерить', glyph: '🎨' },
-  { id: 'transport', label: 'Машинки и техника', glyph: '🚗' },
-  { id: 'outdoor', label: 'Бегать на улице', glyph: '🪁' },
-]
+  { id: 'constructors', label: 'Строить и собирать' },
+  { id: 'soft', label: 'Обнимать и играть в дом' },
+  { id: 'board', label: 'Играть с семьёй' },
+  { id: 'creative', label: 'Рисовать и мастерить' },
+  { id: 'transport', label: 'Машинки и техника' },
+  { id: 'outdoor', label: 'Бегать на улице' },
+].map((interest) => ({
+  ...interest,
+  coverId: TOYS_CATEGORIES.find((cat) => cat.id === interest.id)?.coverId,
+}))
 
 /** Диапазоны бюджета для подбора подарка. */
 export const TOYS_BUDGETS = [

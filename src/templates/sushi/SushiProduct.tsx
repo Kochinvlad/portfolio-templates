@@ -38,6 +38,7 @@ export function SushiCard({ product, onOpen }: { product: Product; onOpen: () =>
           glyph={product.glyph}
           hue={product.hue}
           photo={photoUrl(product.id)}
+          alt={product.name}
           scale="lg"
           className="h-44 w-full transition-transform duration-500 group-hover:scale-[1.04]"
         />
@@ -136,6 +137,7 @@ export function SushiProductModal({
             glyph={product.glyph}
             hue={product.hue}
             photo={photoUrl(product.id)}
+            alt={product.name}
             scale="xl"
             className="h-56 w-full sm:h-full sm:min-h-[22rem]"
           />
