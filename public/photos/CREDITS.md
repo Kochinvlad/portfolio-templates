@@ -48,7 +48,7 @@
 | `lp-kvant-pro.webp` | [Alex Knight](https://unsplash.com/@agk42) |
 | `lp-nord-14.webp` | [Kari Shea](https://unsplash.com/@karishea) |
 | `lp-vektor-13.webp` | [Anete Lūsiņa](https://unsplash.com/@anete_lusina) |
-| `mn-duck.webp` | [Gastro Editorial](https://unsplash.com/@gastroeditorial) |
+| `mn-duck.webp` | [Brett Wharton](https://unsplash.com/@brettwharton) |
 | `mn-lamb.webp` | [Paras Kapoor](https://unsplash.com/@kapoorparas28) |
 | `mn-ribeye.webp` | [Emma Houghton](https://unsplash.com/@madebyswish) |
 | `mn-seabass.webp` | [Keesha's Kitchen](https://unsplash.com/@keeshasskitchen) |
@@ -87,6 +87,6 @@
 | `tr-railway.webp` | [Jerry Wang](https://unsplash.com/@jerry_318) |
 | `wn-barolo.webp` | [Apolo Photographer](https://unsplash.com/@apolophotographer) |
 | `wn-chardonnay.webp` | [Ambitious Studio* | Rick Barrett](https://unsplash.com/@weareambitious) |
-| `wn-prosecco.webp` | [Edward Howell](https://unsplash.com/@edwardhowellphotography) |
+| `wn-prosecco.webp` | [Alexander Naglestad](https://unsplash.com/@alexandernaglestad) |
 | `wt-aurum-classic.webp` | [Luke Chesser](https://unsplash.com/@lukechesser) |
 | `wt-vektor-fit.webp` | [Luke Chesser](https://unsplash.com/@lukechesser) |

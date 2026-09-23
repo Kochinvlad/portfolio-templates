@@ -46,6 +46,15 @@ async function search(query, count) {
   return data.results ?? []
 }
 
+/** Конкретный снимок по его id на Unsplash — когда поиск выдаёт не то. */
+async function fetchPhoto(photoId) {
+  const res = await fetch(`https://api.unsplash.com/photos/${photoId}`, {
+    headers: { Authorization: `Client-ID ${KEY}`, 'Accept-Version': 'v1' },
+  })
+  if (!res.ok) throw new Error(`снимок ${photoId}: HTTP ${res.status}`)
+  return res.json()
+}
+
 async function download(photo, id) {
   const file = path.join(OUT_DIR, `${id}.webp`)
   const url = `${photo.urls.raw}&${IMAGE_PARAMS}`
@@ -66,7 +75,7 @@ let downloaded = 0
 let skipped = 0
 let failed = 0
 
-for (const { q, ids } of QUERIES) {
+for (const { q, photo: pick, ids } of QUERIES) {
   const missing = ids.filter((id) => !fs.existsSync(path.join(OUT_DIR, `${id}.webp`)))
   if (missing.length === 0) {
     skipped += ids.length
@@ -74,9 +83,9 @@ for (const { q, ids } of QUERIES) {
   }
 
   try {
-    const results = await search(q, missing.length)
+    const results = pick ? [await fetchPhoto(pick)] : await search(q, missing.length)
     if (results.length < missing.length) {
-      console.warn(`  мало результатов для «${q}»: ${results.length} из ${missing.length}`)
+      console.warn(`  мало результатов для «${q ?? pick}»: ${results.length} из ${missing.length}`)
     }
     for (let i = 0; i < missing.length; i++) {
       const photo = results[i]
