@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { ArrowRight, Menu, MousePointerClick, Smartphone, Wallet, X, Zap } from 'lucide-react'
-import { useDocumentMeta, useRevealOnScroll } from '../lib/hooks'
+import { Menu, X } from 'lucide-react'
+import { useDocumentMeta, useMediaQuery, useRevealOnScroll } from '../lib/hooks'
 import { buttonStyles } from '../ui/Button'
 import { ToastProvider } from '../ui/Toast'
+import { CinemaHero } from './ShowcaseCinema'
+import { HeroActions, HeroBadge, HeroGlow, HeroLead, HeroStats, HeroTitle } from './ShowcaseHeroParts'
 import { FeaturesSection, ProcessSection, TemplatesSection } from './ShowcaseSections'
 import { ContactSection, FaqSection, ShowcaseFooter } from './ShowcaseContact'
 
@@ -11,13 +13,6 @@ const NAV = [
   { href: '#features', label: 'Что входит' },
   { href: '#process', label: 'Как работаем' },
   { href: '#faq', label: 'Вопросы' },
-]
-
-const STATS = [
-  { icon: MousePointerClick, value: '4', label: 'живых демо — можно кликать' },
-  { icon: Zap, value: '5–14', label: 'дней от брифа до запуска' },
-  { icon: Smartphone, value: '320px', label: 'минимальная ширина адаптива' },
-  { icon: Wallet, value: '0 ₽', label: 'хостинг на статике' },
 ]
 
 function Header() {
@@ -93,27 +88,11 @@ function Header() {
   )
 }
 
+/** Статичный первый экран — для тех, у кого в системе отключены анимации. */
 function Hero() {
   return (
     <section id="top" className="relative overflow-hidden px-4 pb-16 pt-14 sm:px-6 sm:pb-24 sm:pt-20">
-      {/* Живой фон: два пятна света, медленно дрейфующие в противофазе */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-[-18rem] h-[36rem] w-[36rem] rounded-full blur-[110px]"
-        style={{
-          background: 'radial-gradient(circle, #6366f1 0%, #f472b6 55%, transparent 72%)',
-          animation: 'drift-a 26s ease-in-out infinite',
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-40 top-[6rem] h-[30rem] w-[30rem] rounded-full blur-[120px]"
-        style={{
-          background: 'radial-gradient(circle, #22d3ee 0%, #6366f1 60%, transparent 75%)',
-          animation: 'drift-b 34s ease-in-out infinite',
-          animationDelay: '-8s',
-        }}
-      />
+      <HeroGlow />
       {/*
         Сетка в два слоя: тусклая основа и бегущая по её линиям подсветка.
         Оба слоя лежат внутри общей маски, которая мягко гасит сетку к низу шапки.
@@ -162,53 +141,23 @@ function Hero() {
       </div>
 
       <div className="relative mx-auto w-full max-w-4xl text-center">
-        <span className="inline-flex items-center gap-2 rounded-full border border-line bg-surface-2 px-4 py-1.5 text-[13px] font-semibold text-ink-soft">
-          <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-          </span>
-          Берём новые проекты
-        </span>
-
-        <h1 className="mt-6 font-head text-[2.1rem] font-extrabold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl">
-          Сайты, в которых
-          <br className="hidden sm:block" />{' '}
-          <span className="bg-gradient-to-r from-[#818cf8] via-[#c084fc] to-[#f472b6] bg-clip-text text-transparent">
-            всё нажимается
-          </span>
-        </h1>
-
-        <p className="mx-auto mt-5 max-w-2xl text-[17px] leading-relaxed text-ink-soft sm:text-lg">
-          Делаем сайты для доставки еды, ресторанов и магазинов. Ниже — четыре готовых шаблона.
-          Это не картинки: открывайте и кликайте — корзина считает, фильтры фильтруют, формы
-          проверяют ввод.
-        </p>
-
-        <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <a href="#templates" className={buttonStyles('primary', 'lg', 'w-full sm:w-auto')}>
-            Открыть шаблоны
-            <ArrowRight size={18} />
-          </a>
-          <a href="#contact" className={buttonStyles('outline', 'lg', 'w-full sm:w-auto')}>
-            Нужен свой вариант
-          </a>
-        </div>
-
-        <dl className="mx-auto mt-14 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4">
-          {STATS.map(({ icon: Icon, value, label }) => (
-            <div
-              key={label}
-              className="rounded-card border border-line bg-surface-2 px-4 py-5 text-left"
-            >
-              <Icon size={18} className="text-brand" />
-              <dt className="mt-3 font-head text-2xl font-extrabold text-ink">{value}</dt>
-              <dd className="mt-1 text-[13px] leading-snug text-ink-soft">{label}</dd>
-            </div>
-          ))}
-        </dl>
+        <HeroBadge />
+        <HeroTitle />
+        <HeroLead />
+        <HeroActions className="mt-8" />
+        <HeroStats className="mt-14" />
       </div>
     </section>
   )
+}
+
+/**
+ * Первый экран: полёт камеры сквозь шаблоны. Если в системе отключены
+ * анимации — статичная версия с тем же текстом.
+ */
+function HeroSection() {
+  const reducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  return reducedMotion ? <Hero /> : <CinemaHero fallback={<Hero />} />
 }
 
 export function ShowcasePage() {
@@ -223,7 +172,7 @@ export function ShowcasePage() {
       <div className="theme-showcase min-h-screen bg-surface text-ink">
         <Header />
         <main>
-          <Hero />
+          <HeroSection />
           <TemplatesSection />
           <FeaturesSection />
           <ProcessSection />
