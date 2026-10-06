@@ -220,7 +220,7 @@ export const REST_GALLERY: GalleryItem[] = [
   {
     id: 'g-bar',
     title: 'Барная стойка',
-    caption: 'Восемь мест у стойки — можно поужинать в одиночку и не скучать',
+    caption: 'Восемь мест у стойки\u00a0— можно поужинать в одиночку и не скучать',
     glyph: '🍸',
     hue: 268,
   },
@@ -255,8 +255,6 @@ export type Review = {
   role: string
   rating: number
   text: string
-  initial: string
-  hue: number
 }
 
 export const REST_REVIEWS: Review[] = [
@@ -265,9 +263,7 @@ export const REST_REVIEWS: Review[] = [
     name: 'Анна К.',
     role: 'была на ужине вдвоём',
     rating: 5,
-    text: 'Пришли без брони в пятницу вечером — посадили за барную стойку через десять минут. Сибас на углях лучший, что я ела в этом городе. Официант заметил, что мы никуда не спешим, и не торопил со счётом.',
-    initial: 'А',
-    hue: 340,
+    text: 'Пришли без брони в пятницу вечером\u00a0— посадили за барную стойку через десять минут. Сибас на углях лучший, что я ела в этом городе. Официант заметил, что мы никуда не спешим, и не торопил со счётом.',
   },
   {
     id: 'rv-2',
@@ -275,8 +271,6 @@ export const REST_REVIEWS: Review[] = [
     role: 'отмечал день рождения',
     rating: 5,
     text: 'Бронировали приватную комнату на двенадцать человек. Согласовали меню заранее по телефону, всё вынесли вовремя и одновременно. Отдельное спасибо за то, что не поставили музыку громче, чем нужно.',
-    initial: 'Д',
-    hue: 220,
   },
   {
     id: 'rv-3',
@@ -284,8 +278,6 @@ export const REST_REVIEWS: Review[] = [
     role: 'приходит на бизнес-ланч',
     rating: 4,
     text: 'Хожу на обед пару раз в неделю. Готовят стабильно, порции нормальные, укладываюсь в час. Минус один балл за то, что в дождь на террасе прохладно, а внутри в обед бывает шумно.',
-    initial: 'О',
-    hue: 160,
   },
 ]
 
@@ -294,6 +286,30 @@ export const REST_TIME_SLOTS = [
   '12:00', '12:30', '13:00', '13:30', '14:00', '14:30',
   '18:00', '18:30', '19:00', '19:30', '20:00', '20:30', '21:00', '21:30',
 ]
+
+/* ---------- Часы работы ---------- */
+export type OpeningHours = {
+  label: string
+  /** Дни недели в нумерации Date.getDay(): 0 — воскресенье. */
+  days: number[]
+  open: string
+  close: string
+}
+
+export const REST_HOURS: OpeningHours[] = [
+  { label: 'Пн–Чт', days: [1, 2, 3, 4], open: '12:00', close: '23:00' },
+  { label: 'Пт–Сб', days: [5, 6], open: '12:00', close: '01:00' },
+  { label: 'Вс', days: [0], open: '12:00', close: '22:00' },
+]
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
+/** Часы на сегодня по московскому времени — у посетителя может быть другой часовой пояс. */
+export function restHoursToday(now = new Date()): OpeningHours {
+  const weekday = now.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'Europe/Moscow' })
+  const day = WEEKDAYS.indexOf(weekday)
+  return REST_HOURS.find((h) => h.days.includes(day)) ?? REST_HOURS[0]
+}
 
 /** Слоты, которые «уже заняты» — чтобы показать реальную логику. */
 export const REST_BUSY_SLOTS = ['19:00', '19:30', '20:00']

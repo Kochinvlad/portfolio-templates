@@ -55,9 +55,9 @@ async function fetchPhoto(photoId) {
   return res.json()
 }
 
-async function download(photo, id) {
+async function download(photo, id, params = IMAGE_PARAMS) {
   const file = path.join(OUT_DIR, `${id}.webp`)
-  const url = `${photo.urls.raw}&${IMAGE_PARAMS}`
+  const url = `${photo.urls.raw}&${params}`
   const res = await fetch(url)
   if (!res.ok) throw new Error(`загрузка ${id}: HTTP ${res.status}`)
   const buffer = Buffer.from(await res.arrayBuffer())
@@ -75,7 +75,8 @@ let downloaded = 0
 let skipped = 0
 let failed = 0
 
-for (const { q, photo: pick, ids } of QUERIES) {
+// params — свой размер и кадрирование вместо карточного, например для фото на весь экран
+for (const { q, photo: pick, ids, params } of QUERIES) {
   const missing = ids.filter((id) => !fs.existsSync(path.join(OUT_DIR, `${id}.webp`)))
   if (missing.length === 0) {
     skipped += ids.length
@@ -94,7 +95,7 @@ for (const { q, photo: pick, ids } of QUERIES) {
         console.warn(`  нет фото для ${missing[i]}`)
         continue
       }
-      const size = await download(photo, missing[i])
+      const size = await download(photo, missing[i], params)
       downloaded++
       console.log(`  ${missing[i]} — ${(size / 1024).toFixed(0)} КБ — ${photo.user.name}`)
     }

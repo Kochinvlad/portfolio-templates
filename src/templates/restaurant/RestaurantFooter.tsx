@@ -1,4 +1,5 @@
 import { Camera, Clock, MapPin, Phone, Send } from 'lucide-react'
+import { REST_HOURS } from './data'
 
 export function RestaurantFooter() {
   return (
@@ -7,9 +8,7 @@ export function RestaurantFooter() {
         <div>
           <span className="flex flex-col leading-none">
             <span className="font-head text-xl font-bold tracking-[0.18em] text-ink">ТЕРРАСА</span>
-            <span className="mt-1 text-[10px] uppercase tracking-[0.3em] text-ink-soft">
-              кухня и вино
-            </span>
+            <span className="mt-1 font-head text-[13px] italic text-ink-soft">кухня и вино</span>
           </span>
           <p className="mt-5 max-w-sm text-[15px] leading-relaxed text-ink-soft">
             Европейская кухня на открытом огне у Чистых прудов. Работаем с 2016 года.
@@ -32,7 +31,7 @@ export function RestaurantFooter() {
         </div>
 
         <div>
-          <h3 className="text-[11px] font-semibold uppercase tracking-[0.25em] text-brand">
+          <h3 className="font-head text-[21px] text-ink">
             Контакты
           </h3>
           <ul className="mt-5 flex flex-col gap-4 text-[15px] text-ink-soft">
@@ -54,22 +53,22 @@ export function RestaurantFooter() {
         </div>
 
         <div>
-          <h3 className="text-[11px] font-semibold uppercase tracking-[0.25em] text-brand">
+          <h3 className="font-head text-[21px] text-ink">
             Часы работы
           </h3>
           <ul className="mt-5 flex flex-col gap-3 text-[15px] text-ink-soft">
             <li className="flex gap-3">
               <Clock size={17} className="mt-0.5 shrink-0 text-brand" />
-              <span>
-                Пн–Чт: 12:00 – 23:00
-                <br />
-                Пт–Сб: 12:00 – 01:00
-                <br />
-                Вс: 12:00 – 22:00
+              <span className="flex flex-col">
+                {REST_HOURS.map((h) => (
+                  <span key={h.label}>
+                    {h.label}: {h.open} – {h.close}
+                  </span>
+                ))}
               </span>
             </li>
             <li className="text-[13px]">
-              Кухня принимает заказы до 22:00, в пятницу и субботу — до полуночи.
+              Кухня принимает заказы до 22:00, в пятницу и субботу&nbsp;— до полуночи.
             </li>
           </ul>
         </div>

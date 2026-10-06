@@ -8,8 +8,11 @@ import App from './App'
 import '@fontsource-variable/inter'
 import '@fontsource-variable/manrope'
 import '@fontsource-variable/nunito'
-import '@fontsource-variable/playfair-display'
 import '@fontsource-variable/unbounded'
+// У Old Standard TT нет переменной версии: подключаем только нужные начертания
+import '@fontsource/old-standard-tt/400.css'
+import '@fontsource/old-standard-tt/400-italic.css'
+import '@fontsource/old-standard-tt/700.css'
 import './index.css'
 
 // Позицией прокрутки управляем сами (ScrollToTop в App),

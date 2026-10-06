@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Menu as MenuIcon, Phone, UtensilsCrossed, X } from 'lucide-react'
+import { Clock, MapPin, Menu as MenuIcon, Phone, X } from 'lucide-react'
 import { photoUrl } from '../../lib/photos'
 import { buttonStyles } from '../../ui/Button'
+import { restHoursToday } from './data'
 
 const NAV = [
   { href: '#menu', label: 'Меню' },
@@ -19,11 +20,10 @@ export function RestaurantHeader() {
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-surface/92 backdrop-blur-xl">
       <div className="mx-auto flex h-[72px] w-full max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+        {/* Вывеска: прописные с разрядкой здесь — часть знака, а не подпись */}
         <a href="#top" className="flex shrink-0 flex-col leading-none">
           <span className="font-head text-xl font-bold tracking-[0.18em] text-ink">ТЕРРАСА</span>
-          <span className="mt-1 text-[10px] uppercase tracking-[0.3em] text-ink-soft">
-            кухня и вино
-          </span>
+          <span className="mt-1 font-head text-[13px] italic text-ink-soft">кухня и вино</span>
         </a>
 
         <nav className="hidden items-center gap-7 lg:flex">
@@ -31,7 +31,7 @@ export function RestaurantHeader() {
             <a
               key={item.href}
               href={item.href}
-              className="relative text-[14px] font-medium tracking-wide text-ink-soft transition after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-brand after:transition-all after:duration-300 hover:text-ink hover:after:w-full"
+              className="relative text-[14px] font-medium text-ink-soft transition after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-brand after:transition-all after:duration-300 hover:text-ink hover:after:w-full"
             >
               {item.label}
             </a>
@@ -89,68 +89,92 @@ export function RestaurantHeader() {
   )
 }
 
+/*
+  Первый экран — огонь, ради которого сюда идут. Единственное движение на странице:
+  фото медленно оседает, текст появляется следом. Остальные блоки стоят на месте.
+*/
 export function RestaurantHero() {
+  const today = restHoursToday()
+
   return (
-    <section id="top" className="relative overflow-hidden px-4 py-20 sm:px-6 sm:py-28">
-      {/* Тёплая подложка вместо фотографии зала */}
+    <section id="top" className="relative isolate overflow-hidden bg-[#15110e] text-white">
+      <picture>
+        {/* На телефоне — вертикальный кадр того же снимка, иначе мясо уходит за край */}
+        {/* Граница совпадает с sm: в Tailwind — с 640px уже раскладка для компьютера */}
+        <source media="(max-width: 639.98px)" srcSet={photoUrl('rest-hero-tall')} />
+        <img
+          src={photoUrl('rest-hero')}
+          alt="Стейк на кости над открытым огнём гриля"
+          fetchPriority="high"
+          decoding="async"
+          className="animate-hero-settle absolute inset-0 -z-10 h-full w-full object-cover"
+        />
+      </picture>
+      {/*
+        Затемнение там, где лежит текст. На компьютере текст слева внизу, на телефоне
+        заголовок вверху на тёмной стене, кнопки внизу — мясо и пламя видны между ними.
+      */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
+        className="absolute inset-0 -z-10 sm:hidden"
         style={{
           background:
-            'radial-gradient(ellipse 70% 55% at 50% 0%, rgba(140,106,63,0.14) 0%, transparent 70%)',
+            'linear-gradient(to bottom, rgb(21 17 14 / 0.8), rgb(21 17 14 / 0) 35%),' +
+            'linear-gradient(to top, rgb(21 17 14 / 0.92), rgb(21 17 14 / 0) 45%)',
         }}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand/40 to-transparent"
+        className="absolute inset-0 -z-10 hidden sm:block"
+        style={{
+          background:
+            'linear-gradient(to top, rgb(21 17 14 / 0.9), rgb(21 17 14 / 0) 55%),' +
+            'linear-gradient(to right, rgb(21 17 14 / 0.85), rgb(21 17 14 / 0.35) 45%, rgb(21 17 14 / 0) 70%)',
+        }}
       />
 
-      <div className="relative mx-auto flex w-full max-w-3xl flex-col items-center text-center">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.35em] text-brand">
-          Москва · Чистые пруды
-        </span>
-
-        <h1 className="mt-7 font-head text-[2.6rem] font-semibold leading-[1.08] text-ink sm:text-6xl">
-          Европейская кухня
-          <br />
-          <span className="italic text-brand">на открытом огне</span>
-        </h1>
-
-        <div aria-hidden="true" className="my-8 flex items-center gap-4">
-          <span className="h-px w-16 bg-line" />
-          <UtensilsCrossed size={22} strokeWidth={1.4} className="text-brand" />
-          <span className="h-px w-16 bg-line" />
+      <div className="mx-auto flex min-h-[min(calc(100svh_-_72px),800px)] w-full max-w-6xl flex-col justify-between px-4 pb-10 pt-10 sm:justify-end sm:px-6 sm:pb-16 sm:pt-48 lg:pb-20">
+        <div>
+          <h1 className="animate-slide-up max-w-[12ch] font-head text-[2.6rem] font-normal leading-[1.04] sm:text-6xl lg:text-7xl">
+            Европейская кухня на открытом огне
+          </h1>
+          {/* На телефоне абзац закрыл бы мясо, а то же самое рассказано в блоке «О нас» */}
+          <p
+            className="animate-slide-up mt-6 hidden max-w-md text-[17px] leading-relaxed text-white/80 sm:block"
+            style={{ animationDelay: '120ms' }}
+          >
+            Открытая кухня, сорок мест и терраса на бульвар. Готовим на углях и не делаем
+            заготовок дольше одного дня.
+          </p>
         </div>
 
-        <p className="max-w-xl text-[17px] leading-relaxed text-ink-soft">
-          Открытая кухня, сорок посадочных мест и терраса на бульвар. Готовим на углях, работаем с
-          локальными фермерами и не делаем заготовок дольше одного дня.
-        </p>
-
-        <div className="mt-10 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
-          <a href="#booking" className={buttonStyles('primary', 'lg', 'w-full sm:w-auto')}>
-            Забронировать столик
-          </a>
-          <a href="#menu" className={buttonStyles('outline', 'lg', 'w-full sm:w-auto')}>
-            Посмотреть меню
-          </a>
+        <div>
+          <div
+            className="animate-slide-up flex flex-col gap-3 sm:mt-9 sm:flex-row"
+            style={{ animationDelay: '240ms' }}
+          >
+            {/* Винная рамка фокуса на тёмном фото не видна — делаем белую */}
+            <a href="#booking" className={buttonStyles('primary', 'lg', 'focus-visible:outline-white')}>
+              Забронировать столик
+            </a>
+            <a href="#menu" className={buttonStyles('inverse', 'lg')}>
+              Посмотреть меню
+            </a>
+          </div>
+          <ul
+            className="animate-slide-up mt-6 flex flex-col gap-2 text-[15px] text-white/75 sm:mt-10 sm:flex-row sm:gap-8"
+            style={{ animationDelay: '360ms' }}
+          >
+            <li className="flex items-center gap-2">
+              <MapPin size={16} aria-hidden="true" />
+              Чистопрудный бульвар, 14с3
+            </li>
+            <li className="flex items-center gap-2">
+              <Clock size={16} aria-hidden="true" />
+              Сегодня с {today.open} до {today.close}
+            </li>
+          </ul>
         </div>
-
-        <dl className="mt-16 grid w-full grid-cols-3 gap-6 border-t border-line pt-8">
-          {[
-            { value: '2016', label: 'год открытия' },
-            { value: '4.8', label: 'оценка гостей' },
-            { value: '12:00', label: 'открываемся' },
-          ].map(({ value, label }) => (
-            <div key={label}>
-              <dt className="font-head text-2xl font-semibold text-ink sm:text-3xl">{value}</dt>
-              <dd className="mt-1 text-[12px] uppercase tracking-[0.15em] text-ink-soft">
-                {label}
-              </dd>
-            </div>
-          ))}
-        </dl>
       </div>
     </section>
   )
@@ -160,8 +184,8 @@ export function RestaurantHero() {
 
 export function RestaurantAbout() {
   return (
-    <section id="about" className="border-t border-line px-4 py-16 sm:px-6 sm:py-24">
-      <div className="reveal mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2">
+    <section id="about" className="px-4 py-16 sm:px-6 sm:py-24">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-12 lg:grid-cols-2">
         <div className="relative aspect-[4/3] overflow-hidden bg-surface-3">
           <img
             src={photoUrl('about-open-kitchen')}
@@ -170,40 +194,34 @@ export function RestaurantAbout() {
             decoding="async"
             className="absolute inset-0 h-full w-full object-cover"
           />
-          <span className="absolute bottom-5 left-5 bg-surface px-4 py-2 text-[12px] uppercase tracking-[0.2em] text-ink">
-            открытая кухня
-          </span>
         </div>
 
         <div>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-brand">
-            О нас
-          </span>
-          <h2 className="mt-5 font-head text-3xl font-semibold leading-tight text-ink sm:text-4xl">
-            Восемь лет на одном месте — и ни одной заготовки на неделю
+          <h2 className="font-head text-4xl font-normal leading-[1.1] text-ink sm:text-5xl">
+            Восемь лет на одном месте и ни одной заготовки на неделю
           </h2>
           <div className="mt-6 flex flex-col gap-4 text-[16px] leading-relaxed text-ink-soft">
             <p>
               «Терраса» открылась в 2016 году на первом этаже дома у Чистых прудов. С тех пор
-              поменялись два шефа и три раза — меню, но принцип остался прежним: мы готовим ровно
+              поменялись два шефа и три раза&nbsp;— меню, но принцип остался прежним: мы готовим ровно
               столько, сколько съедят сегодня.
             </p>
             <p>
               Мясо берём у фермы в Калужской области, рыбу привозят с Мурманска два раза в неделю,
-              овощи — с рынка каждое утро. Если что-то закончилось, мы честно говорим об этом, а не
+              овощи&nbsp;— с рынка каждое утро. Если что-то закончилось, мы честно говорим об этом, а не
               подаём вчерашнее.
             </p>
           </div>
 
-          <ul className="mt-8 grid gap-4 sm:grid-cols-2">
+          <ul className="mt-8 grid gap-5 sm:grid-cols-2">
             {[
               { title: 'Своя пекарня', text: 'Хлеб печём с шести утра каждый день' },
               { title: 'Сомелье в зале', text: 'Подберёт вино под блюдо, а не по цене' },
               { title: 'Детское меню', text: 'Отдельная страница и стульчики' },
-              { title: 'Можно с собакой', text: 'На террасе — с мая по сентябрь' },
+              { title: 'Можно с собакой', text: 'На террасе\u00a0— с мая по сентябрь' },
             ].map(({ title, text }) => (
               <li key={title} className="border-l-2 border-brand pl-4">
-                <h3 className="font-head text-[17px] font-semibold text-ink">{title}</h3>
+                <h3 className="font-head text-[21px] font-normal leading-tight text-ink">{title}</h3>
                 <p className="mt-1 text-[14px] leading-relaxed text-ink-soft">{text}</p>
               </li>
             ))}

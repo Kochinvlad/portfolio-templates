@@ -28,17 +28,13 @@ export function RestaurantGallery() {
 
   return (
     <section id="gallery" className="border-t border-line px-4 py-16 sm:px-6 sm:py-24">
-      <div className="reveal mx-auto w-full max-w-6xl">
-        <div className="flex flex-col items-center text-center">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-brand">
-            Интерьер
-          </span>
-          <h2 className="mt-5 font-head text-3xl font-semibold leading-tight text-ink sm:text-4xl">
+      <div className="mx-auto w-full max-w-6xl">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-12">
+          <h2 className="font-head text-4xl font-normal leading-[1.1] text-ink sm:text-5xl">
             Как у нас внутри
           </h2>
-          <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-ink-soft">
-            Нажмите на любой кадр, чтобы рассмотреть подробнее. Листать можно стрелками на
-            клавиатуре.
+          <p className="max-w-sm text-[15px] leading-relaxed text-ink-soft">
+            Нажмите на кадр, чтобы рассмотреть подробнее. Листать можно стрелками на клавиатуре.
           </p>
         </div>
 
@@ -64,7 +60,7 @@ export function RestaurantGallery() {
               />
               <span className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
               <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-4 text-left">
-                <span className="font-head text-[17px] font-semibold text-white drop-shadow">
+                <span className="font-head text-[19px] text-white drop-shadow">
                   {item.title}
                 </span>
                 <Expand
@@ -114,7 +110,7 @@ export function RestaurantGallery() {
             </div>
             <div className="p-6">
               <div className="flex items-center justify-between gap-4">
-                <h2 className="font-head text-2xl font-semibold text-ink">{current.title}</h2>
+                <h2 className="font-head text-[26px] font-normal text-ink">{current.title}</h2>
                 <span className="shrink-0 text-[13px] tabular-nums text-ink-soft">
                   {(index ?? 0) + 1} / {REST_GALLERY.length}
                 </span>
@@ -133,42 +129,28 @@ export function RestaurantGallery() {
 export function RestaurantReviews() {
   return (
     <section id="reviews" className="border-t border-line px-4 py-16 sm:px-6 sm:py-24">
-      <div className="reveal mx-auto w-full max-w-6xl">
-        <div className="flex flex-col items-center text-center">
-          <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-brand">
-            Отзывы
-          </span>
-          <h2 className="mt-5 font-head text-3xl font-semibold leading-tight text-ink sm:text-4xl">
+      <div className="mx-auto w-full max-w-6xl">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between sm:gap-12">
+          <h2 className="font-head text-4xl font-normal leading-[1.1] text-ink sm:text-5xl">
             Что говорят гости
           </h2>
-          <div className="mt-5 flex items-center gap-3">
+          <div className="flex items-center gap-3">
             <Rating value={4.8} size={18} />
-            <span className="text-[15px] text-ink-soft">на основе 412 оценок</span>
+            <span className="text-[15px] text-ink-soft">по 412 оценкам</span>
           </div>
         </div>
 
-        <div className="mt-12 grid gap-5 lg:grid-cols-3">
+        {/* Без карточек и аватарок: в отзыве главное — слова гостя */}
+        <div className="mt-12 grid gap-10 lg:grid-cols-3 lg:gap-12">
           {REST_REVIEWS.map((review) => (
-            <figure
-              key={review.id}
-              className="flex flex-col gap-4 border border-line bg-surface-2 p-6 transition hover:border-brand/40"
-            >
-              <Rating value={review.rating} size={15} />
-              <blockquote className="flex-1 text-[15px] leading-relaxed text-ink">
+            <figure key={review.id} className="flex flex-col border-t border-ink pt-6">
+              <Rating value={review.rating} size={14} />
+              <blockquote className="mt-5 flex-1 font-head text-[20px] leading-snug text-ink">
                 «{review.text}»
               </blockquote>
-              <figcaption className="flex items-center gap-3 border-t border-line pt-4">
-                <span
-                  aria-hidden="true"
-                  className="grid h-11 w-11 shrink-0 place-items-center rounded-full font-head text-lg font-semibold text-white"
-                  style={{ backgroundColor: `hsl(${review.hue} 42% 45%)` }}
-                >
-                  {review.initial}
-                </span>
-                <span className="min-w-0">
-                  <span className="block font-semibold text-ink">{review.name}</span>
-                  <span className="block text-[13px] text-ink-soft">{review.role}</span>
-                </span>
+              <figcaption className="mt-6 text-[14px] leading-snug">
+                <span className="block font-semibold text-ink">{review.name}</span>
+                <span className="text-ink-soft">{review.role}</span>
               </figcaption>
             </figure>
           ))}

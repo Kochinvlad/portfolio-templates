@@ -68,7 +68,7 @@ export function RestaurantBooking() {
     if (!date) next.date = 'Выберите дату'
     if (!time) next.time = 'Выберите время'
     if (name.trim().length < 2) next.name = 'Как вас записать?'
-    if (!isPhoneComplete(phone)) next.phone = 'Телефон из 11 цифр — подтвердим бронь'
+    if (!isPhoneComplete(phone)) next.phone = 'Телефон из 11 цифр\u00a0— подтвердим бронь'
     return next
   }
 
@@ -96,9 +96,9 @@ export function RestaurantBooking() {
           <span className="mx-auto grid h-16 w-16 place-items-center rounded-full bg-emerald-600/12 text-emerald-700">
             <Check size={32} />
           </span>
-          <h2 className="mt-6 font-head text-3xl font-semibold text-ink">Столик ваш</h2>
+          <h2 className="mt-6 font-head text-4xl font-normal text-ink">Столик ваш</h2>
           <p className="mt-3 text-[16px] leading-relaxed text-ink-soft">
-            {confirmed.name}, ждём вас. Бронь № {confirmed.code} — назовите этот номер
+            {confirmed.name}, ждём вас. Бронь № {confirmed.code}&nbsp;— назовите этот номер
             администратору на входе.
           </p>
 
@@ -112,8 +112,8 @@ export function RestaurantBooking() {
               },
             ].map(({ label, value }) => (
               <div key={label} className="bg-surface px-4 py-5">
-                <dt className="text-[11px] uppercase tracking-[0.2em] text-ink-soft">{label}</dt>
-                <dd className="mt-2 font-head text-[17px] font-semibold text-ink">{value}</dd>
+                <dt className="text-[13px] text-ink-soft">{label}</dt>
+                <dd className="mt-1 font-head text-[19px] text-ink">{value}</dd>
               </div>
             ))}
           </dl>
@@ -144,16 +144,13 @@ export function RestaurantBooking() {
 
   return (
     <section id="booking" className="border-t border-line px-4 py-16 sm:px-6 sm:py-24">
-      <div className="reveal mx-auto grid w-full max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="mx-auto grid w-full max-w-6xl gap-12 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
-          <span className="text-[11px] font-semibold uppercase tracking-[0.3em] text-brand">
-            Бронирование
-          </span>
-          <h2 className="mt-5 font-head text-3xl font-semibold leading-tight text-ink sm:text-4xl">
+          <h2 className="font-head text-4xl font-normal leading-[1.1] text-ink sm:text-5xl">
             Забронировать столик
           </h2>
           <p className="mt-5 text-[16px] leading-relaxed text-ink-soft">
-            Бронь держим 20 минут после назначенного времени. Если опаздываете — позвоните, мы
+            Бронь держим 20 минут после назначенного времени. Если опаздываете&nbsp;— позвоните, мы
             подождём.
           </p>
 
@@ -165,7 +162,7 @@ export function RestaurantBooking() {
               <li key={title} className="flex gap-4 border-l-2 border-brand pl-4">
                 <Icon size={20} className="mt-0.5 shrink-0 text-brand" />
                 <span>
-                  <span className="block font-head text-[17px] font-semibold text-ink">{title}</span>
+                  <span className="block font-head text-[21px] leading-tight text-ink">{title}</span>
                   <span className="mt-1 block text-[14px] leading-relaxed text-ink-soft">{text}</span>
                 </span>
               </li>
@@ -196,11 +193,12 @@ export function RestaurantBooking() {
               <span className="text-sm font-semibold text-ink">
                 Гостей<span className="text-brand"> *</span>
               </span>
-              <div className="flex h-[50px] items-center justify-between border border-line bg-surface px-4">
+              {/* Сначала число, потом слово: «− 2 + гостя» читается как фраза */}
+              <div className="flex h-[50px] items-center gap-3 border border-line bg-surface px-3">
+                <QtyStepper value={guests} onChange={setGuests} min={1} max={12} size="sm" label="Количество гостей" />
                 <span className="text-[15px] text-ink-soft">
                   {plural(guests, ['гость', 'гостя', 'гостей'])}
                 </span>
-                <QtyStepper value={guests} onChange={setGuests} min={1} max={12} size="sm" label="Количество гостей" />
               </div>
             </div>
           </div>
@@ -242,7 +240,7 @@ export function RestaurantBooking() {
               <p className="text-sm font-medium text-red-500">{errors.time}</p>
             ) : (
               <p className="text-sm text-ink-soft">
-                Зачёркнутое время уже занято — попробуйте другую дату
+                Зачёркнутое время уже занято&nbsp;— попробуйте другую дату
               </p>
             )}
           </div>

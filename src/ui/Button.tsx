@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 import { cn } from '../lib/cn'
 
-export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger'
+export type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger' | 'inverse'
 export type ButtonSize = 'sm' | 'md' | 'lg'
 
 const base =
@@ -22,6 +22,9 @@ const variants: Record<ButtonVariant, string> = {
   outline: 'border border-line text-ink hover:bg-surface-3 bg-transparent',
   ghost: 'text-ink hover:bg-surface-3 bg-transparent',
   danger: 'bg-red-600 text-white hover:bg-red-700',
+  // Контурная кнопка поверх тёмной фотографии, где цвета темы теряются — и рамка фокуса тоже
+  inverse:
+    'border border-white/45 text-white hover:bg-white/10 bg-transparent focus-visible:outline-white',
 }
 
 export function buttonStyles(

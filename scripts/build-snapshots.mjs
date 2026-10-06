@@ -48,7 +48,7 @@ const PREVIEW_QUALITY = 80
  */
 const PREVIEW_ANCHORS = {
   sushi: '#menu [aria-pressed]',
-  restaurant: '#gallery',
+  // У ресторана самое узнаваемое — первый экран с огнём, поэтому снимается верх
   shop: '#catalog',
   toys: '#catalog',
 }

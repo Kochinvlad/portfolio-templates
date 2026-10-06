@@ -61,6 +61,8 @@ const WITH_PHOTO = new Set<string>([
   'ps-carbonara',
   'ps-truffle',
   'ps-vongole',
+  'rest-hero',
+  'rest-hero-tall',
   'roll-alaska',
   'roll-california',
   'roll-dragon',

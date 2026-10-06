@@ -252,10 +252,10 @@
     "description": "A large room with tables and chairs and a tree"
   },
   "g-dish": {
-    "photo": "2tPEqRMCk4U",
-    "author": "Anton Shakirov",
-    "authorLink": "https://unsplash.com/@anton_shakirov",
-    "description": "A restaurant dining area with white tables on a curved concrete balcony"
+    "photo": "AG4EUYNBgmE",
+    "author": "Mathis Mauprivez",
+    "authorLink": "https://unsplash.com/@mathisvisuals",
+    "description": "A close up of a plate of food on a table"
   },
   "g-terrace": {
     "photo": "SUXcGaSnZyY",
@@ -490,5 +490,17 @@
     "author": "Izzedine Elfatih",
     "authorLink": "https://unsplash.com/@zenwijen",
     "description": "A chef cooks with large flames on a grill"
+  },
+  "rest-hero": {
+    "photo": "_aR4l6fj6wQ",
+    "author": "Emerson Vieira",
+    "authorLink": "https://unsplash.com/@emersonvieira",
+    "description": "person barbecuing meat"
+  },
+  "rest-hero-tall": {
+    "photo": "_aR4l6fj6wQ",
+    "author": "Emerson Vieira",
+    "authorLink": "https://unsplash.com/@emersonvieira",
+    "description": "person barbecuing meat"
   }
 }

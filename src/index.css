@@ -63,22 +63,28 @@
   --radius-sm: 12px;
 }
 
-/* ---------- Ресторан: светлая, кремово-бронзовая ---------- */
+/*
+  ---------- Ресторан: известняк, сажа и вино ----------
+  Старый московский дом у Чистых прудов и кухня на огне.
+  Old Standard TT — возрождённый шрифт русских книг конца XIX века;
+  у него только два веса, поэтому заголовки обычной насыщенности.
+*/
 .theme-restaurant {
   --font-ui: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
-  --font-head: "Playfair Display Variable", Georgia, serif;
-  --surface: #fbf8f3;
-  --surface-2: #ffffff;
-  --surface-3: #f2ece1;
-  --ink: #1f1b16;
-  --ink-soft: #6f6558;
-  --line: #e6ded1;
-  --brand: #8c6a3f;
-  --brand-hover: #75562f;
-  --brand-soft: #f3ece1;
+  --font-head: "Old Standard TT", Georgia, serif;
+  --head-tracking: 0;
+  --surface: #edece8;   /* известняк */
+  --surface-2: #f6f5f2;
+  --surface-3: #e2e0da;
+  --ink: #1d1c1a;       /* сажа */
+  --ink-soft: #5e5b55;
+  --line: #d4d1c9;
+  --brand: #6b1f2b;     /* вино */
+  --brand-hover: #561722;
+  --brand-soft: #eadcdc;
   --on-brand: #ffffff;
-  --accent: #2f4a3c;
-  --radius: 4px;
+  --accent: #2f4a3c;    /* бутылочное стекло */
+  --radius: 3px;
   --radius-sm: 2px;
 }
 
@@ -173,7 +179,8 @@
   }
   h1, h2, h3, h4 {
     font-family: var(--font-head);
-    letter-spacing: -0.02em;
+    /* Гротескам идёт плотный набор, классической антикве — нет: тема может переопределить */
+    letter-spacing: var(--head-tracking, -0.02em);
   }
   button, input, select, textarea {
     font-family: inherit;
@@ -241,6 +248,12 @@
   to { transform: translate3d(45%, 0, 0); }
 }
 
+/* Фото на первом экране медленно «оседает» — будто камера отъезжает от огня */
+@keyframes hero-settle {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -252,6 +265,7 @@
 .animate-slide-up { animation: slide-up 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
 .animate-toast-in { animation: toast-in 0.25s cubic-bezier(0.2, 0.9, 0.3, 1) both; }
 .animate-cart-bump { animation: cart-bump 0.4s ease-out; }
+.animate-hero-settle { animation: hero-settle 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 
 /* Появление секций при скролле */
 .reveal {
@@ -270,6 +284,8 @@
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
+    /* Иначе поэтапное появление (задержки в style) держит текст прозрачным */
+    animation-delay: 0s !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;

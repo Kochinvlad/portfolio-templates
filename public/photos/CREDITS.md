@@ -38,7 +38,7 @@
 | `ds-pavlova.webp` | [Janesca](https://unsplash.com/@janesca) |
 | `ds-tiramisu.webp` | [Martin Baron](https://unsplash.com/@elmartinbaron) |
 | `g-bar.webp` | [Ries Bosch](https://unsplash.com/@ries_bosch) |
-| `g-dish.webp` | [Anton Shakirov](https://unsplash.com/@anton_shakirov) |
+| `g-dish.webp` | [Mathis Mauprivez](https://unsplash.com/@mathisvisuals) |
 | `g-hall.webp` | [Zoshua Colah](https://unsplash.com/@zoshuacolah) |
 | `g-kitchen.webp` | [Suzi Kim](https://unsplash.com/@kimsuzi08) |
 | `g-private.webp` | [Declan Sun](https://unsplash.com/@declansun) |
@@ -68,6 +68,8 @@
 | `ps-carbonara.webp` | [Zoran Borojevic](https://unsplash.com/@fresh_studio) |
 | `ps-truffle.webp` | [Rob Wicks](https://unsplash.com/@robwicks) |
 | `ps-vongole.webp` | [Jessie Maxwell](https://unsplash.com/@jessiemaxwellphotography) |
+| `rest-hero.webp` | [Emerson Vieira](https://unsplash.com/@emersonvieira) |
+| `rest-hero-tall.webp` | [Emerson Vieira](https://unsplash.com/@emersonvieira) |
 | `roll-alaska.webp` | [Orkun Orcan](https://unsplash.com/@orkunorcan) |
 | `roll-california.webp` | [Mahmoud Fawzy](https://unsplash.com/@mahmoud_fawzy100) |
 | `roll-dragon.webp` | [Louis Hansel](https://unsplash.com/@louishansel) |

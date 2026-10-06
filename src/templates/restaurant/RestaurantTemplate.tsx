@@ -1,4 +1,4 @@
-import { useDocumentMeta, useRevealOnScroll } from '../../lib/hooks'
+import { useDocumentMeta } from '../../lib/hooks'
 import { ToastProvider } from '../../ui/Toast'
 import { DemoBar } from '../../showcase/DemoBar'
 import { RestaurantAbout, RestaurantHeader, RestaurantHero } from './RestaurantHeader'
@@ -12,7 +12,7 @@ function RestaurantInner() {
     'ТЕРРАСА — ресторан европейской кухни на Чистых прудах',
     'Европейская кухня на открытом огне, летняя терраса и бронирование столика онлайн.',
   )
-  useRevealOnScroll()
+  // Без появления блоков при прокрутке: единственное движение — на первом экране
 
   return (
     <>

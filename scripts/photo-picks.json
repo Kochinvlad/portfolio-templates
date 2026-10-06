@@ -5,5 +5,8 @@
   { "photo": "caoZkadO688", "ids": ["about-open-kitchen"] },
   { "photo": "gbG65gRAGx4", "ids": ["au-helix-speaker"] },
   { "photo": "Q_364J9qF5M", "ids": ["ph-kvant-cam"] },
-  { "photo": "9PROKNisZiU", "ids": ["ph-helix-action"] }
+  { "photo": "9PROKNisZiU", "ids": ["ph-helix-action"] },
+  { "photo": "_aR4l6fj6wQ", "ids": ["rest-hero"], "params": "w=1920&h=1080&fit=crop&q=50&fm=webp" },
+  { "photo": "_aR4l6fj6wQ", "ids": ["rest-hero-tall"], "params": "w=800&h=1200&fit=crop&crop=focalpoint&fp-x=0.56&fp-y=0.5&q=50&fm=webp" },
+  { "photo": "AG4EUYNBgmE", "ids": ["g-dish"] }
 ]
