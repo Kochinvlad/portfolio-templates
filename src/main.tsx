@@ -7,7 +7,7 @@ import App from './App'
 // (латиница, кириллица), которые реально встречаются на странице.
 import '@fontsource-variable/inter'
 import '@fontsource-variable/manrope'
-import '@fontsource-variable/nunito'
+import '@fontsource-variable/rubik'
 import '@fontsource-variable/unbounded'
 // У Old Standard TT нет переменной версии: подключаем только нужные начертания
 import '@fontsource/old-standard-tt/400.css'

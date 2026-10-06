@@ -157,7 +157,7 @@ export function ToysCheckout({ open, onClose }: { open: boolean; onClose: () => 
               Текст на открытку
             </h3>
             <p className="mt-1 text-[13px] font-medium text-ink-soft">
-              В заказе есть подарочная упаковка — напишем от руки на открытке.
+              В заказе есть подарочная упаковка&nbsp;— напишем от руки на открытке.
             </p>
             <Textarea
               className="mt-3"

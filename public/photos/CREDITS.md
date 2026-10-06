@@ -20,15 +20,15 @@
 | `baked-crab.webp` | [Mahmoud Fawzy](https://unsplash.com/@mahmoud_fawzy100) |
 | `baked-eel.webp` | [Mahmoud Fawzy](https://unsplash.com/@mahmoud_fawzy100) |
 | `baked-salmon.webp` | [Mahmoud Fawzy](https://unsplash.com/@mahmoud_fawzy100) |
-| `bd-cards.webp` | [2H Media](https://unsplash.com/@2hmedia) |
-| `bd-logic.webp` | [Christopher Paul High](https://unsplash.com/@christopherphigh) |
+| `bd-cards.webp` | [Olga Musss](https://unsplash.com/@olgamuss) |
+| `bd-logic.webp` | [Miriam Benarroch-Altman](https://unsplash.com/@francesfrehaphotography) |
 | `bd-quest.webp` | [Karthik Balakrishnan](https://unsplash.com/@karthikb351) |
-| `cr-clay.webp` | [Alan Rodriguez](https://unsplash.com/@alanrodriguez) |
+| `cr-clay.webp` | [Julietta Watson](https://unsplash.com/@jwatson95) |
 | `cr-paint.webp` | [Anna Kolosyuk](https://unsplash.com/@anko_) |
-| `cr-slime.webp` | [Dragos Gontariu](https://unsplash.com/@dragos126) |
+| `cr-slime.webp` | [Triana Nana](https://unsplash.com/@triana28) |
 | `ct-blocks.webp` | [Vanessa Bucceri](https://unsplash.com/@vbcreative) |
 | `ct-castle.webp` | [Uladzislau Petrushkevich](https://unsplash.com/@vladuken) |
-| `ct-robot.webp` | [FORTYTWO](https://unsplash.com/@byfortytwo) |
+| `ct-robot.webp` | [Robo Wunderkind](https://unsplash.com/@robowunderkind) |
 | `dessert-cheesecake.webp` | [Edwin Petrus](https://unsplash.com/@ep_petrus) |
 | `dessert-mochi.webp` | [Hamada](https://unsplash.com/@hamadaxyz) |
 | `drink-cola.webp` | [Mohammed Katib](https://unsplash.com/@mkatib) |
@@ -57,9 +57,9 @@
 | `nigiri-eel.webp` | [Luigi Pozzoli](https://unsplash.com/@lu_pl_ph) |
 | `nigiri-salmon.webp` | [Andraz Lazic](https://unsplash.com/@andrazlazic) |
 | `nigiri-tuna.webp` | [FlyD](https://unsplash.com/@flyd2069) |
-| `ot-bubbles.webp` | [Nada Elmekkawi](https://unsplash.com/@nadaelmekkawi) |
-| `ot-kite.webp` | [Kris Len Lu](https://unsplash.com/@kris3) |
-| `ot-scooter.webp` | [Maxim Tolchinskiy](https://unsplash.com/@shaikhulud) |
+| `ot-bubbles.webp` | [Oksana Zub](https://unsplash.com/@oxanamiles) |
+| `ot-kite.webp` | [Arnaud Padallé](https://unsplash.com/@arnotho) |
+| `ot-scooter.webp` | [PAN XIAOZHEN](https://unsplash.com/@zhenhappy) |
 | `ph-aurum-x.webp` | [William Hook](https://unsplash.com/@williamtm) |
 | `ph-helix-action.webp` | [Jadon Kelly](https://unsplash.com/@jado_tornado) |
 | `ph-helix-mini.webp` | [Rodion Kutsaiev](https://unsplash.com/@frostroomhead) |
@@ -87,8 +87,8 @@
 | `st-tartare.webp` | [Delightin Dee](https://unsplash.com/@delightindee) |
 | `sushi-hero.webp` | [Mahmoud Fawzy](https://unsplash.com/@mahmoud_fawzy100) |
 | `sushi-hero-wide.webp` | [Mahmoud Fawzy](https://unsplash.com/@mahmoud_fawzy100) |
-| `tr-cars.webp` | [Jacek Pobłocki](https://unsplash.com/@dabah) |
-| `tr-excavator.webp` | [Jerry Wang](https://unsplash.com/@jerry_318) |
+| `tr-cars.webp` | [Mourizal Zativa](https://unsplash.com/@mourimoto) |
+| `tr-excavator.webp` | [German Krupenin](https://unsplash.com/@hellaren) |
 | `tr-railway.webp` | [Jerry Wang](https://unsplash.com/@jerry_318) |
 | `wn-barolo.webp` | [Apolo Photographer](https://unsplash.com/@apolophotographer) |
 | `wn-chardonnay.webp` | [Ambitious Studio* \| Rick Barrett](https://unsplash.com/@weareambitious) |

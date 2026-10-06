@@ -105,7 +105,8 @@ export function Badge({
     brand: 'bg-brand text-on-brand',
     accent: 'bg-accent text-[#20160a]',
     neutral: 'bg-surface-3 text-ink',
-    sale: 'bg-red-500 text-white',
+    // red-600, а не 500: на 500 белая надпись мелким шрифтом не дотягивала до нормы контраста
+    sale: 'bg-red-600 text-white',
   }
   return (
     <span

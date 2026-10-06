@@ -140,23 +140,31 @@
   --radius-sm: 8px;
 }
 
-/* ---------- Игрушки: светлая, фиолетово-жёлтая, круглая ---------- */
+/*
+  ---------- Игрушки: белая бумага, крафт и деревянные кубики ----------
+  Синий, красный и жёлтый — краска на кубиках с буквами; крафт — подарочная
+  бумага, в которую магазин и упаковывает. Rubik — округлый, но не мультяшный.
+*/
 .theme-toys {
-  --font-ui: "Nunito Variable", "Inter Variable", sans-serif;
-  --font-head: "Nunito Variable", "Inter Variable", sans-serif;
-  --surface: #fffdf8;
+  --font-ui: "Rubik Variable", "Inter Variable", sans-serif;
+  --font-head: "Rubik Variable", "Inter Variable", sans-serif;
+  --head-tracking: -0.01em;
+  --surface: #ffffff;
   --surface-2: #ffffff;
-  --surface-3: #fdf0dd;
-  --ink: #2b1b46;
-  --ink-soft: #7a6b91;
-  --line: #f0e4d4;
-  --brand: #7c4dff;
-  --brand-hover: #6a35ff;
-  --brand-soft: #f2edff;
+  --surface-3: #f5ecdd;   /* светлый крафт */
+  --ink: #2b2420;         /* графит */
+  --ink-soft: #6b625a;
+  --line: #ece4d8;
+  --brand: #2e6be6;       /* синий кубик */
+  --brand-hover: #2459c4;
+  --brand-soft: #eaf1fd;
   --on-brand: #ffffff;
-  --accent: #ffb020;
-  --radius: 24px;
-  --radius-sm: 16px;
+  --accent: #ffc531;      /* жёлтый кубик */
+  --block-red: #e5432f;   /* красный кубик */
+  --wood: #f3e6cc;        /* лицо кубика */
+  --kraft: #e8d7b9;       /* подарочная бумага; текст на ней — только графит */
+  --radius: 18px;
+  --radius-sm: 12px;
 }
 
 /* ============================================================
@@ -296,6 +304,13 @@
   to { transform: scale(1) rotate(-6deg); opacity: 1; }
 }
 
+/* Кубики на первом экране игрушек падают и складываются в пирамиду, снизу вверх */
+@keyframes block-drop {
+  from { transform: translateY(-56px); opacity: 0; }
+  70% { transform: translateY(4px); opacity: 1; }
+  to { transform: none; opacity: 1; }
+}
+
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
@@ -309,6 +324,7 @@
 .animate-cart-bump { animation: cart-bump 0.4s ease-out; }
 .animate-hero-settle { animation: hero-settle 2.4s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
 .animate-stamp { animation: stamp-press 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) 0.35s both; }
+.animate-block-drop { animation: block-drop 0.5s cubic-bezier(0.3, 0.7, 0.4, 1) both; }
 
 /* Появление секций при скролле */
 .reveal {

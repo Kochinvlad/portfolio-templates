@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { ArrowLeft, Gift, RotateCcw, SearchX, Sparkles } from 'lucide-react'
+import { ArrowLeft, RotateCcw, SearchX, Sparkles } from 'lucide-react'
 import type { CategoryMark, Product } from '../../lib/types'
 import { cn } from '../../lib/cn'
 import { Button } from '../../ui/Button'
@@ -40,7 +40,7 @@ function OptionGrid({
               'flex cursor-pointer flex-col items-center gap-2 rounded-card border-2 px-4 py-6 text-center transition',
               active
                 ? 'border-brand bg-brand-soft'
-                : 'border-line bg-surface-2 hover:-translate-y-0.5 hover:border-brand/50',
+                : 'border-line bg-surface-2 hover:border-brand/50',
             )}
           >
             {opt.icon && <CategoryIcon icon={opt.icon} size={30} className="text-brand" />}
@@ -101,7 +101,7 @@ export function ToysGiftFinder({
     },
     {
       title: 'Что ему нравится?',
-      hint: 'Выберите главное увлечение — по нему подберём категорию.',
+      hint: 'Выберите главное увлечение\u00a0— по нему подберём категорию.',
       options: TOYS_INTERESTS,
       value: answers.interestId,
       pick: (id: string) => setAnswers((a) => ({ ...a, interestId: id })),
@@ -125,19 +125,15 @@ export function ToysGiftFinder({
 
   return (
     <section id="finder" className="px-4 py-14 sm:px-6 sm:py-20">
-      <div className="reveal mx-auto w-full max-w-4xl rounded-card border-2 border-line bg-surface-2 p-6 sm:p-10">
+      <div className="mx-auto w-full max-w-4xl rounded-card bg-surface-3 p-6 sm:p-10">
         <div className="flex flex-col items-center text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-2 text-[13px] font-extrabold text-on-brand">
-            <Gift size={15} />
-            Подбор подарка
-          </span>
-          <h2 className="mt-5 font-head text-3xl font-black leading-tight text-ink sm:text-4xl">
+          <h2 className="font-head text-3xl font-extrabold leading-tight text-ink sm:text-4xl">
             {done ? 'Вот что мы нашли' : current?.title}
           </h2>
           <p className="mt-3 max-w-xl text-[16px] font-medium text-ink-soft">
             {done
               ? budgetMissed
-                ? 'В указанный бюджет ничего не попало — показываем самое близкое по цене и возрасту.'
+                ? 'В указанный бюджет ничего не попало\u00a0— показываем самое близкое по цене и возрасту.'
                 : 'Три игрушки, которые подходят по возрасту, интересам и бюджету.'
               : current?.hint}
           </p>
@@ -172,7 +168,7 @@ export function ToysGiftFinder({
               <button
                 type="button"
                 onClick={() => setStep((s) => s - 1)}
-                className="mt-6 inline-flex cursor-pointer items-center gap-2 text-[15px] font-bold text-ink-soft transition hover:text-brand"
+                className="mt-6 inline-flex cursor-pointer items-center gap-2 text-[15px] font-bold text-ink-soft transition hover:text-brand-hover"
               >
                 <ArrowLeft size={16} />
                 Назад
@@ -218,11 +214,11 @@ export function ToysGiftFinder({
                 >
                   <SearchX size={30} strokeWidth={1.75} />
                 </span>
-                <h3 className="font-head text-xl font-black text-ink">
+                <h3 className="font-head text-xl font-extrabold text-ink">
                   По таким условиям ничего нет
                 </h3>
                 <p className="max-w-sm text-[15px] font-medium text-ink-soft">
-                  Попробуйте выбрать другое увлечение — в этой категории для такого возраста пока
+                  Попробуйте выбрать другое увлечение&nbsp;— в этой категории для такого возраста пока
                   пусто.
                 </p>
                 <Button onClick={reset}>

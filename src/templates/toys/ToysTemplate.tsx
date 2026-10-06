@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import type { Product } from '../../lib/types'
-import { useDocumentMeta, useRevealOnScroll } from '../../lib/hooks'
+import { useDocumentMeta } from '../../lib/hooks'
 import { CartProvider, useCart } from '../../store/cart'
 import { ToastProvider } from '../../ui/Toast'
 import { DemoBar } from '../../showcase/DemoBar'
@@ -23,7 +23,7 @@ function ToysInner() {
     'ИГРОГРАД — магазин игрушек с подбором по возрасту',
     'Игрушки для детей от 0 до 14 лет. Подбор подарка за три вопроса, подарочная упаковка, доставка за 1–2 дня.',
   )
-  useRevealOnScroll()
+  // Без появления блоков при прокрутке: единственное движение — кубики на первом экране
 
   const consumePicked = useCallback(() => setPicked(null), [])
 

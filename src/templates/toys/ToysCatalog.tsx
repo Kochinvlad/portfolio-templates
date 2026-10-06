@@ -96,9 +96,9 @@ export function ToysCatalog({ onOpenProduct, picked, onPickedConsumed }: Props) 
   return (
     <section id="catalog" className="px-4 py-14 sm:px-6 sm:py-20">
       <div className="mx-auto w-full max-w-6xl">
-        <div className="reveal flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="font-head text-3xl font-black leading-tight text-ink sm:text-4xl">
+            <h2 className="font-head text-3xl font-extrabold leading-tight text-ink sm:text-4xl">
               Каталог игрушек
             </h2>
             <p className="mt-2 text-[16px] font-medium text-ink-soft">
@@ -139,7 +139,7 @@ export function ToysCatalog({ onOpenProduct, picked, onPickedConsumed }: Props) 
 
         {/* Фильтр по возрасту */}
         <div className="mt-8">
-          <h3 className="text-[13px] font-extrabold uppercase tracking-wider text-ink-soft">
+          <h3 className="text-[14px] font-semibold text-ink-soft">
             Возраст
           </h3>
           <div className="no-scrollbar -mx-4 mt-3 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
@@ -161,7 +161,7 @@ export function ToysCatalog({ onOpenProduct, picked, onPickedConsumed }: Props) 
 
         {/* Фильтр по категории */}
         <div className="mt-6">
-          <h3 className="text-[13px] font-extrabold uppercase tracking-wider text-ink-soft">
+          <h3 className="text-[14px] font-semibold text-ink-soft">
             Категория
           </h3>
           <div className="no-scrollbar -mx-4 mt-3 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">

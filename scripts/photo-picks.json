@@ -11,5 +11,15 @@
   { "photo": "AG4EUYNBgmE", "ids": ["g-dish"] },
   { "photo": "SY6kOypwGMM", "ids": ["sushi-hero"], "params": "w=960&h=1280&fit=crop&crop=focalpoint&fp-x=0.74&fp-y=0.5&q=42&fm=webp" },
   { "photo": "SY6kOypwGMM", "ids": ["sushi-hero-wide"], "params": "rect=2950,1100,3200,2000&w=1100&h=688&fit=crop&q=42&fm=webp" },
-  { "photo": "Yq58lJStQ5M", "ids": ["drink-cola"] }
+  { "photo": "Yq58lJStQ5M", "ids": ["drink-cola"] },
+  { "photo": "tc0cRQJW_DM", "ids": ["ot-scooter"] },
+  { "photo": "XfkNgzyIzMI", "ids": ["bd-cards"] },
+  { "photo": "1VT2qoBtc-k", "ids": ["cr-clay"] },
+  { "photo": "DanbQhVRCM0", "ids": ["ot-bubbles"] },
+  { "photo": "Woq30915dKQ", "ids": ["tr-excavator"] },
+  { "photo": "r5sRQymWiJY", "ids": ["ot-kite"] },
+  { "photo": "L33Rmd9OJxE", "ids": ["bd-logic"] },
+  { "photo": "DnTd-Snz5Ak", "ids": ["tr-cars"] },
+  { "photo": "3EuPcI31MQU", "ids": ["ct-robot"] },
+  { "photo": "VWyiLOKgsgM", "ids": ["cr-slime"] }
 ]

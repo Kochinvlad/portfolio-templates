@@ -32,7 +32,7 @@ export function ToysCard({ product, onOpen }: { product: Product; onOpen: () => 
         'group flex flex-col overflow-hidden rounded-card border-2 border-line bg-surface-2 transition duration-300',
         product.outOfStock
           ? 'opacity-60'
-          : 'cursor-pointer hover:-translate-y-1.5 hover:border-brand hover:shadow-card',
+          : 'cursor-pointer hover:border-brand',
       )}
     >
       <div className="relative">
