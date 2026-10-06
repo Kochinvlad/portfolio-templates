@@ -43,6 +43,36 @@ const PREVIEW_HEIGHT = 900
 const PREVIEW_QUALITY = 80
 
 /**
+ * Страницы целиком — для «полёта» на витрине: сайт листается внутри экрана.
+ * Компьютер снимается при той же ширине, что и превью, поэтому превью служит
+ * заглушкой, пока грузится длинный снимок. Высоту ограничиваем ради веса: в полёте
+ * страница листается секунды, и первых экранов хватает, чтобы понять сайт.
+ */
+const PAGE_SHOTS = [
+  { suffix: 'page', width: PREVIEW_WIDTH, height: PREVIEW_HEIGHT, mobile: false, scale: 1200 / PREVIEW_WIDTH, maxHeight: 5000 },
+  // Телефон чуть крупнее родного размера — иначе на экранах с плотными пикселями мыльно
+  { suffix: 'phone', width: 390, height: 844, mobile: true, scale: 1.2, maxHeight: 4200 },
+]
+const PAGE_QUALITY = 60
+
+/** Пролистывает страницу, чтобы подгрузились отложенные картинки, и возвращает высоту. */
+const LOAD_WHOLE_PAGE = `(async () => {
+  const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+  for (let y = 0; y < document.documentElement.scrollHeight; y += innerHeight * 0.8) {
+    window.scrollTo({ top: y, behavior: 'instant' })
+    await wait(120)
+  }
+  window.scrollTo({ top: 0, behavior: 'instant' })
+  await Promise.all([...document.images].map((img) => img.complete ? null : new Promise((resolve) => {
+    img.addEventListener('load', resolve, { once: true })
+    img.addEventListener('error', resolve, { once: true })
+    setTimeout(resolve, 5000)
+  })))
+  await wait(300)
+  return document.documentElement.scrollHeight
+})()`
+
+/**
  * Какое место шаблона показать на скриншоте — то, где видно, что сайт живой:
  * меню или каталог с фотографиями, а не пустая шапка. Нет записи — снимается верх страницы.
  */
@@ -321,8 +351,46 @@ try {
     console.log(`  previews/${slug}.webp — ${Math.round(image.length / 1024)} КБ`)
   }
 
+  for (const shot of PAGE_SHOTS) {
+    await cdp.send('Emulation.setDeviceMetricsOverride', {
+      width: shot.width,
+      height: shot.height,
+      deviceScaleFactor: 1,
+      mobile: shot.mobile,
+    })
+    for (const { slug } of TEMPLATES) {
+      await cdp.send('Page.navigate', { url: site + slug })
+      await cdp.once('Page.loadEventFired')
+      await cdp.send('Runtime.evaluate', { expression: PREPARE_PAGE, awaitPromise: true })
+      await sleep(SETTLE_MS)
+      const loaded = await cdp.send('Runtime.evaluate', {
+        expression: LOAD_WHOLE_PAGE,
+        awaitPromise: true,
+        returnByValue: true,
+      })
+      const pageHeight = loaded.result?.value
+      if (typeof pageHeight !== 'number') {
+        console.warn(`  previews/${slug}-${shot.suffix}: не удалось пролистать страницу, снимок в один экран`)
+      }
+      const height = Math.min(typeof pageHeight === 'number' ? pageHeight : shot.height, shot.maxHeight)
+      // captureBeyondViewport рисует страницу за пределами окна целиком, шапка остаётся вверху
+      const { data } = await cdp.send('Page.captureScreenshot', {
+        format: 'webp',
+        quality: PAGE_QUALITY,
+        captureBeyondViewport: true,
+        clip: { x: 0, y: 0, width: shot.width, height, scale: shot.scale },
+      })
+      const image = Buffer.from(data, 'base64')
+      fs.writeFileSync(path.join(PREVIEW_DIR, `${slug}-${shot.suffix}.webp`), image)
+      console.log(`  previews/${slug}-${shot.suffix}.webp — ${Math.round(image.length / 1024)} КБ`)
+    }
+  }
+
   cdp.close()
-  console.log(`\nготово: ${PAGES.length} превью ссылок и ${TEMPLATES.length} скриншотов шаблонов`)
+  console.log(
+    `\nготово: ${PAGES.length} превью ссылок, ${TEMPLATES.length} скриншотов шаблонов ` +
+      `и ${TEMPLATES.length * PAGE_SHOTS.length} страниц целиком`,
+  )
 } finally {
   // Штатное закрытие: браузер сам завершит все свои процессы и отпустит профиль.
   // Процесс, который мы запустили, на Windows бывает лишь пусковым — поэтому

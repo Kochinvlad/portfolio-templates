@@ -12,6 +12,11 @@ export type TemplateMeta = {
   themeClass: string
   glyph: string
   hue: number
+  /**
+   * Цвета пространства в «полёте» на витрине: фон, главный свет и второй свет.
+   * Только шестизначный hex (#rrggbb): к цвету дописывается прозрачность.
+   */
+  scene: { bg: string; glow: string; accent: string }
   /** Что умеет демо — показывается на карточке. */
   features: string[]
   /** Ориентировочный срок и цена — правьте под себя. */
@@ -30,6 +35,7 @@ export const TEMPLATES: TemplateMeta[] = [
     themeClass: 'theme-sushi',
     glyph: '🍣',
     hue: 355,
+    scene: { bg: '#0b130f', glow: '#d7263d', accent: '#a8c256' },
     features: ['Меню по категориям', 'Корзина + промокоды', 'Оформление доставки', 'Таймер акции'],
     price: 'от 45 000 ₽',
     term: '7–10 дней',
@@ -44,6 +50,7 @@ export const TEMPLATES: TemplateMeta[] = [
     themeClass: 'theme-restaurant',
     glyph: '🍽️',
     hue: 32,
+    scene: { bg: '#130d09', glow: '#f07a2e', accent: '#6b1f2b' },
     features: ['Бронь столика', 'Меню и винная карта', 'Галерея с лайтбоксом', 'Отзывы гостей'],
     price: 'от 38 000 ₽',
     term: '5–8 дней',
@@ -58,6 +65,7 @@ export const TEMPLATES: TemplateMeta[] = [
     themeClass: 'theme-shop',
     glyph: '🛍️',
     hue: 220,
+    scene: { bg: '#0a1122', glow: '#2e6be6', accent: '#38bdf8' },
     features: ['Поиск и фильтры', 'Избранное', 'Карточка товара', 'Заказ в 2 шага'],
     price: 'от 65 000 ₽',
     term: '10–14 дней',
@@ -72,6 +80,7 @@ export const TEMPLATES: TemplateMeta[] = [
     themeClass: 'theme-toys',
     glyph: '🧸',
     hue: 218,
+    scene: { bg: '#15110a', glow: '#ffc531', accent: '#e5432f' },
     features: ['Фильтр по возрасту', 'Подбор подарка', 'Подарочная упаковка', 'Корзина'],
     price: 'от 42 000 ₽',
     term: '7–10 дней',
