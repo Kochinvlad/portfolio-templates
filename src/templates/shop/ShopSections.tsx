@@ -1,6 +1,7 @@
-import { ArrowRight, BadgeCheck, CreditCard, RotateCcw, Truck } from 'lucide-react'
+import { BadgeCheck, CreditCard, RotateCcw, Truck } from 'lucide-react'
 import { formatPrice } from '../../lib/format'
 import { photoUrl } from '../../lib/photos'
+import { Badge } from '../../ui/Bits'
 import { buttonStyles } from '../../ui/Button'
 import { CategoryIcon } from '../../ui/CategoryIcon'
 import { SHOP_CATALOG, SHOP_CATEGORIES } from './data'
@@ -15,83 +16,45 @@ export function ShopHero({ onOpenFeatured }: { onOpenFeatured: () => void }) {
   return (
     <section id="top" className="px-4 pt-6 sm:px-6 sm:pt-8">
       <div className="mx-auto w-full max-w-6xl">
-        <div
-          className="relative overflow-hidden rounded-card px-6 py-10 sm:px-12 sm:py-14"
-          style={{
-            background: 'linear-gradient(120deg, #1e3a8a 0%, #2563eb 55%, #38bdf8 100%)',
-          }}
-        >
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 opacity-[0.13]"
-            style={{
-              backgroundImage: 'radial-gradient(#fff 1px, transparent 1px)',
-              backgroundSize: '18px 18px',
-            }}
+        {/* Спокойный фон без градиента: в магазине техники главное — сам товар и цена */}
+        <div className="grid items-center gap-6 overflow-hidden rounded-card bg-surface-2 p-5 sm:p-10 lg:grid-cols-[1fr_1.1fr] lg:gap-12 lg:p-12">
+          <img
+            src={photoUrl(FEATURED.id)}
+            alt="Ноутбук на деревянном столе"
+            fetchPriority="high"
+            decoding="async"
+            className="aspect-[4/3] w-full rounded-control object-cover lg:order-last"
           />
-          <div
-            aria-hidden="true"
-            className="absolute -right-16 -top-16 h-72 w-72 rounded-full bg-white/15 blur-2xl"
-          />
-
-          <div className="relative grid items-center gap-8 lg:grid-cols-[1.2fr_1fr]">
-            <div className="text-white">
-              {discount > 0 && (
-                <span className="inline-flex items-center rounded-full bg-white/20 px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-wider backdrop-blur">
-                  скидка {discount} %
+          <div>
+            {discount > 0 && <Badge tone="sale">−{discount}&nbsp;%</Badge>}
+            <h1 className="mt-4 font-head text-[2.1rem] font-extrabold leading-[1.1] text-ink sm:text-5xl">
+              {FEATURED.name}
+            </h1>
+            <p className="mt-4 max-w-lg text-[16px] leading-relaxed text-ink-soft">
+              {FEATURED.description}
+            </p>
+            <div className="mt-6 flex items-baseline gap-3">
+              <span className="font-head text-3xl font-extrabold text-ink">
+                {formatPrice(FEATURED.price)}
+              </span>
+              {FEATURED.oldPrice && (
+                <span className="text-lg text-ink-soft line-through">
+                  {formatPrice(FEATURED.oldPrice)}
                 </span>
               )}
-              <h1 className="mt-5 font-head text-[2.1rem] font-extrabold leading-[1.1] tracking-tight sm:text-5xl">
-                {FEATURED.name}
-              </h1>
-              <p className="mt-4 max-w-lg text-[16px] leading-relaxed text-white/85">
-                {FEATURED.description}
-              </p>
-              <div className="mt-6 flex items-baseline gap-3">
-                <span className="font-head text-3xl font-extrabold">
-                  {formatPrice(FEATURED.price)}
-                </span>
-                {FEATURED.oldPrice && (
-                  <span className="text-lg text-white/60 line-through">
-                    {formatPrice(FEATURED.oldPrice)}
-                  </span>
-                )}
-              </div>
-              <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                <button
-                  type="button"
-                  onClick={onOpenFeatured}
-                  className={buttonStyles(
-                    'secondary',
-                    'lg',
-                    'w-full bg-white text-[#1e3a8a] hover:bg-white/90 sm:w-auto',
-                  )}
-                >
-                  Смотреть товар
-                  <ArrowRight size={18} />
-                </button>
-                <a
-                  href="#catalog"
-                  className={buttonStyles(
-                    'outline',
-                    'lg',
-                    'w-full border-white/50 text-white hover:bg-white/15 sm:w-auto',
-                  )}
-                >
-                  Весь каталог
-                </a>
-              </div>
             </div>
-
-            <div className="hidden justify-self-center lg:block">
-              <img
-                src={photoUrl(FEATURED.id)}
-                alt={FEATURED.name}
-                width={352}
-                height={262}
-                decoding="async"
-                className="h-[262px] w-[352px] rounded-3xl object-cover shadow-pop ring-4 ring-white/25"
-              />
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={onOpenFeatured}
+                className={buttonStyles('primary', 'lg', 'w-full sm:w-auto')}
+              >
+                Смотреть товар
+              </button>
+              {/* Залитая, а не контурная: тонкая рамка на светлой панели почти не видна */}
+              <a href="#catalog" className={buttonStyles('secondary', 'lg', 'w-full sm:w-auto')}>
+                Весь каталог
+              </a>
             </div>
           </div>
         </div>
@@ -102,7 +65,7 @@ export function ShopHero({ onOpenFeatured }: { onOpenFeatured: () => void }) {
             <a
               key={cat.id}
               href="#catalog"
-              className="flex flex-col items-center gap-2 rounded-card border border-line bg-surface p-4 text-center transition hover:-translate-y-0.5 hover:border-brand hover:shadow-card"
+              className="flex flex-col items-center gap-2 rounded-card border border-line bg-surface p-4 text-center transition hover:border-brand"
             >
               <CategoryIcon icon={cat.icon} size={26} className="text-brand" />
               <span className="text-[13px] font-semibold leading-tight text-ink">{cat.name}</span>
@@ -129,9 +92,7 @@ export function ShopBenefits() {
       <div className="mx-auto grid w-full max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {BENEFITS.map(({ icon: Icon, title, text }) => (
           <div key={title} className="flex gap-3.5">
-            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-control bg-brand-soft text-brand">
-              <Icon size={20} />
-            </span>
+            <Icon size={22} aria-hidden="true" className="mt-0.5 shrink-0 text-brand" />
             <span>
               <span className="block font-head text-[15px] font-bold text-ink">{title}</span>
               <span className="mt-1 block text-[13px] leading-relaxed text-ink-soft">{text}</span>
@@ -169,9 +130,7 @@ export function ShopFooter() {
             <span className="grid h-9 w-9 place-items-center rounded-control bg-brand font-head text-lg font-extrabold text-on-brand">
               Т
             </span>
-            <span className="font-head text-[16px] font-extrabold tracking-tight text-ink">
-              ТЕХНО<span className="text-brand">ПОРТ</span>
-            </span>
+            <span className="font-head text-[16px] font-extrabold tracking-tight text-ink">ТЕХНОПОРТ</span>
           </span>
           <p className="mt-4 text-[14px] leading-relaxed text-ink-soft">
             Интернет-магазин техники. Работаем с 2018 года, три пункта выдачи в Москве.

@@ -82,7 +82,7 @@ export function ShopCard({ product, onOpen }: { product: Product; onOpen: () => 
 
       <div className="flex flex-1 flex-col gap-2 p-4">
         {product.brand && (
-          <span className="text-[12px] font-semibold uppercase tracking-wider text-ink-soft">
+          <span className="text-[13px] font-medium text-ink-soft">
             {product.brand}
           </span>
         )}
@@ -174,7 +174,7 @@ export function ShopProductModal({
           <div className="flex flex-col gap-5 p-6 sm:p-8">
             <div>
               {product.brand && (
-                <span className="text-[12px] font-semibold uppercase tracking-wider text-ink-soft">
+                <span className="text-[13px] font-medium text-ink-soft">
                   {product.brand}
                 </span>
               )}

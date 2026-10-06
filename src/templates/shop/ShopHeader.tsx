@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Heart, Menu as MenuIcon, Search, ShoppingCart, X } from 'lucide-react'
 import { cn } from '../../lib/cn'
-import { usePulse } from '../../lib/hooks'
+import { useMediaQuery, usePulse } from '../../lib/hooks'
 import { useCart } from '../../store/cart'
 import { useFavorites } from '../../store/favorites'
 import { IconButton } from '../../ui/Bits'
@@ -27,6 +27,8 @@ export function ShopHeader({
   const { count: favCount } = useFavorites()
   const pulsing = usePulse(count)
   const [menuOpen, setMenuOpen] = useState(false)
+  // На телефоне поле узкое: длинная подсказка обрезалась до «Поиск пс»
+  const wide = useMediaQuery('(min-width: 640px)')
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-surface/95 backdrop-blur-xl">
@@ -36,7 +38,7 @@ export function ShopHeader({
             Т
           </span>
           <span className="hidden font-head text-[16px] font-extrabold tracking-tight text-ink sm:block">
-            ТЕХНО<span className="text-brand">ПОРТ</span>
+            ТЕХНОПОРТ
           </span>
         </a>
 
@@ -48,9 +50,13 @@ export function ShopHeader({
           <input
             value={query}
             onChange={(e) => onQuery(e.target.value)}
-            placeholder="Поиск по каталогу"
+            placeholder={wide ? 'Поиск по каталогу' : 'Поиск'}
             aria-label="Поиск по каталогу"
-            className="w-full rounded-control border border-line bg-surface-2 py-2.5 pl-11 pr-10 text-[15px] text-ink outline-none transition placeholder:text-ink-soft focus:border-brand focus:bg-surface"
+            className={cn(
+              'w-full rounded-control border border-line bg-surface-2 py-2.5 pl-11 text-[15px] text-ink outline-none transition placeholder:text-ink-soft focus:border-brand focus:bg-surface',
+              // Место справа нужно только кнопке очистки
+              query ? 'pr-10' : 'pr-3',
+            )}
           />
           {query && (
             <button
