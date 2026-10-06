@@ -56,6 +56,10 @@ const PREVIEW_ANCHORS = {
 /** Прокручивает к нужному месту под шапку и ждёт, пока догрузятся фото в кадре. */
 const scrollToAnchor = (selector) => `(async () => {
   const target = ${JSON.stringify(selector ?? null)}
+  // Шаблон грузится отдельным файлом: сначала в #root стоит заглушка, якоря ещё нет
+  for (let i = 0; target && i < 50 && !document.querySelector(target); i++) {
+    await new Promise((resolve) => setTimeout(resolve, 100))
+  }
   const el = target && document.querySelector(target)
   const header = document.querySelector('header')
   const offset = (header ? header.offsetHeight : 0) + 16
@@ -70,6 +74,7 @@ const scrollToAnchor = (selector) => `(async () => {
     img.addEventListener('error', resolve, { once: true })
     setTimeout(resolve, 5000)
   })))
+  return { found: Boolean(el), y: Math.round(window.scrollY) }
 })()`
 
 const BROWSERS = [
@@ -283,16 +288,34 @@ try {
     await cdp.once('Page.loadEventFired')
     await cdp.send('Runtime.evaluate', { expression: PREPARE_PAGE, awaitPromise: true })
     await sleep(SETTLE_MS)
-    await cdp.send('Runtime.evaluate', {
+    const scrolled = await cdp.send('Runtime.evaluate', {
       expression: scrollToAnchor(PREVIEW_ANCHORS[slug]),
       awaitPromise: true,
+      returnByValue: true,
     })
+    // Без проверки неудачная прокрутка молча давала снимок шапки вместо каталога
+    const where = scrolled.result?.value
+    if (PREVIEW_ANCHORS[slug] && !(where?.found && where.y > 0)) {
+      console.warn(`  previews/${slug}: не удалось прокрутить к ${PREVIEW_ANCHORS[slug]}`, JSON.stringify(where))
+    }
     await sleep(800)
 
-    // Без clip снимается видимая область — ровно то место, куда прокрутили
+    // Без нового кадра браузер отдаёт старую картинку — ту, что была до прокрутки:
+    // вместо каталога выходила шапка. Выводим вкладку вперёд и ждём два кадра отрисовки.
+    await cdp.send('Page.bringToFront')
+    await cdp.send('Runtime.evaluate', {
+      awaitPromise: true,
+      expression: `Promise.race([
+        new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+        new Promise((resolve) => setTimeout(resolve, 1500)),
+      ])`,
+    })
+
+    // Область — от текущей прокрутки, в координатах страницы
     const { data } = await cdp.send('Page.captureScreenshot', {
       format: 'webp',
       quality: PREVIEW_QUALITY,
+      clip: { x: 0, y: where?.y ?? 0, width: PREVIEW_WIDTH, height: PREVIEW_HEIGHT, scale: 1 },
     })
     const image = Buffer.from(data, 'base64')
     fs.writeFileSync(path.join(PREVIEW_DIR, `${slug}.webp`), image)

@@ -110,7 +110,8 @@ export function Badge({
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-extrabold uppercase tracking-wider',
+        // Обычный регистр: капс с разрядкой на каждой плашке — примета шаблонного дизайна
+        'inline-flex items-center rounded-full px-2.5 py-1 text-[12px] font-bold',
         tones[tone],
         className,
       )}
