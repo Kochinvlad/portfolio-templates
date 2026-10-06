@@ -5,6 +5,7 @@ import { cn } from '../lib/cn'
 import { useMediaQuery } from '../lib/hooks'
 import { buttonStyles } from '../ui/Button'
 import { HeroActions, HeroBadge, HeroGlow, HeroLead, HeroStats, HeroTitle } from './ShowcaseHeroParts'
+import { STICKY_LAYERS } from './stickyLayers'
 import { TEMPLATES, type TemplateMeta } from './templates'
 
 /*
@@ -15,8 +16,8 @@ import { TEMPLATES, type TemplateMeta } from './templates'
   - секция высотой в несколько экранов, внутри неё сцена прилипает к окну (sticky);
   - GSAP ScrollTrigger переводит прокрутку в движение виртуальной камеры;
   - у каждой остановки страница шаблона листается внутри рамки браузера и телефона —
-    видно весь сайт, а шапка, как на настоящей странице, стоит на месте; пространство
-    вокруг перекрашивается в цвета шаблона;
+    видно весь сайт, а шапка и панель фильтров прилипают, как на настоящей странице;
+    пространство вокруг перекрашивается в цвета шаблона;
   - на каждом кадре меняются только transform и opacity — это делает видеокарта,
     страница не перерисовывается.
 */
@@ -107,16 +108,20 @@ function sceneBackground({ scene }: TemplateMeta) {
 type ShotRefs = {
   viewport: (el: HTMLDivElement | null) => void
   image: (el: HTMLImageElement | null) => void
+  layer: (index: number) => (el: HTMLImageElement | null) => void
   onLoad: () => void
 }
 
+const percent = (value: number, of: number) => `${(value / of) * 100}%`
+
 /**
- * Страница шаблона в окне: длинный снимок уезжает вверх, а шапка сайта (отдельная
- * картинка <file>-head) стоит поверх на месте — как на настоящей странице, где она
- * прилипает к верху. file — имя длинного снимка без расширения; нет — ещё не грузим.
+ * Страница шаблона в окне: длинный снимок уезжает вверх, а то, что на сайте прилипает
+ * при прокрутке (шапка, панель фильтров), лежит поверх отдельными картинками и ведёт себя
+ * как на сайте — см. scrollShot. file — имя длинного снимка без расширения; нет — ещё не грузим.
  */
 function ScrollingPage({ file, refs }: { file?: string; refs: ShotRefs }) {
   if (!file) return null
+  const sticky = STICKY_LAYERS[file]
   return (
     <>
       <img
@@ -127,7 +132,24 @@ function ScrollingPage({ file, refs }: { file?: string; refs: ShotRefs }) {
         onLoad={refs.onLoad}
         className="absolute inset-x-0 top-0 w-full"
       />
-      <img src={previewUrl(`${file}-head`)} alt="" decoding="async" className="absolute inset-x-0 top-0 w-full" />
+      {/* Отступ сверху в процентах считается от ширины окна: слой стоит на своём месте
+          страницы ещё до первого кадра полёта */}
+      {sticky?.layers.map((layer, j) => (
+        <img
+          key={layer.file}
+          ref={refs.layer(j)}
+          src={previewUrl(layer.file)}
+          alt=""
+          decoding="async"
+          className="absolute top-0"
+          style={{
+            left: percent(layer.x, sticky.width),
+            width: percent(layer.width, sticky.width),
+            marginTop: percent(layer.y, sticky.width),
+            zIndex: layer.z,
+          }}
+        />
+      ))}
     </>
   )
 }
@@ -175,10 +197,40 @@ function PhoneShot({ file, refs, className }: { file?: string; refs: ShotRefs; c
   )
 }
 
-/** Одна листаемая картинка: окно, сам снимок и сколько пикселей можно пролистать. */
-type Shot = { viewport: HTMLDivElement | null; image: HTMLImageElement | null; range: number }
+/**
+ * Одна листаемая картинка: окно, сам снимок, прилипающие слои поверх, сколько пикселей
+ * можно пролистать и ширина окна.
+ */
+type Shot = {
+  viewport: HTMLDivElement | null
+  image: HTMLImageElement | null
+  layers: Array<HTMLImageElement | null>
+  range: number
+  width: number
+}
 
-const emptyShots = (): Shot[] => TEMPLATES.map(() => ({ viewport: null, image: null, range: 0 }))
+const emptyShots = (): Shot[] =>
+  TEMPLATES.map(() => ({ viewport: null, image: null, layers: [], range: 0, width: 0 }))
+
+/**
+ * Листает снимок на долю p. Прилипающие слои — как на сайте: едут вместе со страницей,
+ * пока не дойдут до своей отметки от верха окна, там стоят, а у конца родителя уезжают дальше.
+ */
+function scrollShot(shot: Shot, file: string, p: number) {
+  if (!shot.image) return
+  const offset = p * shot.range
+  shot.image.style.transform = `translate3d(0, ${-offset}px, 0)`
+  const sticky = STICKY_LAYERS[file]
+  if (!sticky) return
+  // Пикселей окна на пиксель снимка
+  const k = shot.width / sticky.width
+  sticky.layers.forEach((layer, j) => {
+    const el = shot.layers[j]
+    if (!el) return
+    const top = Math.min(Math.max(layer.y * k - offset, layer.stick * k), layer.limit * k - offset)
+    el.style.transform = `translate3d(0, ${top - layer.y * k}px, 0)`
+  })
+}
 
 export function CinemaHero({ fallback }: { fallback: ReactNode }) {
   const sectionRef = useRef<HTMLElement>(null)
@@ -202,10 +254,15 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
   const desktop = useMediaQuery('(min-width: 1024px)')
   const framing = desktop ? FRAMING.desktop : wide ? FRAMING.tablet : FRAMING.phone
 
-  /** Сколько можно пролистать каждый снимок. Меряем при загрузке и смене размера окна. */
+  /** Перерисовка сцены по текущей прокрутке. Пока GSAP не загружен (и после разбора сцены) — пустышка. */
+  const renderRef = useRef(() => {})
+
+  /** Ширина окон и сколько можно пролистать каждый снимок. Меряем при загрузке и смене размера. */
   const measure = () => {
     for (const shot of [...pageShots.current, ...phoneShots.current]) {
-      if (!shot.viewport || !shot.image || !shot.image.complete) continue
+      if (!shot.viewport) continue
+      shot.width = shot.viewport.clientWidth
+      if (!shot.image || !shot.image.complete) continue
       shot.range = Math.max(0, shot.image.offsetHeight - shot.viewport.clientHeight)
     }
   }
@@ -217,8 +274,20 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
     image: (el) => {
       store.current[i].image = el
     },
-    onLoad: measure,
+    layer: (j) => (el) => {
+      store.current[i].layers[j] = el
+    },
+    // Снимок догрузился, когда камера уже стоит: сразу ставим его на нужное место, не дожидаясь прокрутки
+    onLoad: () => {
+      measure()
+      renderRef.current()
+    },
   })
+
+  // Новые снимки появились в окне загрузки — расставляем их слои по текущей прокрутке
+  useEffect(() => {
+    renderRef.current()
+  }, [near])
 
   useEffect(() => {
     let disposed = false
@@ -265,12 +334,9 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
           const near = clamp01(1 - Math.abs(cam.z - stopZ(i)) / (DEPTH_STEP * 0.6))
           el.style.opacity = String(near * cam.reveal)
         })
-        TEMPLATES.forEach((_, i) => {
-          for (const shot of [pageShots.current[i], phoneShots.current[i]]) {
-            if (shot.image) {
-              shot.image.style.transform = `translate3d(0, ${-pages[i].p * shot.range}px, 0)`
-            }
-          }
+        TEMPLATES.forEach(({ slug }, i) => {
+          scrollShot(pageShots.current[i], `${slug}-page`, pages[i].p)
+          scrollShot(phoneShots.current[i], `${slug}-phone`, pages[i].p)
         })
         // Ближайшая остановка: по ней решаем, какие длинные снимки держать загруженными
         if (cam.reveal > 0) {
@@ -288,6 +354,7 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
       }
 
       measure()
+      renderRef.current = render
       const onResize = () => {
         measure()
         render()
@@ -341,6 +408,7 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
       }, sectionRef)
 
       revert = () => {
+        renderRef.current = () => {}
         window.removeEventListener('resize', onResize)
         ctx.revert()
       }

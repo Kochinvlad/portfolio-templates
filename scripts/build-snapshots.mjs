@@ -5,7 +5,9 @@
  *    мессенджеры, когда в чат кидают ссылку на сайт.
  * 2. public/previews/*.webp — скриншоты шаблонов, 1660×900. Они стоят на карточках
  *    витрины и в 3D-сцене на первом экране. Там же страницы целиком для «полёта»
- *    (<шаблон>-page и -phone) и их шапки отдельными картинками (-page-head, -phone-head).
+ *    (<шаблон>-page и -phone) и то, что на них прилипает при прокрутке, отдельными
+ *    картинками (-sticky-1, -sticky-2…). Где эти слои стоят, скрипт записывает
+ *    в src/showcase/stickyLayers.ts.
  *
  * После правок внешнего вида снимки стоит переснять:
  *   npm run build && node scripts/build-snapshots.mjs
@@ -18,6 +20,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { spawn } from 'node:child_process'
+import { pathToFileURL } from 'node:url'
 import { TEMPLATES } from '../src/showcase/templates.ts'
 
 const ROOT = path.resolve(import.meta.dirname, '..')
@@ -56,14 +59,60 @@ const PAGE_SHOTS = [
 ]
 const PAGE_QUALITY = 60
 
+/** Куда записать положения прилипающих слоёв — их читает «полёт» на витрине. */
+const STICKY_MANIFEST = path.join(ROOT, 'src', 'showcase', 'stickyLayers.ts')
+
 /**
- * Нижний край шапки, которая прилипает к верху окна. В «полёте» её показывают отдельной
- * картинкой поверх страницы: страница листается, а шапка стоит на месте, как на сайте.
+ * Находит всё, что на странице прилипает при прокрутке (шапку, панель фильтров), и
+ * возвращает, где оно стоит. В «полёте» такие элементы показываются отдельными картинками
+ * поверх листающейся страницы и ведут себя как на сайте. Учитывается только прилипание
+ * к верху (top); элемент без top остаётся на снимке страницы и просто уезжает с ней.
+ *
+ * Прилипание здесь же отключается (position: relative без сдвигов): элемент встаёт туда,
+ * где его рисует обычная вёрстка, — там его и фотографируют. Список — в window.__sticky.
  */
-const STICKY_HEADER_BOTTOM = `(() => {
-  const header = [...document.querySelectorAll('header')].find((el) => getComputedStyle(el).position === 'sticky')
-  return header ? Math.ceil(header.getBoundingClientRect().bottom) : 0
+const FIND_STICKY = `(() => {
+  const found = [...document.querySelectorAll('body *')]
+    .filter((el) => {
+      const style = getComputedStyle(el)
+      if (style.position !== 'sticky' || style.top === 'auto') return false
+      const box = el.getBoundingClientRect()
+      return box.width > 0 && box.height > 0
+    })
+    .map((el) => {
+      const style = getComputedStyle(el)
+      // Прилипает край внешнего отступа: рамка встаёт на top + margin-top от верха окна
+      const stick = parseFloat(style.top) + parseFloat(style.marginTop)
+      return { el, stick, z: parseInt(style.zIndex) || 0 }
+    })
+  for (const { el } of found) {
+    el.style.position = 'relative'
+    el.style.inset = 'auto'
+  }
+  window.__sticky = found.map(({ el }) => el)
+  return found.map(({ el, stick, z }) => {
+    const box = el.getBoundingClientRect()
+    const parent = el.parentElement.getBoundingClientRect()
+    const parentStyle = getComputedStyle(el.parentElement)
+    // Ниже конца родителя прилипший элемент не опускается — дальше уезжает вместе с ним.
+    // limit — самое низкое положение его верхнего края
+    const parentBottom = parent.bottom - parseFloat(parentStyle.paddingBottom) - parseFloat(parentStyle.borderBottomWidth)
+    const y = box.top + window.scrollY
+    return {
+      x: box.left,
+      y,
+      width: box.width,
+      height: box.height,
+      stick,
+      z,
+      limit: Math.max(y, parentBottom + window.scrollY - box.height - parseFloat(getComputedStyle(el).marginBottom)),
+    }
+  })
 })()`
+
+/** Оставляет видимым только прилипающий элемент с этим номером; -1 — прячет все. */
+const showOnlySticky = (index) =>
+  `window.__sticky.forEach((el, i) => { el.style.visibility = i === ${index} ? '' : 'hidden' })`
 
 /** Пролистывает страницу, чтобы подгрузились отложенные картинки, и возвращает высоту. */
 const LOAD_WHOLE_PAGE = `(async () => {
@@ -162,6 +211,49 @@ function savePreview(name, data) {
   const image = Buffer.from(data, 'base64')
   fs.writeFileSync(path.join(PREVIEW_DIR, `${name}.webp`), image)
   console.log(`  previews/${name}.webp — ${Math.round(image.length / 1024)} КБ`)
+}
+
+/** Удаляет прилипающие слои прошлой съёмки этой страницы — их число могло измениться. */
+function removeStickyFiles(name) {
+  for (const file of fs.readdirSync(PREVIEW_DIR)) {
+    if (file.startsWith(`${name}-sticky-`)) fs.rmSync(path.join(PREVIEW_DIR, file))
+  }
+}
+
+/** Записывает положения прилипающих слоёв в модуль, который читает «полёт». */
+function writeStickyManifest(manifest) {
+  const layer = (l) =>
+    `{ file: '${l.file}', x: ${l.x}, y: ${l.y}, width: ${l.width}, stick: ${l.stick}, limit: ${l.limit}, z: ${l.z} }`
+  const entries = Object.entries(manifest).map(
+    ([name, { width, layers }]) =>
+      `  '${name}': {\n    width: ${width},\n    layers: [\n${layers.map((l) => `      ${layer(l)},\n`).join('')}    ],\n  },\n`,
+  )
+  fs.writeFileSync(
+    STICKY_MANIFEST,
+    `// Файл создаётся скриптом scripts/build-snapshots.mjs — править руками не нужно.
+
+/**
+ * Что на страницах шаблонов прилипает при прокрутке (шапка, панель фильтров) — для «полёта»
+ * на витрине. Ключ — имя длинного снимка из public/previews, сам снимок снят без этих
+ * элементов. Все размеры — в пикселях снимка: width — его ширина; у слоя x и y — где он стоит
+ * на странице, stick — на каком расстоянии от верха окна останавливается, limit — ниже какой
+ * точки страницы не опускается его верхний край (дальше слой уезжает вместе с родителем),
+ * z — его z-index.
+ */
+export type StickyLayer = {
+  file: string
+  x: number
+  y: number
+  width: number
+  stick: number
+  limit: number
+  z: number
+}
+
+export const STICKY_LAYERS: Record<string, { width: number; layers: StickyLayer[] }> = {
+${entries.join('')}}
+`,
+  )
 }
 
 /**
@@ -371,7 +463,16 @@ try {
     savePreview(slug, data)
   }
 
-  let heads = 0
+  /**
+   * Прилипающие слои по снимкам — для src/showcase/stickyLayers.ts. Начинаем с прошлой
+   * записи: файл переписывается после каждой страницы, и при обрыве у ещё не переснятых
+   * страниц остаются их прежние слои. Страниц, которых больше нет, в записи не будет.
+   */
+  const shotNames = PAGE_SHOTS.flatMap(({ suffix }) => TEMPLATES.map(({ slug }) => `${slug}-${suffix}`))
+  const previous = await import(pathToFileURL(STICKY_MANIFEST).href)
+    .then((module) => module.STICKY_LAYERS)
+    .catch(() => ({}))
+  const manifest = Object.fromEntries(shotNames.filter((name) => previous[name]).map((name) => [name, previous[name]]))
   for (const shot of PAGE_SHOTS) {
     await cdp.send('Emulation.setDeviceMetricsOverride', {
       width: shot.width,
@@ -380,6 +481,7 @@ try {
       mobile: shot.mobile,
     })
     for (const { slug } of TEMPLATES) {
+      const name = `${slug}-${shot.suffix}`
       await cdp.send('Page.navigate', { url: site + slug })
       await cdp.once('Page.loadEventFired')
       await cdp.send('Runtime.evaluate', { expression: PREPARE_PAGE, awaitPromise: true })
@@ -391,44 +493,75 @@ try {
       })
       const pageHeight = loaded.result?.value
       if (typeof pageHeight !== 'number') {
-        console.warn(`  previews/${slug}-${shot.suffix}: не удалось пролистать страницу, снимок в один экран`)
+        console.warn(`  previews/${name}: не удалось пролистать страницу, снимок в один экран`)
       }
       const height = Math.min(typeof pageHeight === 'number' ? pageHeight : shot.height, shot.maxHeight)
-      // Старую шапку убираем до записи новой страницы: если скрипт оборвётся между снимками,
-      // шапка от прежней вёрстки не ляжет поверх новой страницы
-      const headFile = `${slug}-${shot.suffix}-head`
-      fs.rmSync(path.join(PREVIEW_DIR, `${headFile}.webp`), { force: true })
-      // captureBeyondViewport рисует страницу за пределами окна целиком, шапка остаётся вверху
+
+      const sticky = await cdp.send('Runtime.evaluate', { expression: FIND_STICKY, returnByValue: true })
+      if (sticky.exceptionDetails || !Array.isArray(sticky.result?.value)) {
+        throw new Error(`previews/${name}: не удалось найти прилипающие элементы — ${sticky.exceptionDetails?.text}`)
+      }
+      // Что ниже обреза снимка, в полёт не попадает
+      const found = sticky.result.value
+        .map((layer, index) => ({ ...layer, index }))
+        .filter((layer) => layer.y < height)
+      if (!found.length) {
+        console.warn(`  previews/${name}: ничего не прилипает — в полёте шапка уедет вместе со страницей`)
+      }
+
+      // Каждый слой — отдельно, тем же масштабом и в тех же условиях, что и страница,
+      // чтобы лёг поверх неё точно. Пишем на диск всё разом в конце: если скрипт оборвётся
+      // на середине, страница, её слои и их положения не разойдутся
+      const toImage = (value) => Math.round(value * shot.scale * 100) / 100
+      const layers = []
+      const layerShots = []
+      for (const [i, layer] of found.entries()) {
+        await cdp.send('Runtime.evaluate', { expression: showOnlySticky(layer.index) })
+        await freshFrame(cdp)
+        const file = `${name}-sticky-${i + 1}`
+        const { data } = await cdp.send('Page.captureScreenshot', {
+          format: 'webp',
+          quality: PREVIEW_QUALITY,
+          captureBeyondViewport: true,
+          clip: { x: layer.x, y: layer.y, width: layer.width, height: layer.height, scale: shot.scale },
+        })
+        layerShots.push({ file, data })
+        layers.push({
+          file,
+          x: toImage(layer.x),
+          y: toImage(layer.y),
+          width: toImage(layer.width),
+          stick: toImage(layer.stick),
+          limit: toImage(layer.limit),
+          z: layer.z,
+        })
+      }
+
+      // Сама страница — без прилипающих элементов: их рисуют слои поверх.
+      // captureBeyondViewport рисует страницу за пределами окна целиком
+      await cdp.send('Runtime.evaluate', { expression: showOnlySticky(-1) })
+      await freshFrame(cdp)
       const { data } = await cdp.send('Page.captureScreenshot', {
         format: 'webp',
         quality: PAGE_QUALITY,
         captureBeyondViewport: true,
         clip: { x: 0, y: 0, width: shot.width, height, scale: shot.scale },
       })
-      savePreview(`${slug}-${shot.suffix}`, data)
 
-      // Шапка — тем же масштабом, что и страница, чтобы легла поверх неё точно
-      const header = await cdp.send('Runtime.evaluate', { expression: STICKY_HEADER_BOTTOM, returnByValue: true })
-      const headerBottom = header.result?.value
-      if (!(headerBottom > 0)) {
-        console.warn(`  previews/${headFile}: не нашёл прилипающую шапку — в полёте она уедет вместе со страницей`)
-        continue
-      }
-      await freshFrame(cdp)
-      const head = await cdp.send('Page.captureScreenshot', {
-        format: 'webp',
-        quality: PREVIEW_QUALITY,
-        clip: { x: 0, y: 0, width: shot.width, height: headerBottom, scale: shot.scale },
-      })
-      savePreview(headFile, head.data)
-      heads++
+      // Слои прошлой съёмки убираем: их число могло измениться
+      removeStickyFiles(name)
+      for (const layer of layerShots) savePreview(layer.file, layer.data)
+      savePreview(name, data)
+      manifest[name] = { width: Math.round(shot.width * shot.scale), layers }
+      writeStickyManifest(manifest)
     }
   }
+  const layerCount = Object.values(manifest).reduce((sum, { layers }) => sum + layers.length, 0)
 
   cdp.close()
   console.log(
     `\nготово: ${PAGES.length} превью ссылок, ${TEMPLATES.length} скриншотов шаблонов, ` +
-      `${TEMPLATES.length * PAGE_SHOTS.length} страниц целиком и ${heads} шапок к ним`,
+      `${TEMPLATES.length * PAGE_SHOTS.length} страниц целиком и ${layerCount} прилипающих слоёв к ним`,
   )
 } finally {
   // Штатное закрытие: браузер сам завершит все свои процессы и отпустит профиль.
