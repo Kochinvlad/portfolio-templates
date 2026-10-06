@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import { ArrowDown, ArrowRight } from 'lucide-react'
+import { ArrowDown } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { HeroActions, HeroBadge, HeroGlow, HeroLead, HeroStats, HeroTitle } from './ShowcaseHeroParts'
 import { TEMPLATES } from './templates'
@@ -233,7 +233,7 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
                     <span className="h-2 w-2 rounded-full bg-white/25" />
                     <span className="h-2 w-2 rounded-full bg-white/25" />
                     <span className="h-2 w-2 rounded-full bg-white/25" />
-                    <span className="ml-2 text-[11px] text-ink-soft">{template.slug}.ru</span>
+                    <span className="ml-2 text-[11px] text-ink-soft">{template.brand}</span>
                   </div>
                   <img
                     src={`${import.meta.env.BASE_URL}previews/${template.slug}.webp`}
@@ -286,21 +286,21 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
             }}
             className="invisible absolute inset-x-0 bottom-[7%] mx-auto w-[min(92vw,640px)] px-4 text-center opacity-0"
           >
-            <p className="font-head text-[12px] font-bold uppercase tracking-[0.25em] text-[#a5b4fc]">
+            <p className="font-head text-[13px] font-bold tabular-nums text-brand-text">
               {String(i + 1).padStart(2, '0')} / {String(TEMPLATES.length).padStart(2, '0')}
             </p>
             <p className="mt-2 font-head text-2xl font-extrabold text-ink sm:text-3xl">
               {template.name}
             </p>
-            <p className="mt-1.5 text-[15px] text-ink-soft">
-              {template.tagline} · {template.price} · {template.term}
+            <p className="mt-1.5 text-[15px] text-ink-soft">{template.tagline}</p>
+            <p className="mt-0.5 text-[15px] text-ink-soft">
+              {template.price}, {template.term}
             </p>
             <Link
               to={`/${template.slug}`}
-              className="mt-4 inline-flex items-center gap-1.5 text-[15px] font-semibold text-[#a5b4fc] transition hover:text-white"
+              className="mt-4 inline-flex items-center gap-1.5 text-[15px] font-semibold text-brand-text transition hover:text-ink"
             >
               Открыть демо
-              <ArrowRight size={16} />
             </Link>
           </div>
         ))}
@@ -311,7 +311,7 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
           className="invisible absolute inset-0 flex flex-col items-center justify-center px-4 pt-16 text-center opacity-0 sm:px-6"
         >
           <h2 className="max-w-3xl text-balance font-head text-3xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-            Выбирайте основу — остальное соберём под вас
+            Выбирайте основу&nbsp;— остальное соберём под вас
           </h2>
           <HeroActions className="mt-8" />
           <HeroStats className="mt-10 w-full" />

@@ -95,7 +95,7 @@ const PREPARE_PAGE = `(async () => {
     await new Promise((resolve) => setTimeout(resolve, 100))
   }
   const style = document.createElement('style')
-  style.textContent = '[data-demo-bar] { display: none !important } .reveal { opacity: 1 !important; transform: none !important }'
+  style.textContent = '[data-demo-bar] { display: none !important }'
   document.head.append(style)
   await document.fonts.ready
 })()`

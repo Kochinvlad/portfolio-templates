@@ -74,7 +74,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 export function FaqSection() {
   return (
     <Section id="faq" className="border-t border-line py-16 sm:py-24" containerClassName="max-w-3xl">
-      <SectionHeading eyebrow="Вопросы" title="Что обычно спрашивают" />
+      <SectionHeading title="Что обычно спрашивают" />
       <div className="mt-10">
         {FAQ.map((item) => (
           <FaqItem key={item.q} {...item} />
@@ -235,7 +235,6 @@ ${message}`
       <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
         <div>
           <SectionHeading
-            eyebrow="Контакты"
             title="Расскажите, что нужно"
             subtitle="Напишите пару предложений о бизнесе и о том, что должен делать сайт. Ответим в течение рабочего дня и назовём срок и цену."
           />
@@ -244,9 +243,7 @@ ${message}`
               // Почту и мессенджер делаем кликабельными: с телефона это одно касание
               const content = (
                 <>
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand-soft text-brand">
-                    <Icon size={18} />
-                  </span>
+                  <Icon size={20} aria-hidden="true" className="shrink-0 text-brand-text" />
                   <span>
                     <span className="block text-[13px] text-ink-soft">{label}</span>
                     <span className="block font-semibold text-ink">{value}</span>

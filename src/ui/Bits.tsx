@@ -122,38 +122,34 @@ export function Badge({
   )
 }
 
-/** Секция страницы с центрирующим контейнером и появлением при скролле. */
+/** Секция страницы с центрирующим контейнером. */
 export function Section({
   children,
   className,
   containerClassName,
   id,
-  reveal = true,
 }: {
   children: ReactNode
   className?: string
   containerClassName?: string
   id?: string
-  reveal?: boolean
 }) {
   return (
     <section id={id} className={cn('px-4 sm:px-6', className)}>
-      <div className={cn('mx-auto w-full max-w-6xl', reveal && 'reveal', containerClassName)}>
+      <div className={cn('mx-auto w-full max-w-6xl', containerClassName)}>
         {children}
       </div>
     </section>
   )
 }
 
-/** Заголовок секции: надзаголовок + H2 + подпись. */
+/** Заголовок секции: H2 и подпись. Надписи капсом над заголовком убраны — шаблонная деталь. */
 export function SectionHeading({
-  eyebrow,
   title,
   subtitle,
   align = 'left',
   className,
 }: {
-  eyebrow?: string
   title: ReactNode
   subtitle?: ReactNode
   align?: 'left' | 'center'
@@ -167,11 +163,6 @@ export function SectionHeading({
         className,
       )}
     >
-      {eyebrow && (
-        <span className="text-xs font-extrabold uppercase tracking-[0.2em] text-brand">
-          {eyebrow}
-        </span>
-      )}
       <h2 className="font-head text-3xl font-bold leading-tight text-ink sm:text-4xl">{title}</h2>
       {subtitle && (
         <p className="max-w-2xl text-[17px] leading-relaxed text-ink-soft">{subtitle}</p>

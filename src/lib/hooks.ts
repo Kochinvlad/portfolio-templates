@@ -52,58 +52,6 @@ export function useEscape(active: boolean, onClose: () => void) {
   }, [active, onClose])
 }
 
-/**
- * Плавное появление блоков при прокрутке: элементы с классом .reveal
- * получают .is-visible, когда попадают во вьюпорт.
- *
- * Следим не только за тем, что есть при монтировании: секции появляются и позже —
- * например, экран «Заявка принята» вместо формы. Без MutationObserver такой блок
- * навсегда оставался с opacity: 0, и пользователь видел пустое место.
- */
-export function useRevealOnScroll() {
-  useEffect(() => {
-    if (!('IntersectionObserver' in window)) {
-      document.querySelectorAll('.reveal').forEach((n) => n.classList.add('is-visible'))
-      return
-    }
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible')
-            io.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' },
-    )
-
-    // Повторный observe уже наблюдаемого элемента ничего не делает, так что вызывать безопасно
-    const observeAll = () => {
-      document.querySelectorAll('.reveal:not(.is-visible)').forEach((n) => io.observe(n))
-    }
-    observeAll()
-
-    let frame = 0
-    const mo = new MutationObserver(() => {
-      // Склеиваем серию правок DOM в один проход
-      if (frame) return
-      frame = requestAnimationFrame(() => {
-        frame = 0
-        observeAll()
-      })
-    })
-    mo.observe(document.body, { childList: true, subtree: true })
-
-    return () => {
-      if (frame) cancelAnimationFrame(frame)
-      mo.disconnect()
-      io.disconnect()
-    }
-  }, [])
-}
-
 /** true, если media-запрос выполняется. */
 export function useMediaQuery(query: string): boolean {
   const [matches, setMatches] = useState(() =>
@@ -291,41 +239,4 @@ export function useAppUpdate(checkEveryMs = 5 * 60 * 1000) {
   }, [checkEveryMs])
 
   return updateAvailable
-}
-
-/**
- * Следит, попал ли конкретный элемент во вьюпорт. Срабатывает один раз.
- *
- * Отличие от useRevealOnScroll: тот навешивает общий класс на все блоки страницы,
- * а здесь нужен момент входа одного элемента — чтобы от него отсчитывать задержки
- * дочерних анимаций и запускать их по очереди.
- */
-export function useInView<T extends HTMLElement>(threshold = 0.2) {
-  const ref = useRef<T>(null)
-  const [inView, setInView] = useState(false)
-
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-
-    if (!('IntersectionObserver' in window)) {
-      setInView(true)
-      return
-    }
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setInView(true)
-          observer.disconnect()
-        }
-      },
-      { threshold, rootMargin: '0px 0px -60px 0px' },
-    )
-
-    observer.observe(el)
-    return () => observer.disconnect()
-  }, [threshold])
-
-  return [ref, inView] as const
 }

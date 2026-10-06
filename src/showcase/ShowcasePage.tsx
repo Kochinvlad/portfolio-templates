@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Menu, X } from 'lucide-react'
-import { useDocumentMeta, useMediaQuery, useRevealOnScroll } from '../lib/hooks'
+import { useDocumentMeta, useMediaQuery } from '../lib/hooks'
 import { buttonStyles } from '../ui/Button'
 import { ToastProvider } from '../ui/Toast'
 import { CinemaHero } from './ShowcaseCinema'
@@ -165,7 +165,6 @@ export function ShowcasePage() {
     'UltraTeam — сайты для доставки еды, ресторанов и магазинов',
     'Живые интерактивные шаблоны сайтов: доставка суши, ресторан, интернет-магазин, магазин игрушек.',
   )
-  useRevealOnScroll()
 
   return (
     <ToastProvider>
