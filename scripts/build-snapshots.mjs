@@ -4,7 +4,8 @@
  * 1. public/og/*.jpg — превью ссылок (Open Graph), 1200×630. Их показывают
  *    мессенджеры, когда в чат кидают ссылку на сайт.
  * 2. public/previews/*.webp — скриншоты шаблонов, 1660×900. Они стоят на карточках
- *    витрины и в 3D-сцене на первом экране.
+ *    витрины и в 3D-сцене на первом экране. Там же страницы целиком для «полёта»
+ *    (<шаблон>-page и -phone) и их шапки отдельными картинками (-page-head, -phone-head).
  *
  * После правок внешнего вида снимки стоит переснять:
  *   npm run build && node scripts/build-snapshots.mjs
@@ -54,6 +55,15 @@ const PAGE_SHOTS = [
   { suffix: 'phone', width: 390, height: 844, mobile: true, scale: 1.2, maxHeight: 4200 },
 ]
 const PAGE_QUALITY = 60
+
+/**
+ * Нижний край шапки, которая прилипает к верху окна. В «полёте» её показывают отдельной
+ * картинкой поверх страницы: страница листается, а шапка стоит на месте, как на сайте.
+ */
+const STICKY_HEADER_BOTTOM = `(() => {
+  const header = [...document.querySelectorAll('header')].find((el) => getComputedStyle(el).position === 'sticky')
+  return header ? Math.ceil(header.getBoundingClientRect().bottom) : 0
+})()`
 
 /** Пролистывает страницу, чтобы подгрузились отложенные картинки, и возвращает высоту. */
 const LOAD_WHOLE_PAGE = `(async () => {
@@ -131,6 +141,28 @@ const PREPARE_PAGE = `(async () => {
 })()`
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+/**
+ * Без нового кадра браузер отдаёт старую картинку — ту, что была до прокрутки или смены
+ * размеров (так вместо каталога выходила шапка). Выводим вкладку вперёд и ждём два кадра.
+ */
+async function freshFrame(cdp) {
+  await cdp.send('Page.bringToFront')
+  await cdp.send('Runtime.evaluate', {
+    awaitPromise: true,
+    expression: `Promise.race([
+      new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
+      new Promise((resolve) => setTimeout(resolve, 1500)),
+    ])`,
+  })
+}
+
+/** Сохраняет снимок из ответа браузера (base64) в public/previews/<name>.webp. */
+function savePreview(name, data) {
+  const image = Buffer.from(data, 'base64')
+  fs.writeFileSync(path.join(PREVIEW_DIR, `${name}.webp`), image)
+  console.log(`  previews/${name}.webp — ${Math.round(image.length / 1024)} КБ`)
+}
 
 /**
  * Ждёт выхода процесса: сначала даёт завершиться самому, потом завершает принудительно.
@@ -328,17 +360,7 @@ try {
       console.warn(`  previews/${slug}: не удалось прокрутить к ${PREVIEW_ANCHORS[slug]}`, JSON.stringify(where))
     }
     await sleep(800)
-
-    // Без нового кадра браузер отдаёт старую картинку — ту, что была до прокрутки:
-    // вместо каталога выходила шапка. Выводим вкладку вперёд и ждём два кадра отрисовки.
-    await cdp.send('Page.bringToFront')
-    await cdp.send('Runtime.evaluate', {
-      awaitPromise: true,
-      expression: `Promise.race([
-        new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))),
-        new Promise((resolve) => setTimeout(resolve, 1500)),
-      ])`,
-    })
+    await freshFrame(cdp)
 
     // Область — от текущей прокрутки, в координатах страницы
     const { data } = await cdp.send('Page.captureScreenshot', {
@@ -346,11 +368,10 @@ try {
       quality: PREVIEW_QUALITY,
       clip: { x: 0, y: where?.y ?? 0, width: PREVIEW_WIDTH, height: PREVIEW_HEIGHT, scale: 1 },
     })
-    const image = Buffer.from(data, 'base64')
-    fs.writeFileSync(path.join(PREVIEW_DIR, `${slug}.webp`), image)
-    console.log(`  previews/${slug}.webp — ${Math.round(image.length / 1024)} КБ`)
+    savePreview(slug, data)
   }
 
+  let heads = 0
   for (const shot of PAGE_SHOTS) {
     await cdp.send('Emulation.setDeviceMetricsOverride', {
       width: shot.width,
@@ -373,6 +394,10 @@ try {
         console.warn(`  previews/${slug}-${shot.suffix}: не удалось пролистать страницу, снимок в один экран`)
       }
       const height = Math.min(typeof pageHeight === 'number' ? pageHeight : shot.height, shot.maxHeight)
+      // Старую шапку убираем до записи новой страницы: если скрипт оборвётся между снимками,
+      // шапка от прежней вёрстки не ляжет поверх новой страницы
+      const headFile = `${slug}-${shot.suffix}-head`
+      fs.rmSync(path.join(PREVIEW_DIR, `${headFile}.webp`), { force: true })
       // captureBeyondViewport рисует страницу за пределами окна целиком, шапка остаётся вверху
       const { data } = await cdp.send('Page.captureScreenshot', {
         format: 'webp',
@@ -380,16 +405,30 @@ try {
         captureBeyondViewport: true,
         clip: { x: 0, y: 0, width: shot.width, height, scale: shot.scale },
       })
-      const image = Buffer.from(data, 'base64')
-      fs.writeFileSync(path.join(PREVIEW_DIR, `${slug}-${shot.suffix}.webp`), image)
-      console.log(`  previews/${slug}-${shot.suffix}.webp — ${Math.round(image.length / 1024)} КБ`)
+      savePreview(`${slug}-${shot.suffix}`, data)
+
+      // Шапка — тем же масштабом, что и страница, чтобы легла поверх неё точно
+      const header = await cdp.send('Runtime.evaluate', { expression: STICKY_HEADER_BOTTOM, returnByValue: true })
+      const headerBottom = header.result?.value
+      if (!(headerBottom > 0)) {
+        console.warn(`  previews/${headFile}: не нашёл прилипающую шапку — в полёте она уедет вместе со страницей`)
+        continue
+      }
+      await freshFrame(cdp)
+      const head = await cdp.send('Page.captureScreenshot', {
+        format: 'webp',
+        quality: PREVIEW_QUALITY,
+        clip: { x: 0, y: 0, width: shot.width, height: headerBottom, scale: shot.scale },
+      })
+      savePreview(headFile, head.data)
+      heads++
     }
   }
 
   cdp.close()
   console.log(
-    `\nготово: ${PAGES.length} превью ссылок, ${TEMPLATES.length} скриншотов шаблонов ` +
-      `и ${TEMPLATES.length * PAGE_SHOTS.length} страниц целиком`,
+    `\nготово: ${PAGES.length} превью ссылок, ${TEMPLATES.length} скриншотов шаблонов, ` +
+      `${TEMPLATES.length * PAGE_SHOTS.length} страниц целиком и ${heads} шапок к ним`,
   )
 } finally {
   // Штатное закрытие: браузер сам завершит все свои процессы и отпустит профиль.

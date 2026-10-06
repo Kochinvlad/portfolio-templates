@@ -15,8 +15,8 @@ import { TEMPLATES, type TemplateMeta } from './templates'
   - секция высотой в несколько экранов, внутри неё сцена прилипает к окну (sticky);
   - GSAP ScrollTrigger переводит прокрутку в движение виртуальной камеры;
   - у каждой остановки страница шаблона листается внутри рамки браузера и телефона —
-    видно весь сайт, а не только шапку; пространство вокруг перекрашивается
-    в цвета шаблона;
+    видно весь сайт, а шапка, как на настоящей странице, стоит на месте; пространство
+    вокруг перекрашивается в цвета шаблона;
   - на каждом кадре меняются только transform и opacity — это делает видеокарта,
     страница не перерисовывается.
 */
@@ -110,8 +110,30 @@ type ShotRefs = {
   onLoad: () => void
 }
 
+/**
+ * Страница шаблона в окне: длинный снимок уезжает вверх, а шапка сайта (отдельная
+ * картинка <file>-head) стоит поверх на месте — как на настоящей странице, где она
+ * прилипает к верху. file — имя длинного снимка без расширения; нет — ещё не грузим.
+ */
+function ScrollingPage({ file, refs }: { file?: string; refs: ShotRefs }) {
+  if (!file) return null
+  return (
+    <>
+      <img
+        ref={refs.image}
+        src={previewUrl(file)}
+        alt=""
+        decoding="async"
+        onLoad={refs.onLoad}
+        className="absolute inset-x-0 top-0 w-full"
+      />
+      <img src={previewUrl(`${file}-head`)} alt="" decoding="async" className="absolute inset-x-0 top-0 w-full" />
+    </>
+  )
+}
+
 /** Окно браузера: страница шаблона листается внутри, пока камера стоит рядом. */
-function BrowserShot({ template, src, refs }: { template: TemplateMeta; src?: string; refs: ShotRefs }) {
+function BrowserShot({ template, file, refs }: { template: TemplateMeta; file?: string; refs: ShotRefs }) {
   return (
     <div
       className="overflow-hidden rounded-2xl border border-white/10 bg-surface-2"
@@ -131,23 +153,14 @@ function BrowserShot({ template, src, refs }: { template: TemplateMeta; src?: st
         className="relative aspect-[16/10] overflow-hidden bg-top bg-no-repeat"
         style={{ backgroundImage: `url(${previewUrl(template.slug)})`, backgroundSize: '100% auto' }}
       >
-        {src && (
-          <img
-            ref={refs.image}
-            src={src}
-            alt=""
-            decoding="async"
-            onLoad={refs.onLoad}
-            className="absolute inset-x-0 top-0 w-full"
-          />
-        )}
+        <ScrollingPage file={file} refs={refs} />
       </div>
     </div>
   )
 }
 
 /** Телефон с мобильной версией — видно, что сайт удобен и с маленького экрана. */
-function PhoneShot({ src, refs, className }: { src?: string; refs: ShotRefs; className?: string }) {
+function PhoneShot({ file, refs, className }: { file?: string; refs: ShotRefs; className?: string }) {
   return (
     <div
       className={cn(
@@ -156,16 +169,7 @@ function PhoneShot({ src, refs, className }: { src?: string; refs: ShotRefs; cla
       )}
     >
       <div ref={refs.viewport} className="relative aspect-[9/19.5] overflow-hidden rounded-[1.3rem] bg-surface-3">
-        {src && (
-          <img
-            ref={refs.image}
-            src={src}
-            alt=""
-            decoding="async"
-            onLoad={refs.onLoad}
-            className="absolute inset-x-0 top-0 w-full"
-          />
-        )}
+        <ScrollingPage file={file} refs={refs} />
       </div>
     </div>
   )
@@ -411,8 +415,8 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
               // Текущая остановка и соседние; мобильную версию первого шаблона грузим сразу —
               // на телефоне это первый же кадр
               const inWindow = near >= 0 && Math.abs(i - near) <= 1
-              const phoneSrc = inWindow || i === 0 ? previewUrl(`${template.slug}-phone`) : undefined
-              const pageSrc = inWindow ? previewUrl(`${template.slug}-page`) : undefined
+              const phoneFile = inWindow || i === 0 ? `${template.slug}-phone` : undefined
+              const pageFile = inWindow ? `${template.slug}-page` : undefined
               return (
                 <div
                   key={template.slug}
@@ -427,15 +431,15 @@ export function CinemaHero({ fallback }: { fallback: ReactNode }) {
                 >
                   {wide ? (
                     <div className="relative">
-                      <BrowserShot template={template} src={pageSrc} refs={shotRefs(pageShots, i)} />
+                      <BrowserShot template={template} file={pageFile} refs={shotRefs(pageShots, i)} />
                       <PhoneShot
-                        src={phoneSrc}
+                        file={phoneFile}
                         refs={shotRefs(phoneShots, i)}
                         className="absolute -bottom-[9%] -right-[5%] w-[21%]"
                       />
                     </div>
                   ) : (
-                    <PhoneShot src={phoneSrc} refs={shotRefs(phoneShots, i)} />
+                    <PhoneShot file={phoneFile} refs={shotRefs(phoneShots, i)} />
                   )}
                 </div>
               )
