@@ -40,7 +40,7 @@ export function SushiCheckout({ open, onClose }: { open: boolean; onClose: () =>
   function validate(): Errors {
     const next: Errors = {}
     if (name.trim().length < 2) next.name = 'Как к вам обращаться?'
-    if (!isPhoneComplete(phone)) next.phone = 'Телефон из 11 цифр — курьер позвонит'
+    if (!isPhoneComplete(phone)) next.phone = 'Телефон из 11 цифр\u00a0— курьер позвонит'
     if (address.trim().length < 5) next.address = 'Укажите улицу и номер дома'
     if (deliveryType === 'time' && !time) next.time = 'Выберите время доставки'
     return next
@@ -88,7 +88,7 @@ export function SushiCheckout({ open, onClose }: { open: boolean; onClose: () =>
           </p>
           <dl className="flex w-full items-center justify-between rounded-control bg-surface-2 px-4 py-3">
             <dt className="text-ink-soft">К оплате</dt>
-            <dd className="font-head text-lg font-extrabold text-brand">
+            <dd className="font-head text-lg font-extrabold text-brand-text">
               {formatPrice(placed.total)}
             </dd>
           </dl>
@@ -111,7 +111,7 @@ export function SushiCheckout({ open, onClose }: { open: boolean; onClose: () =>
           <h2 className="font-head text-2xl font-extrabold text-ink">Оформление заказа</h2>
           <p className="mt-1 text-[15px] text-ink-soft">
             {lines.length > 0
-              ? `К оплате ${formatPrice(total)} — доставим по Москве в пределах МКАД`
+              ? `К оплате ${formatPrice(total)}\u00a0— доставим по Москве в пределах МКАД`
               : 'Корзина пуста'}
           </p>
         </header>

@@ -33,7 +33,7 @@ function Wrapper({
       {label && (
         <label htmlFor={htmlFor} className="text-sm font-semibold text-ink">
           {label}
-          {required && <span className="text-brand"> *</span>}
+          {required && <span className="text-brand-text"> *</span>}
         </label>
       )}
       {children}

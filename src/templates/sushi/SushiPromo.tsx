@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useCountdown } from '../../lib/hooks'
 import { buttonStyles } from '../../ui/Button'
 import { SectionHeading } from '../../ui/Bits'
+import { SakuraSeal } from './SushiSections'
 import { useToast } from '../../ui/Toast'
 
 const PROMO_CODE = 'VECHER20'
@@ -35,18 +36,18 @@ export function SushiPromo() {
 
   return (
     <section id="promo" className="px-4 py-16 sm:px-6 sm:py-20">
-      <div className="reveal mx-auto w-full max-w-6xl overflow-hidden rounded-card border border-line bg-surface-2">
+      <div className="mx-auto w-full max-w-6xl overflow-hidden rounded-card border border-line bg-surface-2">
         <div className="grid items-center gap-8 p-8 sm:p-12 lg:grid-cols-[1.2fr_1fr]">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-1.5 text-[13px] font-extrabold uppercase tracking-wider text-on-brand">
+            <span className="inline-flex items-center gap-2 rounded-full bg-brand px-4 py-1.5 text-[13px] font-semibold text-on-brand">
               <Timer size={14} />
               Только сегодня
             </span>
-            <h2 className="mt-5 font-head text-3xl font-extrabold leading-tight text-ink sm:text-4xl">
+            <h2 className="mt-5 font-head text-3xl leading-tight text-ink sm:text-4xl">
               Минус 20 % на вечерний заказ
             </h2>
             <p className="mt-4 max-w-lg text-[16px] leading-relaxed text-ink-soft">
-              Скидка действует на заказы после 18:00. Введите промокод в корзине — он применится
+              Скидка действует на заказы после 18:00. Введите промокод в корзине&nbsp;— он применится
               ко всей сумме, кроме доставки.
             </p>
 
@@ -73,7 +74,7 @@ export function SushiPromo() {
 
           {/* Таймер */}
           <div className="flex flex-col items-center gap-4 rounded-card border border-line bg-surface p-6">
-            <span className="text-[13px] font-semibold uppercase tracking-wider text-ink-soft">
+            <span className="text-[14px] text-ink-soft">
               До конца акции
             </span>
             <div className="flex items-center gap-2">
@@ -106,45 +107,41 @@ const DELIVERY = [
   {
     icon: Fish,
     title: 'Рыба каждое утро',
-    text: 'Поставка в 7:00, к вечеру ничего не остаётся. Если позиция закончилась — она просто пропадает из меню, а не едет к вам вчерашней.',
+    text: 'Поставка в 7:00, к вечеру ничего не остаётся. Если позиция закончилась\u00a0— она просто пропадает из меню, а не едет к вам вчерашней.',
   },
   {
     icon: Truck,
     title: '60 минут по городу',
-    text: 'В пределах МКАД — час. За МКАД считаем отдельно по километражу, курьер скажет сумму до выезда.',
+    text: 'В пределах МКАД\u00a0— час. За МКАД считаем отдельно по километражу, курьер скажет сумму до выезда.',
   },
   {
     icon: Snowflake,
     title: 'Термосумка обязательна',
-    text: 'Роллы едут при +4 °C, горячее — в отдельном отсеке. Ничего не нагревается и не остывает по дороге.',
+    text: 'Роллы едут при +4 °C, горячее\u00a0— в отдельном отсеке. Ничего не нагревается и не остывает по дороге.',
   },
   {
     icon: MapPin,
-    title: 'Бесплатно от 1500 ₽',
-    text: 'Заказ меньше — доставка 250 ₽. Самовывоз со скидкой 10 %, забрать можно через 25 минут после заказа.',
+    title: 'Бесплатно от 1500\u00a0₽',
+    text: 'Заказ меньше\u00a0— доставка 250\u00a0₽. Самовывоз со скидкой 10 %, забрать можно через 25 минут после заказа.',
   },
 ]
 
 export function SushiDelivery() {
   return (
     <section id="delivery" className="border-t border-line px-4 py-16 sm:px-6 sm:py-24">
-      <div className="reveal mx-auto w-full max-w-6xl">
+      <div className="mx-auto w-full max-w-6xl">
         <SectionHeading
-          eyebrow="Доставка"
           title="Как мы довозим"
           subtitle="Короткий и честный ответ на четыре вопроса, которые задают чаще всего."
         />
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           {DELIVERY.map(({ icon: Icon, title, text }) => (
-            <div
-              key={title}
-              className="rounded-card border border-line bg-surface-2 p-6 transition hover:border-brand/40"
-            >
-              <span className="grid h-11 w-11 place-items-center rounded-xl bg-brand-soft text-brand">
-                <Icon size={20} />
-              </span>
-              <h3 className="mt-4 font-head text-lg font-bold text-ink">{title}</h3>
-              <p className="mt-2 text-[15px] leading-relaxed text-ink-soft">{text}</p>
+            <div key={title} className="border-t-2 border-brand pt-5">
+              <h3 className="flex items-start gap-2.5 font-head text-lg leading-snug text-ink">
+                <Icon size={20} aria-hidden="true" className="mt-0.5 shrink-0 text-accent" />
+                {title}
+              </h3>
+              <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">{text}</p>
             </div>
           ))}
         </div>
@@ -161,10 +158,8 @@ export function SushiFooter() {
       <div className="mx-auto grid w-full max-w-6xl gap-8 sm:grid-cols-2 lg:grid-cols-4">
         <div>
           <span className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-brand font-head text-lg font-extrabold text-on-brand">
-              С
-            </span>
-            <span className="font-head text-[15px] font-extrabold text-ink">САКУРА</span>
+            <SakuraSeal className="h-9 w-9" />
+            <span className="font-head text-[17px] text-ink">САКУРА</span>
           </span>
           <p className="mt-3 text-[14px] leading-relaxed text-ink-soft">
             Суши-бар и доставка японской кухни. Работаем с 2019 года.
@@ -175,12 +170,12 @@ export function SushiFooter() {
           <h3 className="font-head text-[15px] font-bold text-ink">Контакты</h3>
           <ul className="mt-3 flex flex-col gap-2 text-[14px] text-ink-soft">
             <li>
-              <a href="tel:+74951234567" className="transition hover:text-brand">
+              <a href="tel:+74951234567" className="transition hover:text-brand-text">
                 +7 (495) 123-45-67
               </a>
             </li>
             <li>
-              <a href="mailto:order@sakura.example" className="transition hover:text-brand">
+              <a href="mailto:order@sakura.example" className="transition hover:text-brand-text">
                 order@sakura.example
               </a>
             </li>
@@ -206,7 +201,7 @@ export function SushiFooter() {
               { href: '#delivery', label: 'Доставка' },
             ].map((l) => (
               <li key={l.href}>
-                <a href={l.href} className="transition hover:text-brand">
+                <a href={l.href} className="transition hover:text-brand-text">
                   {l.label}
                 </a>
               </li>

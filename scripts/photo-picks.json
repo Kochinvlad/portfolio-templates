@@ -8,5 +8,8 @@
   { "photo": "9PROKNisZiU", "ids": ["ph-helix-action"] },
   { "photo": "_aR4l6fj6wQ", "ids": ["rest-hero"], "params": "w=1920&h=1080&fit=crop&q=50&fm=webp" },
   { "photo": "_aR4l6fj6wQ", "ids": ["rest-hero-tall"], "params": "w=800&h=1200&fit=crop&crop=focalpoint&fp-x=0.56&fp-y=0.5&q=50&fm=webp" },
-  { "photo": "AG4EUYNBgmE", "ids": ["g-dish"] }
+  { "photo": "AG4EUYNBgmE", "ids": ["g-dish"] },
+  { "photo": "SY6kOypwGMM", "ids": ["sushi-hero"], "params": "w=960&h=1280&fit=crop&crop=focalpoint&fp-x=0.74&fp-y=0.5&q=42&fm=webp" },
+  { "photo": "SY6kOypwGMM", "ids": ["sushi-hero-wide"], "params": "rect=2950,1100,3200,2000&w=1100&h=688&fit=crop&q=42&fm=webp" },
+  { "photo": "Yq58lJStQ5M", "ids": ["drink-cola"] }
 ]

@@ -11,8 +11,19 @@ import { photoUrl } from '../../lib/photos'
 import { ProductArt } from '../../ui/ProductArt'
 import { useToast } from '../../ui/Toast'
 
-/** Карточка блюда в меню. */
-export function SushiCard({ product, onOpen }: { product: Product; onOpen: () => void }) {
+/**
+ * Карточка блюда в меню. Широкая (wide) на компьютере занимает две колонки:
+ * фото слева, текст справа — ей меню закрывает неполный последний ряд.
+ */
+export function SushiCard({
+  product,
+  onOpen,
+  wide = false,
+}: {
+  product: Product
+  onOpen: () => void
+  wide?: boolean
+}) {
   const { add, qtyOf } = useCart()
   const { toast } = useToast()
   const inCart = qtyOf(product.id)
@@ -28,19 +39,21 @@ export function SushiCard({ product, onOpen }: { product: Product; onOpen: () =>
       onClick={product.outOfStock ? undefined : onOpen}
       className={cn(
         'group flex flex-col overflow-hidden rounded-card border border-line bg-surface-2 transition duration-300',
-        product.outOfStock
-          ? 'opacity-55'
-          : 'cursor-pointer hover:-translate-y-1 hover:border-brand/50 hover:shadow-pop',
+        wide && 'lg:col-span-2 lg:flex-row',
+        product.outOfStock ? 'opacity-55' : 'cursor-pointer hover:border-brand/60',
       )}
     >
-      <div className="relative">
+      <div className={cn('relative', wide && 'lg:w-1/2 lg:shrink-0')}>
         <ProductArt
           glyph={product.glyph}
           hue={product.hue}
           photo={photoUrl(product.id)}
           alt={product.name}
           scale="lg"
-          className="h-44 w-full transition-transform duration-500 group-hover:scale-[1.04]"
+          className={cn(
+            'h-44 w-full transition-transform duration-500 group-hover:scale-[1.04]',
+            wide && 'lg:h-full lg:min-h-64',
+          )}
         />
         <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
           {product.badge && <Badge tone="accent">{product.badge}</Badge>}
@@ -56,9 +69,11 @@ export function SushiCard({ product, onOpen }: { product: Product; onOpen: () =>
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-2.5 p-4">
-        <h3 className="font-head text-[17px] font-bold leading-snug text-ink">{product.name}</h3>
-        <p className="line-clamp-2 text-[14px] leading-relaxed text-ink-soft">
+      <div className={cn('flex flex-1 flex-col gap-2.5 p-4', wide && 'lg:p-6')}>
+        <h3 className={cn('font-head text-[17px] leading-snug text-ink', wide && 'lg:text-[22px]')}>
+          {product.name}
+        </h3>
+        <p className={cn('line-clamp-2 text-[14px] leading-relaxed text-ink-soft', wide && 'lg:line-clamp-none lg:text-[15px]')}>
           {product.description}
         </p>
 
@@ -68,8 +83,9 @@ export function SushiCard({ product, onOpen }: { product: Product; onOpen: () =>
               <Weight size={13} /> {product.weight}
             </span>
           )}
+          {/* Остро — цветом васаби: и смысл тот же, и мелкий текст читается на тёмном */}
           {product.tags?.includes('Остро') && (
-            <span className="inline-flex items-center gap-1 text-brand">
+            <span className="inline-flex items-center gap-1 text-accent">
               <Flame size={13} /> остро
             </span>
           )}

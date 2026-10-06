@@ -114,10 +114,10 @@
     "description": "lime juice on drinking glass beside sliced limes"
   },
   "drink-cola": {
-    "photo": "qy4vrr2qi3M",
-    "author": "Alessandro D’Antonio",
-    "authorLink": "https://unsplash.com/@alessandrodantonio",
-    "description": "coca cola bottles on black table"
+    "photo": "Yq58lJStQ5M",
+    "author": "Mohammed Katib",
+    "authorLink": "https://unsplash.com/@mkatib",
+    "description": "a glass of ice tea on a white background"
   },
   "dessert-mochi": {
     "photo": "I-1zlzFd-sQ",
@@ -502,5 +502,17 @@
     "author": "Emerson Vieira",
     "authorLink": "https://unsplash.com/@emersonvieira",
     "description": "person barbecuing meat"
+  },
+  "sushi-hero": {
+    "photo": "SY6kOypwGMM",
+    "author": "Mahmoud Fawzy",
+    "authorLink": "https://unsplash.com/@mahmoud_fawzy100",
+    "description": "green and red floral plastic pack"
+  },
+  "sushi-hero-wide": {
+    "photo": "SY6kOypwGMM",
+    "author": "Mahmoud Fawzy",
+    "authorLink": "https://unsplash.com/@mahmoud_fawzy100",
+    "description": "green and red floral plastic pack"
   }
 }

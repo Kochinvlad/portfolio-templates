@@ -78,6 +78,8 @@ const WITH_PHOTO = new Set<string>([
   'st-hummus',
   'st-scallops',
   'st-tartare',
+  'sushi-hero',
+  'sushi-hero-wide',
   'tr-cars',
   'tr-excavator',
   'tr-railway',

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Product } from '../../lib/types'
-import { useDocumentMeta, useRevealOnScroll } from '../../lib/hooks'
+import { useDocumentMeta } from '../../lib/hooks'
 import { CartProvider, useCart } from '../../store/cart'
 import { ToastProvider } from '../../ui/Toast'
 import { DemoBar } from '../../showcase/DemoBar'
@@ -26,7 +26,7 @@ function SushiInner() {
     'САКУРА — доставка суши и роллов за 60 минут',
     'Доставка суши, роллов и горячих блюд по Москве за 60 минут. Бесплатно от 1500 ₽.',
   )
-  useRevealOnScroll()
+  // Без появления блоков при прокрутке: единственное движение — печать на первом экране
 
   return (
     <>

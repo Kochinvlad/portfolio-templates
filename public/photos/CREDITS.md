@@ -31,7 +31,7 @@
 | `ct-robot.webp` | [FORTYTWO](https://unsplash.com/@byfortytwo) |
 | `dessert-cheesecake.webp` | [Edwin Petrus](https://unsplash.com/@ep_petrus) |
 | `dessert-mochi.webp` | [Hamada](https://unsplash.com/@hamadaxyz) |
-| `drink-cola.webp` | [Alessandro D’Antonio](https://unsplash.com/@alessandrodantonio) |
+| `drink-cola.webp` | [Mohammed Katib](https://unsplash.com/@mkatib) |
 | `drink-green-tea.webp` | [Geoff Oliver](https://unsplash.com/@satsuma9) |
 | `drink-lemonade.webp` | [Francesca Hotchin](https://unsplash.com/@franhotchin) |
 | `ds-fondant.webp` | [Jon Handley](https://unsplash.com/@handley4eu) |
@@ -85,6 +85,8 @@
 | `st-hummus.webp` | [Nicholas Barbaros](https://unsplash.com/@nicubarbaros) |
 | `st-scallops.webp` | [Meg von Haartman](https://unsplash.com/@traveleroohlala) |
 | `st-tartare.webp` | [Delightin Dee](https://unsplash.com/@delightindee) |
+| `sushi-hero.webp` | [Mahmoud Fawzy](https://unsplash.com/@mahmoud_fawzy100) |
+| `sushi-hero-wide.webp` | [Mahmoud Fawzy](https://unsplash.com/@mahmoud_fawzy100) |
 | `tr-cars.webp` | [Jacek Pobłocki](https://unsplash.com/@dabah) |
 | `tr-excavator.webp` | [Jerry Wang](https://unsplash.com/@jerry_318) |
 | `tr-railway.webp` | [Jerry Wang](https://unsplash.com/@jerry_318) |

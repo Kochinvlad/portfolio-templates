@@ -13,6 +13,7 @@ import '@fontsource-variable/unbounded'
 import '@fontsource/old-standard-tt/400.css'
 import '@fontsource/old-standard-tt/400-italic.css'
 import '@fontsource/old-standard-tt/700.css'
+// Dela Gothic One (суши) объявлен в index.css: из пакета нужны только два алфавита
 import './index.css'
 
 // Позицией прокрутки управляем сами (ScrollToTop в App),

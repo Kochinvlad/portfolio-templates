@@ -59,7 +59,7 @@ function FreeDeliveryBar({ threshold }: { threshold: number }) {
         <Truck size={16} className="shrink-0 text-brand" />
         {freeDeliveryLeft > 0 ? (
           <span>
-            До бесплатной доставки <b className="text-brand">{formatPrice(freeDeliveryLeft)}</b>
+            До бесплатной доставки <b className="text-brand-text">{formatPrice(freeDeliveryLeft)}</b>
           </span>
         ) : (
           <span className="font-semibold text-emerald-600">Доставка бесплатная</span>
@@ -203,7 +203,7 @@ export function CartPanel({
               </div>
               <div className="flex justify-between border-t border-line pt-2">
                 <dt className="font-head text-lg font-bold text-ink">Итого</dt>
-                <dd className="font-head text-lg font-extrabold text-brand">
+                <dd className="font-head text-lg font-extrabold text-brand-text">
                   {formatPrice(total)}
                 </dd>
               </div>

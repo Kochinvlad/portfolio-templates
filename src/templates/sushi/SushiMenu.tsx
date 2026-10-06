@@ -27,13 +27,16 @@ export function SushiMenu({ onOpenProduct }: { onOpenProduct: (p: Product) => vo
 
   const tabs: Category[] = [{ id: 'all', name: 'Всё меню', icon: LayoutGrid }, ...SUSHI_CATEGORIES]
 
+  // В три колонки неполный последний ряд закрываем широкими карточками: одна широкая
+  // добавляет ячейку. Ставим их через одну с начала — 0, 2… — чтобы ряды не рвались.
+  const wideCount = (3 - (visible.length % 3)) % 3
+
   return (
     <section id="menu" className="px-4 py-16 sm:px-6 sm:py-24">
       <div className="mx-auto w-full max-w-6xl">
-        <div className="reveal flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <SectionHeading
-            eyebrow="Меню"
-            title="Двадцать две позиции — и все свежие"
+            title={'Двадцать две позиции\u00a0— и все свежие'}
             subtitle="Рыбу привозят каждое утро, роллы крутят после того, как вы нажали «Заказать». Поэтому доставка 60 минут, а не 20."
           />
           <label className="relative w-full md:max-w-xs">
@@ -85,8 +88,13 @@ export function SushiMenu({ onOpenProduct }: { onOpenProduct: (p: Product) => vo
         {/* Карточки */}
         {visible.length > 0 ? (
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {visible.map((product) => (
-              <SushiCard key={product.id} product={product} onOpen={() => onOpenProduct(product)} />
+            {visible.map((product, i) => (
+              <SushiCard
+                key={product.id}
+                product={product}
+                onOpen={() => onOpenProduct(product)}
+                wide={i % 2 === 0 && i / 2 < wideCount}
+              />
             ))}
           </div>
         ) : (
